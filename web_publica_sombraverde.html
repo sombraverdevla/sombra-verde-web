@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sombra Verde · Cabañas Villa La Angostura</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBX9DTDvVxUdU2SFzRvVgLqgES625-qRIo",
+  authDomain: "sombra-verde.firebaseapp.com",
+  projectId: "sombra-verde",
+  storageBucket: "sombra-verde.firebasestorage.app",
+  messagingSenderId: "505526109312",
+  appId: "1:505526109312:web:7ca9e1dc1a509f9bd61265"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+// Escuchar reservas en tiempo real
+onSnapshot(doc(db, 'sv', 'reservas'), (snap) => {
+  if (snap.exists()) {
+    try {
+      const data = JSON.parse(snap.data().data);
+      window.reservasDB = data;
+      if (typeof window.onReservasLoaded === 'function') window.onReservasLoaded(data);
+    } catch(e) { console.warn('Error parsing reservas:', e); }
+  }
+});
+
+// Escuchar tarifas en tiempo real
+onSnapshot(doc(db, 'sv', 'tarifas'), (snap) => {
+  if (snap.exists()) {
+    try {
+      window.tarifasDB = JSON.parse(snap.data().data);
+      if (typeof window.onTarifasLoaded === 'function') window.onTarifasLoaded(window.tarifasDB);
+    } catch(e) {}
+  }
+});
+</script>
+
+<style>
+:root{
+  --forest:#1a2e1a;--moss:#3d5a3e;--sage:#7a9e7e;
+  --cream:#f5f0e8;--warm:#e8dfd0;--terra:#8b6f47;
+  --dark:#0f1a0f;--accent:#c4a35a;--white:#fff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);}
+
+/* HEADER */
+header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(196,163,90,.3);}
+.logo{font-family:'Playfair Display',serif;font-size:1.25rem;color:var(--cream);letter-spacing:.04em;}
+.logo span{color:var(--accent);font-style:italic;}
+.header-sub{font-size:.75rem;color:var(--sage);}
+
+/* HERO */
+.hero{background:var(--forest);padding:2.5rem 2rem 0;text-align:center;position:relative;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(61,90,62,.4) 0%,transparent 70%);}
+.hero-tag{display:inline-block;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem;position:relative;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:var(--cream);line-height:1.15;margin-bottom:.4rem;position:relative;}
+.hero h1 em{color:var(--accent);font-style:italic;}
+.hero-sub{color:var(--sage);font-size:.83rem;font-weight:300;position:relative;margin-bottom:2rem;}
+
+/* SEARCH */
+.search-wrap{background:var(--forest);padding:0 2rem 2.5rem;}
+.search-box{background:white;border-radius:16px;padding:1.3rem;max-width:860px;margin:0 auto;box-shadow:0 8px 40px rgba(0,0,0,.25);}
+.search-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:.9rem;align-items:end;}
+.field label{display:block;font-size:.65rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--terra);margin-bottom:5px;}
+.field input,.field select{width:100%;padding:10px 12px;border:1.5px solid var(--warm);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.86rem;color:var(--dark);background:var(--cream);outline:none;transition:border-color .2s;}
+.field input:focus,.field select:focus{border-color:var(--moss);}
+.btn-search{background:var(--moss);color:white;border:none;padding:11px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .2s;}
+.btn-search:hover{background:var(--forest);}
+
+/* LOADING */
+.loading-bar{text-align:center;padding:3rem 1rem;color:var(--terra);font-size:.85rem;}
+.spinner{width:32px;height:32px;border:3px solid var(--warm);border-top-color:var(--moss);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* RESULTS */
+.results-section{max-width:1100px;margin:0 auto;padding:2rem 2rem;}
+.results-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:1.25rem;}
+.results-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--forest);}
+.results-count{font-size:.75rem;color:var(--terra);letter-spacing:.05em;}
+
+/* CARDS */
+.cabanas-grid{display:flex;flex-direction:column;gap:1.1rem;}
+.cabana-card{background:white;border-radius:16px;overflow:hidden;display:grid;grid-template-columns:320px 1fr;box-shadow:0 2px 12px rgba(0,0,0,.07);transition:box-shadow .2s,transform .2s;border:1px solid rgba(0,0,0,.06);}
+.cabana-card:hover{box-shadow:0 8px 28px rgba(0,0,0,.12);transform:translateY(-2px);}
+.cabana-card.hidden{display:none;}
+.cabana-card.no-disponible{opacity:.55;pointer-events:none;}
+
+.card-gallery{position:relative;height:250px;overflow:hidden;}
+.gallery-main{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
+.cabana-card:hover .gallery-main{transform:scale(1.04);}
+.gallery-thumbs{position:absolute;bottom:8px;left:8px;display:flex;gap:5px;}
+.thumb{width:48px;height:35px;border-radius:6px;object-fit:cover;border:2px solid white;cursor:pointer;opacity:.8;transition:opacity .2s;}
+.thumb:hover,.thumb.active{opacity:1;border-color:var(--accent);}
+.badge-disp{position:absolute;top:10px;left:10px;font-size:.6rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:20px;}
+.badge-libre{background:var(--moss);color:white;}
+.badge-ocupada{background:#c0392b;color:white;}
+.guest-badge{position:absolute;top:42px;left:10px;background:rgba(15,26,15,.75);color:white;font-size:.65rem;padding:3px 8px;border-radius:20px;backdrop-filter:blur(4px);}
+
+.card-content{padding:1.2rem 1.3rem;display:flex;flex-direction:column;}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:.35rem;}
+.cabana-name{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--forest);line-height:1.2;}
+.cabana-type{font-size:.68rem;color:var(--terra);letter-spacing:.06em;text-transform:uppercase;margin-top:2px;}
+.stars{color:var(--accent);font-size:.75rem;}
+.reviews{font-size:.68rem;color:#888;margin-left:3px;}
+.cabana-desc{font-size:.8rem;color:#555;line-height:1.6;margin-bottom:.75rem;flex:1;}
+.amenities{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:.8rem;}
+.amenity{font-size:.65rem;padding:3px 8px;border-radius:20px;background:var(--cream);color:var(--terra);border:1px solid var(--warm);}
+
+.card-footer{display:flex;align-items:center;justify-content:space-between;padding-top:.8rem;border-top:1px solid var(--warm);margin-top:auto;}
+.price-block{}
+.price-label{font-size:.65rem;color:#aaa;margin-bottom:1px;}
+.price-current{font-size:1.2rem;font-weight:600;color:var(--forest);line-height:1;}
+.price-current span{font-size:.68rem;font-weight:400;color:#777;margin-left:2px;}
+.price-sena{font-size:.67rem;color:var(--moss);margin-top:2px;font-weight:500;}
+.price-nodisp{font-size:.8rem;color:#c0392b;font-weight:500;}
+
+.btn-cal{background:none;border:1.5px solid var(--warm);color:var(--terra);padding:8px 13px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.78rem;cursor:pointer;transition:all .2s;margin-right:6px;}
+.btn-cal:hover{border-color:var(--moss);color:var(--moss);}
+.btn-reservar{background:var(--moss);color:white;border:none;padding:9px 18px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:500;cursor:pointer;transition:background .2s;}
+.btn-reservar:hover{background:var(--forest);}
+.btn-reservar:disabled{background:#ccc;cursor:not-allowed;}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(10,20,10,.6);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(3px);}
+.modal-overlay.open{display:flex;}
+.modal{background:white;border-radius:20px;width:100%;max-width:660px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.3);}
+.modal-header{background:var(--forest);padding:1.3rem 1.5rem;border-radius:20px 20px 0 0;display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--cream);}
+.modal-subtitle{font-size:.72rem;color:var(--sage);margin-top:2px;}
+.btn-close{background:none;border:none;color:var(--sage);font-size:1.3rem;cursor:pointer;padding:0 4px;}
+.btn-close:hover{color:white;}
+.modal-body{padding:1.5rem;}
+
+/* CALENDAR */
+.cal-nav-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem;}
+.cal-month-label{font-family:'Playfair Display',serif;font-size:.95rem;color:var(--forest);}
+.btn-cal-nav{background:none;border:1.5px solid var(--warm);border-radius:8px;width:30px;height:30px;cursor:pointer;font-size:.9rem;color:var(--terra);display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.btn-cal-nav:hover{border-color:var(--moss);color:var(--moss);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.cal-dh{text-align:center;font-size:.6rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--terra);padding:5px 0;}
+.cal-day{text-align:center;padding:7px 3px;border-radius:7px;font-size:.8rem;position:relative;}
+.cal-day.empty{cursor:default;}
+.cal-day.past{color:#ccc;cursor:not-allowed;}
+.cal-day.ocupado{background:#fde8e8;color:#c0392b;cursor:not-allowed;border-radius:0;}
+.cal-day.ocupado-start{border-radius:7px 0 0 7px;}
+.cal-day.ocupado-end{border-radius:0 7px 7px 0;}
+.cal-day.libre{color:var(--forest);cursor:pointer;}
+.cal-day.libre:hover{background:var(--cream);}
+.cal-day.sel{background:var(--moss);color:white;font-weight:500;}
+.cal-day.en-rango{background:rgba(61,90,62,.1);color:var(--forest);}
+.cal-legend{display:flex;gap:.9rem;margin-top:.6rem;flex-wrap:wrap;}
+.leg-item{display:flex;align-items:center;gap:4px;font-size:.67rem;color:#666;}
+.leg-dot{width:11px;height:11px;border-radius:3px;}
+.leg-l{background:var(--cream);border:1px solid var(--warm);}
+.leg-o{background:#fde8e8;}
+.leg-s{background:var(--moss);}
+
+/* RESUMEN NOCHES */
+.nights-box{background:var(--cream);border-radius:11px;padding:.9rem 1rem;margin-bottom:1.1rem;display:none;}
+.nights-box.show{display:block;}
+.n-row{display:flex;justify-content:space-between;font-size:.8rem;color:#555;margin-bottom:3px;}
+.n-row.total{font-size:.95rem;font-weight:600;color:var(--forest);border-top:1px solid var(--warm);padding-top:7px;margin-top:3px;}
+.n-row.sena{font-size:.8rem;color:var(--moss);font-weight:500;}
+
+/* FORM */
+.form-sec h4{font-size:.68rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:var(--terra);margin-bottom:.75rem;}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;}
+.fg{display:flex;flex-direction:column;gap:4px;}
+.fg.full{grid-column:1/-1;}
+.fg label{font-size:.7rem;font-weight:500;color:var(--dark);}
+.fg input,.fg textarea,.fg select{padding:9px 12px;border:1.5px solid var(--warm);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:.83rem;color:var(--dark);background:var(--cream);outline:none;transition:border-color .2s;}
+.fg input:focus,.fg textarea:focus{border-color:var(--moss);}
+.fg textarea{resize:vertical;min-height:65px;}
+.btn-conf{width:100%;background:var(--moss);color:white;border:none;padding:12px;border-radius:11px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;margin-top:.5rem;transition:background .2s;}
+.btn-conf:hover{background:var(--forest);}
+
+/* CONFIRMACIÓN */
+.conf-wrap{display:none;text-align:center;}
+.conf-wrap.show{display:block;}
+.conf-icon{font-size:2.2rem;margin-bottom:.6rem;}
+.conf-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--forest);margin-bottom:.25rem;}
+.conf-sub{font-size:.82rem;color:#666;margin-bottom:1.3rem;}
+.cbu-box{background:var(--cream);border:1.5px solid var(--warm);border-radius:13px;padding:1.1rem;margin-bottom:.9rem;text-align:left;}
+.cbu-label{font-size:.62rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--terra);margin-bottom:3px;}
+.cbu-val{font-size:.95rem;font-weight:600;color:var(--forest);letter-spacing:.04em;}
+.cbu-alias{font-size:.75rem;color:#777;margin-top:2px;}
+.conf-detail{background:var(--cream);border-radius:11px;padding:.9rem;margin-bottom:.9rem;text-align:left;}
+.c-row{display:flex;justify-content:space-between;font-size:.8rem;color:#555;margin-bottom:3px;}
+.c-row.total{font-size:.9rem;font-weight:600;color:var(--forest);border-top:1px solid var(--warm);padding-top:7px;margin-top:3px;}
+.c-row.sena-v{font-size:.85rem;color:var(--moss);font-weight:600;}
+.conf-note{font-size:.75rem;color:#777;line-height:1.65;margin-bottom:1.1rem;}
+.btn-wsp-final{width:100%;background:var(--moss);color:white;border:none;padding:12px;border-radius:11px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;cursor:pointer;transition:background .2s;}
+.btn-wsp-final:hover{background:var(--forest);}
+
+/* FAQ */
+.faq-section{max-width:740px;margin:0 auto;padding:2rem 2rem 3rem;}
+.faq-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--forest);margin-bottom:1.1rem;}
+.faq-item{background:white;border-radius:11px;margin-bottom:.5rem;border:1px solid rgba(0,0,0,.06);overflow:hidden;}
+.faq-q{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.1rem;cursor:pointer;font-size:.87rem;font-weight:500;color:var(--forest);transition:background .15s;user-select:none;}
+.faq-q:hover{background:var(--cream);}
+.faq-arrow{color:var(--terra);transition:transform .25s;flex-shrink:0;}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.faq-a-inner{padding:0 1.1rem .9rem;font-size:.81rem;color:#555;line-height:1.7;}
+.faq-item.open .faq-arrow{transform:rotate(180deg);}
+.faq-item.open .faq-a{max-height:300px;}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:2.5rem 1rem;display:none;}
+.no-results h3{font-family:'Playfair Display',serif;color:var(--forest);margin-bottom:.4rem;}
+.no-results p{color:#777;font-size:.85rem;}
+
+/* WA FLOAT */
+.wa-float{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;background:#25D366;color:white;border:none;width:50px;height:50px;border-radius:50%;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:transform .2s;}
+.wa-float:hover{transform:scale(1.1);}
+
+footer{background:var(--forest);color:var(--sage);text-align:center;padding:1.8rem;font-size:.75rem;margin-top:1rem;}
+footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
+
+@media(max-width:680px){
+  .cabana-card{grid-template-columns:1fr;}
+  .card-gallery{height:190px;}
+  .search-grid{grid-template-columns:1fr 1fr;}
+  .btn-search{grid-column:1/-1;width:100%;}
+  .form-grid-2{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Sombra <span>Verde</span></div>
+  <div class="header-sub">Villa La Angostura · Neuquén</div>
+</header>
+
+<div class="hero">
+  <div class="hero-tag">Patagonia Argentina</div>
+  <h1>Tu refugio en<br><em>Villa La Angostura</em></h1>
+  <p class="hero-sub">7 cabañas privadas · Disponibilidad en tiempo real · Atención personalizada</p>
+</div>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <div class="search-grid">
+      <div class="field"><label>Check-in</label><input type="date" id="checkin" onchange="filtrar()"></div>
+      <div class="field"><label>Check-out</label><input type="date" id="checkout" onchange="filtrar()"></div>
+      <div class="field">
+        <label>Personas</label>
+        <select id="personas" onchange="filtrar()">
+          <option value="">Todas</option>
+          <option value="2">2 personas</option>
+          <option value="3">3 personas</option>
+          <option value="4">4 personas</option>
+          <option value="5">5 o más</option>
+        </select>
+      </div>
+      <button class="btn-search" onclick="filtrar()">Buscar</button>
+    </div>
+  </div>
+</div>
+
+<div class="results-section">
+  <div class="results-header">
+    <div class="results-title">Nuestras cabañas</div>
+    <div class="results-count" id="count-label">Cargando disponibilidad...</div>
+  </div>
+
+  <div id="loading-bar" class="loading-bar">
+    <div class="spinner"></div>
+    Conectando con disponibilidad en tiempo real...
+  </div>
+
+  <div class="cabanas-grid" id="cabanas-grid" style="display:none">
+
+    <!-- SOMBRA 1 -->
+    <div class="cabana-card" id="card-s1" data-cabana="Sombra 1" data-cap="2">
+      <div class="card-gallery">
+        <img class="gallery-main" id="img-s1" src="https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=700&q=80" alt="Sombra 1">
+        <span class="badge-disp badge-libre" id="badge-s1">Disponible</span>
+        <span class="guest-badge">👥 hasta 2</span>
+        <div class="gallery-thumbs">
+          <img class="thumb active" src="https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=120&q=70" onclick="cambiarFoto('img-s1',this,'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=120&q=70" onclick="cambiarFoto('img-s1',this,'https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=120&q=70" onclick="cambiarFoto('img-s1',this,'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=700&q=80')">
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-top">
+          <div><div class="cabana-name">Sombra 1</div><div class="cabana-type">Cabaña · Sector A · Para 2</div></div>
+          <div><span class="stars">★★★★★</span><span class="reviews">(34)</span></div>
+        </div>
+        <p class="cabana-desc">Acogedora cabaña para parejas con vista al cerro. Hogar a leña, deck privado y toda la tranquilidad de la Patagonia.</p>
+        <div class="amenities">
+          <span class="amenity">🔥 Hogar a leña</span><span class="amenity">🛁 Jacuzzi</span><span class="amenity">🏔 Vista al cerro</span><span class="amenity">📶 WiFi</span><span class="amenity">🚗 Parking</span>
+        </div>
+        <div class="card-footer">
+          <div class="price-block" id="price-s1">
+            <div class="price-label">Desde</div>
+            <div class="price-current" id="pn-s1">Consultá<span></span></div>
+            <div class="price-sena" id="sena-s1"></div>
+          </div>
+          <div>
+            <button class="btn-cal" onclick="abrirModal('Sombra 1','s1')">📅 Ver fechas</button>
+            <button class="btn-reservar" id="btn-s1" onclick="abrirModal('Sombra 1','s1')">Reservar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOMBRA 2 -->
+    <div class="cabana-card" id="card-s2" data-cabana="Sombra 2" data-cap="3">
+      <div class="card-gallery">
+        <img class="gallery-main" id="img-s2" src="https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=700&q=80" alt="Sombra 2">
+        <span class="badge-disp badge-libre" id="badge-s2">Disponible</span>
+        <span class="guest-badge">👥 hasta 3</span>
+        <div class="gallery-thumbs">
+          <img class="thumb active" src="https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=120&q=70" onclick="cambiarFoto('img-s2',this,'https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=120&q=70" onclick="cambiarFoto('img-s2',this,'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=120&q=70" onclick="cambiarFoto('img-s2',this,'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=80')">
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-top">
+          <div><div class="cabana-name">Sombra 2</div><div class="cabana-type">Cabaña · Sector A · Para 3</div></div>
+          <div><span class="stars">★★★★★</span><span class="reviews">(28)</span></div>
+        </div>
+        <p class="cabana-desc">Deck exterior con parrilla privada rodeada de cipreses patagónicos. A 5 minutos del centro de Villa La Angostura.</p>
+        <div class="amenities">
+          <span class="amenity">🌲 Entorno bosque</span><span class="amenity">🔥 Parrilla privada</span><span class="amenity">🛏 2 dormitorios</span><span class="amenity">📶 WiFi</span>
+        </div>
+        <div class="card-footer">
+          <div class="price-block" id="price-s2">
+            <div class="price-label">Desde</div>
+            <div class="price-current" id="pn-s2">Consultá<span></span></div>
+            <div class="price-sena" id="sena-s2"></div>
+          </div>
+          <div>
+            <button class="btn-cal" onclick="abrirModal('Sombra 2','s2')">📅 Ver fechas</button>
+            <button class="btn-reservar" id="btn-s2" onclick="abrirModal('Sombra 2','s2')">Reservar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOMBRA 3 -->
+    <div class="cabana-card" id="card-s3" data-cabana="Sombra 3" data-cap="4">
+      <div class="card-gallery">
+        <img class="gallery-main" id="img-s3" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80" alt="Sombra 3">
+        <span class="badge-disp badge-libre" id="badge-s3">Disponible</span>
+        <span class="guest-badge">👥 hasta 4</span>
+        <div class="gallery-thumbs">
+          <img class="thumb active" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=120&q=70" onclick="cambiarFoto('img-s3',this,'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=120&q=70" onclick="cambiarFoto('img-s3',this,'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1586105449897-20b5efeb3233?w=120&q=70" onclick="cambiarFoto('img-s3',this,'https://images.unsplash.com/photo-1586105449897-20b5efeb3233?w=700&q=80')">
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-top">
+          <div><div class="cabana-name">Sombra 3</div><div class="cabana-type">Cabaña · Sector A · Vista al lago · Para 4</div></div>
+          <div><span class="stars">★★★★★</span><span class="reviews">(19)</span></div>
+        </div>
+        <p class="cabana-desc">Vista panorámica al lago Nahuel Huapi. Hogar a leña, cocina completa y tranquilidad total en barrio residencial.</p>
+        <div class="amenities">
+          <span class="amenity">💧 Vista al lago</span><span class="amenity">🔥 Hogar a leña</span><span class="amenity">🛏 2 dormitorios</span><span class="amenity">🍳 Cocina completa</span>
+        </div>
+        <div class="card-footer">
+          <div class="price-block" id="price-s3">
+            <div class="price-label">Desde</div>
+            <div class="price-current" id="pn-s3">Consultá<span></span></div>
+            <div class="price-sena" id="sena-s3"></div>
+          </div>
+          <div>
+            <button class="btn-cal" onclick="abrirModal('Sombra 3','s3')">📅 Ver fechas</button>
+            <button class="btn-reservar" id="btn-s3" onclick="abrirModal('Sombra 3','s3')">Reservar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOMBRA 4 -->
+    <div class="cabana-card" id="card-s4" data-cabana="Sombra 4" data-cap="4">
+      <div class="card-gallery">
+        <img class="gallery-main" id="img-s4" src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=700&q=80" alt="Sombra 4">
+        <span class="badge-disp badge-libre" id="badge-s4">Disponible</span>
+        <span class="guest-badge">👥 hasta 4</span>
+        <div class="gallery-thumbs">
+          <img class="thumb active" src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=120&q=70" onclick="cambiarFoto('img-s4',this,'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=120&q=70" onclick="cambiarFoto('img-s4',this,'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=120&q=70" onclick="cambiarFoto('img-s4',this,'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=700&q=80')">
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-top">
+          <div><div class="cabana-name">Sombra 4</div><div class="cabana-type">Cabaña · Sector B · Para 4</div></div>
+          <div><span class="stars">★★★★☆</span><span class="reviews">(15)</span></div>
+        </div>
+        <p class="cabana-desc">Jardín privado y calefacción losa radiante. Estilo patagónico auténtico a minutos del centro. Acepta mascotas.</p>
+        <div class="amenities">
+          <span class="amenity">🌿 Jardín privado</span><span class="amenity">🔥 Losa radiante</span><span class="amenity">🐾 Mascotas</span><span class="amenity">📶 WiFi</span>
+        </div>
+        <div class="card-footer">
+          <div class="price-block" id="price-s4">
+            <div class="price-label">Desde</div>
+            <div class="price-current" id="pn-s4">Consultá<span></span></div>
+            <div class="price-sena" id="sena-s4"></div>
+          </div>
+          <div>
+            <button class="btn-cal" onclick="abrirModal('Sombra 4','s4')">📅 Ver fechas</button>
+            <button class="btn-reservar" id="btn-s4" onclick="abrirModal('Sombra 4','s4')">Reservar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOMBRA 5 -->
+    <div class="cabana-card" id="card-s5" data-cabana="Sombra 5" data-cap="4">
+      <div class="card-gallery">
+        <img class="gallery-main" id="img-s5" src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=700&q=80" alt="Sombra 5">
+        <span class="badge-disp badge-libre" id="badge-s5">Disponible</span>
+        <span class="guest-badge">👥 hasta 4</span>
+        <div class="gallery-thumbs">
+          <img class="thumb active" src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=120&q=70" onclick="cambiarFoto('img-s5',this,'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=120&q=70" onclick="cambiarFoto('img-s5',this,'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1505843513577-22bb7d21e455?w=120&q=70" onclick="cambiarFoto('img-s5',this,'https://images.unsplash.com/photo-1505843513577-22bb7d21e455?w=700&q=80')">
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-top">
+          <div><div class="cabana-name">Sombra 5</div><div class="cabana-type">Cabaña · Sector B · Para 4</div></div>
+          <div><span class="stars">★★★★★</span><span class="reviews">(22)</span></div>
+        </div>
+        <p class="cabana-desc">Quincho techado con parrilla y juegos para niños en el jardín. Perfecta para familias que buscan espacio y privacidad.</p>
+        <div class="amenities">
+          <span class="amenity">🏡 Quincho techado</span><span class="amenity">🎮 Juegos jardín</span><span class="amenity">🛏 2 dormitorios</span><span class="amenity">📶 WiFi fibra</span>
+        </div>
+        <div class="card-footer">
+          <div class="price-block" id="price-s5">
+            <div class="price-label">Desde</div>
+            <div class="price-current" id="pn-s5">Consultá<span></span></div>
+            <div class="price-sena" id="sena-s5"></div>
+          </div>
+          <div>
+            <button class="btn-cal" onclick="abrirModal('Sombra 5','s5')">📅 Ver fechas</button>
+            <button class="btn-reservar" id="btn-s5" onclick="abrirModal('Sombra 5','s5')">Reservar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOMBRA 6 -->
+    <div class="cabana-card" id="card-s6" data-cabana="Sombra 6" data-cap="5">
+      <div class="card-gallery">
+        <img class="gallery-main" id="img-s6" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=80" alt="Sombra 6">
+        <span class="badge-disp badge-libre" id="badge-s6">Disponible</span>
+        <span class="guest-badge">👥 hasta 5</span>
+        <div class="gallery-thumbs">
+          <img class="thumb active" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=120&q=70" onclick="cambiarFoto('img-s6',this,'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1586105449897-20b5efeb3233?w=120&q=70" onclick="cambiarFoto('img-s6',this,'https://images.unsplash.com/photo-1586105449897-20b5efeb3233?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=120&q=70" onclick="cambiarFoto('img-s6',this,'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80')">
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-top">
+          <div><div class="cabana-name">Sombra 6</div><div class="cabana-type">Cabaña · Sector B · Para 5</div></div>
+          <div><span class="stars">★★★★★</span><span class="reviews">(17)</span></div>
+        </div>
+        <p class="cabana-desc">Amplia cabaña familiar con dos plantas y vistas al bosque. Cocina equipada, hogar a leña y deck con vista a la montaña.</p>
+        <div class="amenities">
+          <span class="amenity">🏡 2 plantas</span><span class="amenity">🌲 Vista al bosque</span><span class="amenity">🛏 3 dormitorios</span><span class="amenity">📶 WiFi</span>
+        </div>
+        <div class="card-footer">
+          <div class="price-block" id="price-s6">
+            <div class="price-label">Desde</div>
+            <div class="price-current" id="pn-s6">Consultá<span></span></div>
+            <div class="price-sena" id="sena-s6"></div>
+          </div>
+          <div>
+            <button class="btn-cal" onclick="abrirModal('Sombra 6','s6')">📅 Ver fechas</button>
+            <button class="btn-reservar" id="btn-s6" onclick="abrirModal('Sombra 6','s6')">Reservar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOMBRA 7 -->
+    <div class="cabana-card" id="card-s7" data-cabana="Sombra 7" data-cap="5">
+      <div class="card-gallery">
+        <img class="gallery-main" id="img-s7" src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=700&q=80" alt="Sombra 7">
+        <span class="badge-disp badge-libre" id="badge-s7">Disponible</span>
+        <span class="guest-badge">👥 hasta 5</span>
+        <div class="gallery-thumbs">
+          <img class="thumb active" src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=120&q=70" onclick="cambiarFoto('img-s7',this,'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=120&q=70" onclick="cambiarFoto('img-s7',this,'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=700&q=80')">
+          <img class="thumb" src="https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=120&q=70" onclick="cambiarFoto('img-s7',this,'https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=700&q=80')">
+        </div>
+      </div>
+      <div class="card-content">
+        <div class="card-top">
+          <div><div class="cabana-name">Sombra 7</div><div class="cabana-type">Cabaña · Sector B · La más grande · Para 5</div></div>
+          <div><span class="stars">★★★★★</span><span class="reviews">(31)</span></div>
+        </div>
+        <p class="cabana-desc">La más espaciosa del complejo. Tres dormitorios, quincho con parrilla techada y jardín con área de juegos. Ideal para grupos.</p>
+        <div class="amenities">
+          <span class="amenity">🏡 3 dormitorios</span><span class="amenity">🔥 Quincho techado</span><span class="amenity">🎮 Área juegos</span><span class="amenity">📶 WiFi fibra</span>
+        </div>
+        <div class="card-footer">
+          <div class="price-block" id="price-s7">
+            <div class="price-label">Desde</div>
+            <div class="price-current" id="pn-s7">Consultá<span></span></div>
+            <div class="price-sena" id="sena-s7"></div>
+          </div>
+          <div>
+            <button class="btn-cal" onclick="abrirModal('Sombra 7','s7')">📅 Ver fechas</button>
+            <button class="btn-reservar" id="btn-s7" onclick="abrirModal('Sombra 7','s7')">Reservar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="no-results" id="no-results">
+    <h3>Sin disponibilidad para esas fechas</h3>
+    <p>Probá con otras fechas o menos personas.<br>También podés consultarnos directamente.</p>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="faq-section">
+  <div class="faq-title">Preguntas frecuentes</div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cómo funciona el proceso de reserva? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Elegís la cabaña, seleccionás las fechas y completás tus datos. Abonás el 30% de seña por transferencia al CBU que te indicamos y enviás el comprobante por WhatsApp. Confirmamos tu reserva en menos de 2 horas.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cuál es la política de cancelación? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Con más de 15 días: devolución del 100%. Entre 7 y 15 días: 50%. Menos de 7 días: la seña no es reembolsable. En casos de fuerza mayor lo evaluamos.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cuáles son los horarios de check-in y check-out? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Check-in desde las 14:00 hs. Check-out hasta las 10:00 hs. Consultanos si necesitás horarios especiales.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Se admiten mascotas? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Sí, en Sombra 4 se admiten mascotas. En el resto consultanos antes de reservar.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Hay mínimo de noches? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">En temporada alta y fines de semana largo el mínimo es 3 noches. En temporada baja desde 2 noches.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Qué incluye cada cabaña? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Todas incluyen ropa de cama, toallas, cocina equipada, WiFi, estacionamiento y calefacción. El detalle específico varía por cabaña.</div></div></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="cerrarSiOverlay(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div><div class="modal-title" id="modal-title">Cabaña</div><div class="modal-subtitle" id="modal-sub">Seleccioná tus fechas</div></div>
+      <button class="btn-close" onclick="cerrarModal()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <div id="step-form">
+        <!-- CALENDARIO -->
+        <div style="margin-bottom:1rem;">
+          <div class="cal-nav-row">
+            <button class="btn-cal-nav" onclick="navMes(-1)">‹</button>
+            <div class="cal-month-label" id="cal-label"></div>
+            <button class="btn-cal-nav" onclick="navMes(1)">›</button>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+          <div class="cal-legend">
+            <div class="leg-item"><div class="leg-dot leg-l"></div>Libre</div>
+            <div class="leg-item"><div class="leg-dot leg-o"></div>Ocupado</div>
+            <div class="leg-item"><div class="leg-dot leg-s"></div>Tu selección</div>
+          </div>
+        </div>
+
+        <!-- RESUMEN -->
+        <div class="nights-box" id="nights-box">
+          <div class="n-row"><span id="nb-fechas"></span><span id="nb-noches"></span></div>
+          <div class="n-row"><span>Precio por noche</span><span id="nb-pn"></span></div>
+          <div class="n-row total"><span>Total estadía</span><span id="nb-total"></span></div>
+          <div class="n-row sena"><span>Seña (30%)</span><span id="nb-sena"></span></div>
+        </div>
+
+        <!-- FORM -->
+        <div id="form-huésped" style="display:none">
+          <div class="form-sec"><h4>Tus datos</h4>
+            <div class="form-grid-2">
+              <div class="fg"><label>Nombre completo *</label><input type="text" id="f-nombre" placeholder="Juan Pérez"></div>
+              <div class="fg"><label>WhatsApp *</label><input type="tel" id="f-tel" placeholder="+54 9 11 1234-5678"></div>
+              <div class="fg full"><label>Email *</label><input type="email" id="f-email" placeholder="juan@email.com"></div>
+              <div class="fg"><label>Cantidad de personas</label><input type="number" id="f-pers" min="1" max="8" placeholder="2"></div>
+              <div class="fg"><label>¿Traés mascotas?</label><select id="f-masc"><option value="no">No</option><option value="si">Sí</option></select></div>
+              <div class="fg full"><label>Consultas o pedidos especiales</label><textarea id="f-consulta" placeholder="Opcional..."></textarea></div>
+            </div>
+            <button class="btn-conf" onclick="confirmar()">Ver datos de pago →</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONFIRMACIÓN -->
+      <div class="conf-wrap" id="step-conf">
+        <div class="conf-icon">✅</div>
+        <div class="conf-title">¡Casi listo, <span id="conf-nombre"></span>!</div>
+        <div class="conf-sub">Transferí la seña para confirmar tu reserva</div>
+        <div class="conf-detail">
+          <div class="c-row"><span>Cabaña</span><span id="conf-cab"></span></div>
+          <div class="c-row"><span>Fechas</span><span id="conf-fechas"></span></div>
+          <div class="c-row"><span>Personas</span><span id="conf-pers"></span></div>
+          <div class="c-row total"><span>Total estadía</span><span id="conf-total"></span></div>
+          <div class="c-row sena-v"><span>Seña a transferir ahora</span><span id="conf-sena"></span></div>
+        </div>
+        <div class="cbu-box">
+          <div class="cbu-label">CBU</div>
+          <div class="cbu-val">0000003100012345678901</div>
+          <div class="cbu-alias">Alias: SOMBRA.VERDE.VLA</div>
+          <div class="cbu-alias" style="margin-top:3px">Titular: Tu Nombre Acá</div>
+        </div>
+        <div class="conf-note">
+          Transferí la seña al CBU de arriba y enviá el comprobante por WhatsApp al <strong>+54 9 294 XXX-XXXX</strong>. Confirmamos tu reserva en menos de 2 horas. El saldo (<span id="conf-saldo"></span>) se abona al check-in.
+        </div>
+        <button class="btn-wsp-final" onclick="enviarWsp()">💬 Ya transferí — enviar comprobante por WhatsApp</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<button class="wa-float" onclick="window.open('https://wa.me/549294XXXXXXX?text=Hola!%20Quiero%20consultar%20disponibilidad.','_blank')">💬</button>
+
+<footer>
+  <strong>Sombra Verde</strong> · Villa La Angostura, Neuquén<br>
+  <span style="margin-top:5px;display:block">Reservas directas sin comisión · +54 9 294 XXX-XXXX</span>
+</footer>
+
+<script>
+// ─── CABAÑAS ───────────────────────────────────────────────────
+const CABANAS_IDS = {
+  's1':'Sombra 1','s2':'Sombra 2','s3':'Sombra 3','s4':'Sombra 4',
+  's5':'Sombra 5','s6':'Sombra 6','s7':'Sombra 7'
+};
+const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+const DIAS  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+
+// ─── ESTADO ────────────────────────────────────────────────────
+let reservasDB  = [];
+let tarifasDB   = {};
+let modalCab    = '';
+let modalCabId  = '';
+let calYear     = new Date().getFullYear();
+let calMonth    = new Date().getMonth();
+let selStart    = null;
+let selEnd      = null;
+const todayStr  = new Date().toISOString().split('T')[0];
+
+// ─── FIREBASE CALLBACKS ────────────────────────────────────────
+window.onReservasLoaded = function(data) {
+  reservasDB = data;
+  document.getElementById('loading-bar').style.display = 'none';
+  document.getElementById('cabanas-grid').style.display = 'flex';
+  actualizarBadges();
+  actualizarPrecios();
+  filtrar();
+};
+
+window.onTarifasLoaded = function(data) {
+  tarifasDB = data;
+  actualizarPrecios();
+};
+
+// Fallback si Firebase tarda más de 5 segundos
+setTimeout(() => {
+  if (!window.reservasDB) {
+    reservasDB = [];
+    document.getElementById('loading-bar').style.display = 'none';
+    document.getElementById('cabanas-grid').style.display = 'flex';
+    document.getElementById('count-label').textContent = '7 cabañas disponibles';
+  }
+}, 5000);
+
+// ─── DISPONIBILIDAD ────────────────────────────────────────────
+function fechasOcupadasCabana(cabNombre) {
+  const set = new Set();
+  reservasDB
+    .filter(r => r.cabana === cabNombre && r.estado !== 'Cancelada')
+    .forEach(r => {
+      let d = new Date(r.checkin);
+      const end = new Date(r.checkout);
+      while (d < end) {
+        set.add(d.toISOString().split('T')[0]);
+        d.setDate(d.getDate() + 1);
+      }
+    });
+  return set;
+}
+
+function estaDisponible(cabNombre, desde, hasta) {
+  if (!desde || !hasta) return true;
+  const ocupadas = fechasOcupadasCabana(cabNombre);
+  let d = new Date(desde);
+  const end = new Date(hasta);
+  while (d < end) {
+    if (ocupadas.has(d.toISOString().split('T')[0])) return false;
+    d.setDate(d.getDate() + 1);
+  }
+  return true;
+}
+
+function actualizarBadges() {
+  const ci = document.getElementById('checkin').value;
+  const co = document.getElementById('checkout').value;
+  Object.keys(CABANAS_IDS).forEach(id => {
+    const nombre = CABANAS_IDS[id];
+    const badge  = document.getElementById('badge-' + id);
+    const btn    = document.getElementById('btn-' + id);
+    const card   = document.getElementById('card-' + id);
+    if (!badge) return;
+    const disp = !ci || !co || estaDisponible(nombre, ci, co);
+    badge.textContent = disp ? 'Disponible' : 'Ocupada';
+    badge.className = 'badge-disp ' + (disp ? 'badge-libre' : 'badge-ocupada');
+    card.classList.toggle('no-disponible', !disp);
+    if (btn) btn.disabled = !disp;
+  });
+}
+
+// ─── PRECIOS DESDE TARIFAS ─────────────────────────────────────
+function getPrecioNoche(cabNombre, fechaStr) {
+  if (!fechaStr || !tarifasDB) return null;
+  const key = fechaStr + '_' + cabNombre;
+  return tarifasDB[key] ? Number(tarifasDB[key]) : null;
+}
+
+function getPrecioPromedioMes(cabNombre) {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = now.getMonth() + 1;
+  const dias = new Date(year, month, 0).getDate();
+  let total = 0, count = 0;
+  for (let d = 1; d <= dias; d++) {
+    const iso = year + '-' + String(month).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+    const p = getPrecioNoche(cabNombre, iso);
+    if (p) { total += p; count++; }
+  }
+  return count ? Math.round(total / count) : null;
+}
+
+function actualizarPrecios() {
+  Object.keys(CABANAS_IDS).forEach(id => {
+    const nombre = CABANAS_IDS[id];
+    const precio = getPrecioPromedioMes(nombre);
+    const el     = document.getElementById('pn-' + id);
+    const senaEl = document.getElementById('sena-' + id);
+    if (!el) return;
+    if (precio) {
+      el.innerHTML = '$' + precio.toLocaleString('es-AR') + '<span>/ noche</span>';
+      if (senaEl) senaEl.textContent = 'Seña 30%: $' + Math.round(precio * 0.3).toLocaleString('es-AR');
+    }
+  });
+}
+
+// ─── FILTRAR POR PERSONAS ──────────────────────────────────────
+function filtrar() {
+  actualizarBadges();
+  const pas = parseInt(document.getElementById('personas').value) || 0;
+  const cards = document.querySelectorAll('.cabana-card');
+  let vis = 0;
+  cards.forEach(c => {
+    const cap = parseInt(c.dataset.cap);
+    const ok  = !pas || cap >= pas;
+    c.classList.toggle('hidden', !ok);
+    if (ok) vis++;
+  });
+  document.getElementById('count-label').textContent = vis + (vis === 1 ? ' cabaña disponible' : ' cabañas disponibles');
+  document.getElementById('no-results').style.display = vis === 0 ? 'block' : 'none';
+}
+
+// ─── MODAL ─────────────────────────────────────────────────────
+function abrirModal(nombre, id) {
+  modalCab   = nombre;
+  modalCabId = id;
+  selStart   = null;
+  selEnd     = null;
+  document.getElementById('modal-title').textContent = nombre;
+  document.getElementById('modal-sub').textContent   = 'Seleccioná tus fechas';
+  document.getElementById('nights-box').classList.remove('show');
+  document.getElementById('form-huésped').style.display = 'none';
+  document.getElementById('step-form').style.display = 'block';
+  document.getElementById('step-conf').classList.remove('show');
+  calYear  = new Date().getFullYear();
+  calMonth = new Date().getMonth();
+  renderCal();
+  document.getElementById('modal-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function cerrarModal() { document.getElementById('modal-overlay').classList.remove('open'); document.body.style.overflow = ''; }
+function cerrarSiOverlay(e) { if (e.target === document.getElementById('modal-overlay')) cerrarModal(); }
+
+// ─── CALENDARIO ────────────────────────────────────────────────
+function navMes(d) {
+  calMonth += d;
+  if (calMonth > 11) { calMonth = 0; calYear++; }
+  if (calMonth < 0)  { calMonth = 11; calYear--; }
+  renderCal();
+}
+
+function renderCal() {
+  document.getElementById('cal-label').textContent = MESES[calMonth] + ' ' + calYear;
+  const grid   = document.getElementById('cal-grid');
+  const ocupadas = fechasOcupadasCabana(modalCab);
+  grid.innerHTML = '';
+  DIAS.forEach(d => {
+    const h = document.createElement('div'); h.className = 'cal-dh'; h.textContent = d; grid.appendChild(h);
+  });
+  const first = new Date(calYear, calMonth, 1).getDay();
+  const days  = new Date(calYear, calMonth + 1, 0).getDate();
+  for (let i = 0; i < first; i++) { const e = document.createElement('div'); e.className = 'cal-day empty'; grid.appendChild(e); }
+  for (let d = 1; d <= days; d++) {
+    const ds  = calYear + '-' + String(calMonth + 1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+    const el  = document.createElement('div');
+    el.textContent = d;
+    const isPast = ds < todayStr;
+    const isOcup = ocupadas.has(ds);
+    if (isPast)      el.className = 'cal-day past';
+    else if (isOcup) el.className = 'cal-day ocupado';
+    else {
+      el.className = 'cal-day libre';
+      if (selStart && selEnd) {
+        if (ds === selStart || ds === selEnd) el.className = 'cal-day sel';
+        else if (ds > selStart && ds < selEnd) el.className = 'cal-day en-rango';
+      } else if (selStart && ds === selStart) el.className = 'cal-day sel';
+      el.onclick = () => clickDia(ds, ocupadas);
+    }
+    grid.appendChild(el);
+  }
+}
+
+function clickDia(ds, ocupadas) {
+  if (!selStart || selEnd) { selStart = ds; selEnd = null; }
+  else if (ds <= selStart) { selStart = ds; selEnd = null; }
+  else {
+    let cur = new Date(selStart); cur.setDate(cur.getDate() + 1);
+    const end = new Date(ds); let ok = true;
+    while (cur < end) {
+      if (ocupadas.has(cur.toISOString().split('T')[0])) { ok = false; break; }
+      cur.setDate(cur.getDate() + 1);
+    }
+    if (ok) { selEnd = ds; mostrarResumen(); }
+    else { alert('Hay fechas ocupadas en ese rango. Elegí otras fechas.'); selStart = ds; selEnd = null; }
+  }
+  renderCal();
+  if (!selEnd) document.getElementById('nights-box').classList.remove('show');
+}
+
+function mostrarResumen() {
+  if (!selStart || !selEnd) return;
+  const noches = Math.round((new Date(selEnd) - new Date(selStart)) / 86400000);
+  const pn     = getPrecioNoche(modalCab, selStart) || getPrecioPromedioMes(modalCab) || 0;
+  const total  = noches * pn;
+  const sena   = Math.round(total * 0.3);
+  const fmtD   = s => { const [y,m,d] = s.split('-'); return d+'/'+m+'/'+y; };
+  const fmt    = n => '$' + Math.round(n).toLocaleString('es-AR');
+  document.getElementById('nb-fechas').textContent = fmtD(selStart) + ' → ' + fmtD(selEnd);
+  document.getElementById('nb-noches').textContent = noches + (noches === 1 ? ' noche' : ' noches');
+  document.getElementById('nb-pn').textContent     = pn ? fmt(pn) : 'A confirmar';
+  document.getElementById('nb-total').textContent  = pn ? fmt(total) : 'A confirmar';
+  document.getElementById('nb-sena').textContent   = pn ? fmt(sena) : 'A confirmar';
+  document.getElementById('nights-box').classList.add('show');
+  document.getElementById('form-huésped').style.display = 'block';
+}
+
+// ─── CONFIRMAR ─────────────────────────────────────────────────
+function confirmar() {
+  const nombre = document.getElementById('f-nombre').value.trim();
+  const tel    = document.getElementById('f-tel').value.trim();
+  const email  = document.getElementById('f-email').value.trim();
+  if (!nombre || !tel || !email) { alert('Completá nombre, WhatsApp y email.'); return; }
+  if (!selStart || !selEnd) { alert('Seleccioná fechas primero.'); return; }
+  const noches = Math.round((new Date(selEnd) - new Date(selStart)) / 86400000);
+  const pn     = getPrecioNoche(modalCab, selStart) || getPrecioPromedioMes(modalCab) || 0;
+  const total  = noches * pn;
+  const sena   = Math.round(total * 0.3);
+  const pers   = document.getElementById('f-pers').value || '—';
+  const fmtD   = s => { const [y,m,d] = s.split('-'); return d+'/'+m+'/'+y; };
+  const fmt    = n => '$' + Math.round(n).toLocaleString('es-AR');
+  document.getElementById('conf-nombre').textContent = nombre.split(' ')[0];
+  document.getElementById('conf-cab').textContent    = modalCab;
+  document.getElementById('conf-fechas').textContent = fmtD(selStart) + ' → ' + fmtD(selEnd);
+  document.getElementById('conf-pers').textContent   = pers + ' persona' + (pers !== '1' ? 's' : '');
+  document.getElementById('conf-total').textContent  = pn ? fmt(total) : 'A confirmar';
+  document.getElementById('conf-sena').textContent   = pn ? fmt(sena) : 'A confirmar';
+  document.getElementById('conf-saldo').textContent  = pn ? fmt(total - sena) : '';
+  document.getElementById('step-form').style.display = 'none';
+  document.getElementById('step-conf').classList.add('show');
+  document.getElementById('modal-sub').textContent = 'Confirmá tu reserva';
+  window._confData = { nombre, tel, sena, total, noches };
+}
+
+function enviarWsp() {
+  const d = window._confData || {};
+  const fmtD = s => { if (!s) return ''; const [y,m,d2] = s.split('-'); return d2+'/'+m+'/'+y; };
+  const fmt  = n => '$' + Math.round(n).toLocaleString('es-AR');
+  const msg  = `Hola! Soy ${d.nombre}. Quiero reservar ${modalCab} del ${fmtD(selStart)} al ${fmtD(selEnd)} (${d.noches} noches). Realicé la transferencia de la seña de ${fmt(d.sena)}. Te mando el comprobante.`;
+  window.open('https://wa.me/549294XXXXXXX?text=' + encodeURIComponent(msg), '_blank');
+}
+
+// ─── HELPERS ───────────────────────────────────────────────────
+function cambiarFoto(id, el, src) {
+  document.getElementById(id).src = src;
+  el.closest('.card-gallery').querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+function toggleFaq(el) { el.closest('.faq-item').classList.toggle('open'); }
+
+// Fechas mínimas
+document.getElementById('checkin').min  = todayStr;
+document.getElementById('checkout').min = todayStr;
+</script>
+</body>
+</html>
