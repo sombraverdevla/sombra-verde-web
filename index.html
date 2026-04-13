@@ -9,7 +9,7 @@
 <!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, onSnapshot, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBX9DTDvVxUdU2SFzRvVgLqgES625-qRIo",
@@ -43,6 +43,24 @@ onSnapshot(doc(db, 'sv', 'tarifas'), (snap) => {
     } catch(e) {}
   }
 });
+
+// ─── GUARDAR RESERVA EN FIREBASE ──────────────────────────────
+window.guardarReservaFirebase = async function(nueva) {
+  try {
+    const ref  = doc(db, 'sv', 'reservas');
+    const snap = await getDoc(ref);
+    let reservas = [];
+    if (snap.exists()) {
+      try { reservas = JSON.parse(snap.data().data); } catch(e) {}
+    }
+    reservas.push(nueva);
+    await setDoc(ref, { data: JSON.stringify(reservas) });
+    return true;
+  } catch(e) {
+    console.error('Error guardando reserva:', e);
+    return false;
+  }
+};
 </script>
 
 <style>
@@ -1370,7 +1388,9 @@ function mostrarResumen() {
 }
 
 // ─── CONFIRMAR ─────────────────────────────────────────────────
-function confirmar() {
+function genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2,5); }
+
+async function confirmar() {
   const nombre = document.getElementById('f-nombre').value.trim();
   const tel    = document.getElementById('f-tel').value.trim();
   const email  = document.getElementById('f-email').value.trim();
@@ -1380,9 +1400,13 @@ function confirmar() {
   const pn     = getPrecioNoche(modalCab, selStart) || getPrecioPromedioMes(modalCab) || 0;
   const total  = noches * pn;
   const sena   = Math.round(total * 0.3);
-  const pers   = document.getElementById('f-pers').value || '—';
+  const pers   = document.getElementById('f-pers').value || '1';
+  const mascotas = document.getElementById('f-mascotas') ? document.getElementById('f-mascotas').value : 'No';
+  const obs    = document.getElementById('f-obs-huesped') ? document.getElementById('f-obs-huesped').value.trim() : '';
   const fmtD   = s => { const [y,m,d] = s.split('-'); return d+'/'+m+'/'+y; };
   const fmt    = n => '$' + Math.round(n).toLocaleString('es-AR');
+
+  // Mostrar pantalla confirmación
   document.getElementById('conf-nombre').textContent = nombre.split(' ')[0];
   document.getElementById('conf-cab').textContent    = modalCab;
   document.getElementById('conf-fechas').textContent = fmtD(selStart) + ' → ' + fmtD(selEnd);
@@ -1394,6 +1418,37 @@ function confirmar() {
   document.getElementById('step-conf').classList.add('show');
   document.getElementById('modal-sub').textContent = 'Confirmá tu reserva';
   window._confData = { nombre, tel, sena, total, noches };
+
+  // Separar nombre y apellido
+  const partes   = nombre.trim().split(' ');
+  const apellido = partes.length > 1 ? partes.slice(1).join(' ') : '';
+  const primerNombre = partes[0];
+
+  // Escribir en Firebase
+  const nuevaReserva = {
+    id:         genId(),
+    apellido:   apellido || primerNombre,
+    nombre:     primerNombre,
+    telefono:   tel,
+    canal:      'Web directa',
+    cabana:     modalCab,
+    estado:     'Pendiente',
+    checkin:    selStart,
+    checkout:   selEnd,
+    adultos:    Number(pers) || 1,
+    ninos:      0,
+    tarifa:     pn || 0,
+    sena:       sena,
+    sena1:      0, sena1fecha: '',
+    sena2:      0, sena2fecha: '',
+    sena3:      0, sena3fecha: '',
+    obs:        `Email: ${email}${mascotas !== 'No' ? ' · Mascotas: ' + mascotas : ''}${obs ? ' · ' + obs : ''} · Reserva web ${new Date().toLocaleDateString('es-AR')}`
+  };
+
+  if (typeof window.guardarReservaFirebase === 'function') {
+    const ok = await window.guardarReservaFirebase(nuevaReserva);
+    if (!ok) console.warn('No se pudo guardar en Firebase — el huésped deberá confirmar por WhatsApp');
+  }
 }
 
 function enviarWsp() {
