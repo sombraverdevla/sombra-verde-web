@@ -44,6 +44,16 @@ onSnapshot(doc(db, 'sv', 'tarifas'), (snap) => {
   }
 });
 
+// Escuchar cabañas (bloqueos) en tiempo real
+onSnapshot(doc(db, 'sv', 'cabanas'), (snap) => {
+  if (snap.exists()) {
+    try {
+      window.cabanasDB = JSON.parse(snap.data().data);
+      if (typeof window.onCabanasLoaded === 'function') window.onCabanasLoaded(window.cabanasDB);
+    } catch(e) {}
+  }
+});
+
 // ─── GUARDAR RESERVA EN FIREBASE ──────────────────────────────
 window.guardarReservaFirebase = async function(nueva) {
   try {
@@ -701,7 +711,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
 <div class="search-wrap">
   <div class="search-box">
     <div class="search-grid">
-      <div class="field"><label>Check-in</label><input type="date" id="checkin" onchange="filtrar()"></div>
+      <div class="field"><label>Check-in</label><input type="date" id="checkin" onchange="onCheckinChange()"></div>
       <div class="field"><label>Check-out</label><input type="date" id="checkout" onchange="filtrar()"></div>
       <div class="field">
         <label>Personas</label>
@@ -1559,6 +1569,8 @@ const DIAS  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
 // ─── ESTADO ────────────────────────────────────────────────────
 let reservasDB  = [];
 let tarifasDB   = {};
+let cabanasDB   = {};
+const CAB_ID_MAP = {'Sombra 1':'s1','Sombra 2':'s2','Sombra 3':'s3','Sombra 4':'s4','Sombra 5':'s5','Sombra 6':'s6','Sombra 7':'s7'};
 let modalCab    = '';
 let modalCabId  = '';
 let calYear     = new Date().getFullYear();
@@ -1583,6 +1595,12 @@ window.onTarifasLoaded = function(data) {
   actualizarPrecios();
 };
 
+window.onCabanasLoaded = function(data) {
+  cabanasDB = data;
+  actualizarBadges();
+  filtrar();
+};
+
 // Fallback si Firebase tarda más de 5 segundos
 setTimeout(() => {
   if (!window.reservasDB) {
@@ -1597,6 +1615,7 @@ setTimeout(() => {
 // ─── DISPONIBILIDAD ────────────────────────────────────────────
 function fechasOcupadasCabana(cabNombre) {
   const set = new Set();
+  // Reservas
   reservasDB
     .filter(r => r.cabana === cabNombre && r.estado !== 'Cancelada')
     .forEach(r => {
@@ -1607,6 +1626,17 @@ function fechasOcupadasCabana(cabNombre) {
         d.setDate(d.getDate() + 1);
       }
     });
+  // Bloqueos
+  const cid = CAB_ID_MAP[cabNombre];
+  const bloqueos = cid && cabanasDB[cid] && cabanasDB[cid].bloqueos ? cabanasDB[cid].bloqueos : [];
+  bloqueos.forEach(b => {
+    let d = new Date(b.desde);
+    const end = new Date(b.hasta);
+    while (d < end) {
+      set.add(d.toISOString().split('T')[0]);
+      d.setDate(d.getDate() + 1);
+    }
+  });
   return set;
 }
 
@@ -1751,6 +1781,21 @@ function getPersonas() {
   return parseInt(sel.value) || 0;
 }
 
+function onCheckinChange() {
+  const ci = document.getElementById('checkin').value;
+  const coInput = document.getElementById('checkout');
+  if (ci) {
+    // Forzar checkout mínimo = checkin + 1
+    const minCo = new Date(ci);
+    minCo.setDate(minCo.getDate() + 1);
+    const minCoStr = minCo.toISOString().split('T')[0];
+    coInput.min = minCoStr;
+    if (coInput.value && coInput.value <= ci) coInput.value = minCoStr;
+  }
+  // Solo filtrar si ya hay checkout
+  if (ci && document.getElementById('checkout').value) filtrar();
+}
+
 function filtrar() {
   actualizarBadges();
   const ci  = document.getElementById('checkin').value;
@@ -1892,16 +1937,30 @@ function abrirModal(nombre, id) {
   modalCabId = id;
   selStart   = null;
   selEnd     = null;
+
+  // Pre-cargar fechas del buscador si están completas
+  const ci = document.getElementById('checkin').value;
+  const co = document.getElementById('checkout').value;
+  if (ci && co && co > ci) {
+    selStart = ci;
+    selEnd   = co;
+    calYear  = parseInt(ci.split('-')[0]);
+    calMonth = parseInt(ci.split('-')[1]) - 1;
+  } else {
+    calYear  = new Date().getFullYear();
+    calMonth = new Date().getMonth();
+  }
+
   document.getElementById('modal-title').textContent = nombre;
   document.getElementById('modal-sub').textContent   = 'Seleccioná tus fechas';
   document.getElementById('nights-box').classList.remove('show');
   document.getElementById('form-huésped').style.display = 'none';
   document.getElementById('step-form').style.display = 'block';
   document.getElementById('step-conf').classList.remove('show');
-  calYear  = new Date().getFullYear();
-  calMonth = new Date().getMonth();
   setProgreso(1);
   renderCal();
+  // Si ya hay fechas pre-cargadas, mostrar resumen directo
+  if (selStart && selEnd) mostrarResumen();
   document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
