@@ -6,6 +6,9 @@
 <title>Sombra Verde · Cabañas Villa La Angostura</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('v5ds2alX6hPpTqaiw');</script>
+
 <!-- Firebase -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -125,7 +128,7 @@ header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:cen
 .cabana-card.no-disponible{opacity:.55;pointer-events:none;}
 .cabana-card .btn-reservar,.cabana-card .btn-cal{position:relative;z-index:2;}
 
-.card-gallery{position:relative;height:250px;overflow:hidden;}
+.card-gallery{position:relative;height:340px;overflow:hidden;}
 .gallery-main{width:100%;height:100%;object-fit:cover;transition:transform .4s;}
 .cabana-card:hover .gallery-main{transform:scale(1.04);}
 .gallery-thumbs{position:absolute;bottom:8px;left:8px;display:flex;gap:5px;}
@@ -457,7 +460,7 @@ header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:cen
 .detail-overlay.open{display:flex;}
 .detail-modal{background:white;border-radius:20px;width:100%;max-width:780px;max-height:92vh;overflow-y:auto;position:relative;}
 .detail-header{position:relative;}
-.detail-gallery-main{width:100%;height:280px;object-fit:cover;border-radius:20px 20px 0 0;}
+.detail-gallery-main{width:100%;height:420px;object-fit:cover;border-radius:20px 20px 0 0;}
 .detail-thumbs-row{display:flex;gap:6px;padding:.75rem 1rem .5rem;}
 .detail-thumb{width:70px;height:50px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid transparent;opacity:.8;transition:all .2s;flex-shrink:0;}
 .detail-thumb:hover,.detail-thumb.active{opacity:1;border-color:var(--accent);}
@@ -470,7 +473,7 @@ header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:cen
 .detail-amenity{font-size:.72rem;padding:4px 10px;border-radius:20px;background:var(--cream);color:var(--terra);border:1px solid var(--warm);}
 .detail-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:1.2rem;}
 .detail-info-item{background:var(--cream);border-radius:10px;padding:.7rem .9rem;}
-.detail-info-label{font-size:.65rem;color:var(--terra);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px;}
+.detail-info-label{font-size:.68rem;color:var(--terra);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;opacity:.85;}
 .detail-info-val{font-size:.88rem;font-weight:500;color:var(--forest);}
 .detail-footer{display:flex;align-items:center;justify-content:space-between;padding-top:1rem;border-top:1px solid var(--warm);}
 .detail-price-block{}
@@ -503,9 +506,10 @@ header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:cen
 .no-results p{color:#777;font-size:.85rem;}
 
 /* WA FLOAT */
-.wa-float{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;background:#25D366;color:white;border:none;width:50px;height:50px;border-radius:50%;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:transform .2s;}
-.wa-float:hover{transform:scale(1.1);}
-/* ── Formulario consulta rápida ── */
+.wa-float{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;background:#25D366;color:white;border:none;height:50px;border-radius:25px;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:transform .2s;display:flex;align-items:center;gap:8px;padding:0 18px 0 14px;}
+.wa-float:hover{transform:scale(1.05);}
+.wa-float-txt{font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;white-space:nowrap;}
+@media(max-width:480px){.wa-float-txt{display:none;}.wa-float{width:50px;padding:0;justify-content:center;border-radius:50%;}}
 .consulta-section{background:var(--cream);border-top:1px solid var(--warm);padding:2.5rem 2rem;}
 .consulta-inner{max-width:640px;margin:0 auto;text-align:center;}
 .consulta-title{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--forest);margin-bottom:.3rem;}
@@ -562,7 +566,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
 
   /* Cards — foto arriba, contenido abajo, ocupa todo el ancho */
   .cabana-card{grid-template-columns:1fr;border-radius:14px;}
-  .card-gallery{height:220px;border-radius:14px 14px 0 0;}
+  .card-gallery{height:280px;border-radius:14px 14px 0 0;}
   .gallery-thumbs{bottom:6px;left:6px;}
   .gallery-thumbs .thumb{width:38px;height:28px;}
   .card-content{padding:1rem;}
@@ -622,7 +626,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
 
   /* Modal detalle */
   .detail-modal{border-radius:16px 16px 0 0;margin-top:auto;}
-  .detail-gallery-main{height:220px;}
+  .detail-gallery-main{height:300px;}
 
   /* Angostura VIP banner */
   .avip-banner{flex-direction:column;text-align:center;padding:.9rem 1rem;gap:.8rem;}
@@ -726,7 +730,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         </select>
         <input type="number" id="personas-num" min="6" max="25" placeholder="¿Cuántos?" style="display:none;margin-top:4px;width:100%;border:1px solid #ddd;border-radius:8px;padding:7px 10px;font-size:.9rem;font-family:inherit;" oninput="filtrar()">
       </div>
-      <button class="btn-search" onclick="filtrar()">Buscar</button>
+      <button class="btn-search" onclick="window._filtrarConScroll=true;filtrar()">Buscar</button>
     </div>
   </div>
 </div>
@@ -784,14 +788,14 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
     <!-- SOMBRA 1 -->
     <div class="cabana-card fade-in" id="card-s1" onclick="abrirDetalle('s1')" data-cabana="Sombra 1" data-cap="5">
       <div class="card-gallery">
-        <img class="gallery-main" id="img-s1" style="cursor:pointer" onclick="abrirDetalle('s1')" src="https://raw.githubusercontent.com/sombraverdevla/sombra-verde-web/main/fffffff.jpg" alt="Sombra 1">
+        <img class="gallery-main" id="img-s1" style="cursor:pointer" onclick="abrirDetalle('s1')" src="https://res.cloudinary.com/dzld5gwmr/image/upload/c62cfb12-9d48-458e-a8c5-2921f1288e67-YNqMzqeOZyS0WQXP_mgj96u" alt="Sombra 1">
         <span class="badge-disp badge-libre" id="badge-s1">Disponible</span>
         <span class="badge-off">15% OFF</span>
         <span class="guest-badge">👥 hasta 5</span>
         <div class="gallery-thumbs">
-          <img class="thumb active" src="https://raw.githubusercontent.com/sombraverdevla/sombra-verde-web/main/fffffff.jpg" onclick="event.stopPropagation();cambiarFoto('img-s1',this,'https://raw.githubusercontent.com/sombraverdevla/sombra-verde-web/main/fffffff.jpg')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s1',this,'https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=700&q=80')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s1',this,'https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=700&q=80')">
+          <img class="thumb active" src="https://res.cloudinary.com/dzld5gwmr/image/upload/c62cfb12-9d48-458e-a8c5-2921f1288e67-YNqMzqeOZyS0WQXP_mgj96u" onclick="event.stopPropagation();cambiarFoto('img-s1',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/c62cfb12-9d48-458e-a8c5-2921f1288e67-YNqMzqeOZyS0WQXP_mgj96u')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-14-AGBbxLO01qt1Nq9W_dngutm" onclick="event.stopPropagation();cambiarFoto('img-s1',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-14-AGBbxLO01qt1Nq9W_dngutm')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-11-mePJ9OlB92foBWJ6_ckft9m" onclick="event.stopPropagation();cambiarFoto('img-s1',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-11-mePJ9OlB92foBWJ6_ckft9m')">
         </div>
       </div>
       <div class="card-content">
@@ -799,7 +803,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           <div><div class="cabana-name">Sombra 1 <span class="badge-mas-reservada">🏆 Más reservada</span></div><div class="cabana-type">Cabaña · Michay 268 · Hasta 5 pax</div></div>
           <div><span class="stars">★★★★★</span><span class="reviews">(34)</span></div>
         </div>
-        <p class="cabana-desc">Todo en planta baja — ideal para quienes buscan comodidad sin escaleras. 1 dormitorio matrimonial + diván cama en living. A metros del centro, supermercados y restaurantes caminando.</p>
+        <p class="cabana-desc">Todo en planta baja — 2 dormitorios: 1 matrimonial y 1 con camas separadas (una de ellas es diván, para el 5to huésped). A metros del centro, supermercados y restaurantes caminando.</p>
         <div class="amenities">
           <span class="amenity">🏠 Todo planta baja</span><span class="amenity">📍 Céntrica</span><span class="amenity">🔥 Parrilla</span><span class="amenity">📶 WiFi</span><span class="amenity">🚗 Estacionamiento</span><span class="amenity">📺 Smart TV</span><span class="amenity">🍼 Cuna</span>
         </div>
@@ -824,14 +828,14 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
     <!-- SOMBRA 2 -->
     <div class="cabana-card fade-in" id="card-s2" onclick="abrirDetalle('s2')" data-cabana="Sombra 2" data-cap="3">
       <div class="card-gallery">
-        <img class="gallery-main" id="img-s2" style="cursor:pointer" onclick="abrirDetalle('s2')" src="https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=700&q=80" alt="Sombra 2">
+        <img class="gallery-main" id="img-s2" style="cursor:pointer" onclick="abrirDetalle('s2')" src="https://res.cloudinary.com/dzld5gwmr/image/upload/1-6-d95ZN585j5hV3vJ0_gn6h4e" alt="Sombra 2">
         <span class="badge-disp badge-libre" id="badge-s2">Disponible</span>
         <span class="badge-off">15% OFF</span>
         <span class="guest-badge">👥 hasta 3</span>
         <div class="gallery-thumbs">
-          <img class="thumb active" src="https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s2',this,'https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=700&q=80')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s2',this,'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&q=80')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s2',this,'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=80')">
+          <img class="thumb active" src="https://res.cloudinary.com/dzld5gwmr/image/upload/1-6-d95ZN585j5hV3vJ0_gn6h4e" onclick="event.stopPropagation();cambiarFoto('img-s2',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/1-6-d95ZN585j5hV3vJ0_gn6h4e')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/a-YNqMzVVbMVt62KK0_yzhz5r" onclick="event.stopPropagation();cambiarFoto('img-s2',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/a-YNqMzVVbMVt62KK0_yzhz5r')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/b-A0xvLgg9lrtB2Wlo_lxwxdz" onclick="event.stopPropagation();cambiarFoto('img-s2',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/b-A0xvLgg9lrtB2Wlo_lxwxdz')">
         </div>
       </div>
       <div class="card-content">
@@ -861,14 +865,14 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
     <!-- SOMBRA 3 -->
     <div class="cabana-card fade-in" id="card-s3" onclick="abrirDetalle('s3')" data-cabana="Sombra 3" data-cap="3">
       <div class="card-gallery">
-        <img class="gallery-main" id="img-s3" style="cursor:pointer" onclick="abrirDetalle('s3')" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80" alt="Sombra 3">
+        <img class="gallery-main" id="img-s3" style="cursor:pointer" onclick="abrirDetalle('s3')" src="https://res.cloudinary.com/dzld5gwmr/image/upload/img_1893-AQEe6v7ybXuZB7B3_t7qyjt" alt="Sombra 3">
         <span class="badge-disp badge-libre" id="badge-s3">Disponible</span>
         <span class="badge-off">15% OFF</span>
         <span class="guest-badge">👥 hasta 4</span>
         <div class="gallery-thumbs">
-          <img class="thumb active" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s3',this,'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s3',this,'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=80')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1586105449897-20b5efeb3233?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s3',this,'https://images.unsplash.com/photo-1586105449897-20b5efeb3233?w=700&q=80')">
+          <img class="thumb active" src="https://res.cloudinary.com/dzld5gwmr/image/upload/img_1893-AQEe6v7ybXuZB7B3_t7qyjt" onclick="event.stopPropagation();cambiarFoto('img-s3',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/img_1893-AQEe6v7ybXuZB7B3_t7qyjt')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/b3be4030-48ec-4ba2-b70e-17c3e365cf30-A85M7jGON1s3zrRg_bxgotd" onclick="event.stopPropagation();cambiarFoto('img-s3',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/b3be4030-48ec-4ba2-b70e-17c3e365cf30-A85M7jGON1s3zrRg_bxgotd')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/img_1922-m5K8Ox04DZcR3NXd_juvpgb" onclick="event.stopPropagation();cambiarFoto('img-s3',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/img_1922-m5K8Ox04DZcR3NXd_juvpgb')">
         </div>
       </div>
       <div class="card-content">
@@ -876,7 +880,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           <div><div class="cabana-name">Sombra 3</div><div class="cabana-type">Cabaña · Michay 268 · Hasta 3 pax</div></div>
           <div><span class="stars">★★★★★</span><span class="reviews">(19)</span></div>
         </div>
-        <p class="cabana-desc">2 plantas con living/cocina/baño en PB y dormitorio en PA. 1 dormitorio matrimonial + sillón cama en living. Céntrica, tranquila y a metros de todo lo que necesitás.</p>
+        <p class="cabana-desc">2 plantas con living/cocina en PB y dormitorio/baño en PA. 1 dormitorio matrimonial + sillón cama en living. Céntrica, tranquila y a metros de todo lo que necesitás.</p>
         <div class="amenities">
           <span class="amenity">🏡 2 plantas</span><span class="amenity">📍 Céntrica</span><span class="amenity">🔥 Parrilla</span><span class="amenity">📶 WiFi</span><span class="amenity">🚗 Estacionamiento</span><span class="amenity">📺 Smart TV</span><span class="amenity">🍼 Cuna</span>
         </div>
@@ -896,16 +900,16 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
     </div>
 
     <!-- SOMBRA 4 -->
-    <div class="cabana-card fade-in" id="card-s4" onclick="abrirDetalle('s4')" data-cabana="Sombra 4" data-cap="4">
+    <div class="cabana-card fade-in" id="card-s4" onclick="abrirDetalle('s4')" data-cabana="Sombra 4" data-cap="5">
       <div class="card-gallery">
-        <img class="gallery-main" id="img-s4" style="cursor:pointer" onclick="abrirDetalle('s4')" src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=700&q=80" alt="Sombra 4">
+        <img class="gallery-main" id="img-s4" style="cursor:pointer" onclick="abrirDetalle('s4')" src="https://res.cloudinary.com/dzld5gwmr/image/upload/16-mnl4Xl1qynFblejQ_hk683u" alt="Sombra 4">
         <span class="badge-disp badge-libre" id="badge-s4">Disponible</span>
         <span class="badge-off">15% OFF</span>
-        <span class="guest-badge">👥 hasta 4</span>
+        <span class="guest-badge">👥 hasta 5</span>
         <div class="gallery-thumbs">
-          <img class="thumb active" src="https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s4',this,'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=700&q=80')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s4',this,'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=700&q=80')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s4',this,'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=700&q=80')">
+          <img class="thumb active" src="https://res.cloudinary.com/dzld5gwmr/image/upload/16-mnl4Xl1qynFblejQ_hk683u" onclick="event.stopPropagation();cambiarFoto('img-s4',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/16-mnl4Xl1qynFblejQ_hk683u')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/630c7eff-e2b3-4047-8a9a-a7abeafa5f22-AE073XLPrZCLQeBg_p2sxsf" onclick="event.stopPropagation();cambiarFoto('img-s4',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/630c7eff-e2b3-4047-8a9a-a7abeafa5f22-AE073XLPrZCLQeBg_p2sxsf')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/1-Yan0eBe11LiZkxzP_ceytkm" onclick="event.stopPropagation();cambiarFoto('img-s4',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/1-Yan0eBe11LiZkxzP_ceytkm')">
         </div>
       </div>
       <div class="card-content">
@@ -913,7 +917,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           <div><div class="cabana-name">Sombra 4</div><div class="cabana-type">Cabaña · Aluminé 961 · Hasta 5 pax</div></div>
           <div><span class="stars">★★★★★</span><span class="reviews">(15)</span></div>
         </div>
-        <p class="cabana-desc">2 plantas con living/cocina/baño en PB y 2 dormitorios en PA — 1 matrimonial y 1 con 3 camas separadas. Parque amplio, tranquila y con todo el espacio que necesitás.</p>
+        <p class="cabana-desc">2 plantas — PB: cocina, living y comedor. PA: dormitorio matrimonial, dormitorio con 3 camas separadas y baño completo. Parque amplio, tranquila y con todo el espacio que necesitás.</p>
         <div class="amenities">
           <span class="amenity">🏡 2 plantas</span><span class="amenity">🛏 2 dormitorios</span><span class="amenity">🔥 Parrilla</span><span class="amenity">🌳 Parque amplio</span><span class="amenity">📶 WiFi</span><span class="amenity">🚗 Estacionamiento</span><span class="amenity">🍼 Cuna</span>
         </div>
@@ -933,16 +937,16 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
     </div>
 
     <!-- SOMBRA 5 -->
-    <div class="cabana-card fade-in" id="card-s5" onclick="abrirDetalle('s5')" data-cabana="Sombra 5" data-cap="4">
+    <div class="cabana-card fade-in" id="card-s5" onclick="abrirDetalle('s5')" data-cabana="Sombra 5" data-cap="5">
       <div class="card-gallery">
-        <img class="gallery-main" id="img-s5" style="cursor:pointer" onclick="abrirDetalle('s5')" src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=700&q=80" alt="Sombra 5">
+        <img class="gallery-main" id="img-s5" style="cursor:pointer" onclick="abrirDetalle('s5')" src="https://res.cloudinary.com/dzld5gwmr/image/upload/l-Yle47MjQRDC6Wqq1_vschvm" alt="Sombra 5">
         <span class="badge-disp badge-libre" id="badge-s5">Disponible</span>
         <span class="badge-off">15% OFF</span>
-        <span class="guest-badge">👥 hasta 4</span>
+        <span class="guest-badge">👥 hasta 5</span>
         <div class="gallery-thumbs">
-          <img class="thumb active" src="https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s5',this,'https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=700&q=80')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s5',this,'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=700&q=80')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1505843513577-22bb7d21e455?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s5',this,'https://images.unsplash.com/photo-1505843513577-22bb7d21e455?w=700&q=80')">
+          <img class="thumb active" src="https://res.cloudinary.com/dzld5gwmr/image/upload/l-Yle47MjQRDC6Wqq1_vschvm" onclick="event.stopPropagation();cambiarFoto('img-s5',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/l-Yle47MjQRDC6Wqq1_vschvm')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/j-YBgjDpVjxpCvkrlL_sathgj" onclick="event.stopPropagation();cambiarFoto('img-s5',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/j-YBgjDpVjxpCvkrlL_sathgj')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/c-YyvDeonDvaCw7VDJ_skvrwb" onclick="event.stopPropagation();cambiarFoto('img-s5',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/c-YyvDeonDvaCw7VDJ_skvrwb')">
         </div>
       </div>
       <div class="card-content">
@@ -950,7 +954,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           <div><div class="cabana-name">Sombra 5</div><div class="cabana-type">Cabaña · Aluminé 961 · Hasta 5 pax</div></div>
           <div><span class="stars">★★★★★</span><span class="reviews">(22)</span></div>
         </div>
-        <p class="cabana-desc">Igual distribución que Sombra 4 — 2 plantas, living/cocina/baño en PB y 2 dormitorios en PA (1 matrimonial + 1 con 3 camas). Parque amplio y estacionamiento propio.</p>
+        <p class="cabana-desc">2 plantas — PB: cocina, living y comedor. PA: dormitorio matrimonial, dormitorio con 3 camas separadas y baño completo. Parque amplio y estacionamiento propio.</p>
         <div class="amenities">
           <span class="amenity">🏡 2 plantas</span><span class="amenity">🛏 2 dormitorios</span><span class="amenity">🔥 Parrilla</span><span class="amenity">🌳 Parque amplio</span><span class="amenity">📶 WiFi</span><span class="amenity">🚗 Estacionamiento</span><span class="amenity">🍼 Cuna</span>
         </div>
@@ -972,14 +976,14 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
     <!-- SOMBRA 6 -->
     <div class="cabana-card fade-in" id="card-s6" onclick="abrirDetalle('s6')" data-cabana="Sombra 6" data-cap="4">
       <div class="card-gallery">
-        <img class="gallery-main" id="img-s6" style="cursor:pointer" onclick="abrirDetalle('s6')" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=80" alt="Sombra 6">
+        <img class="gallery-main" id="img-s6" style="cursor:pointer" onclick="abrirDetalle('s6')" src="https://res.cloudinary.com/dzld5gwmr/image/upload/a08e7e02-3461-4e58-966e-ed33d3d481b1-dJoPxoDQWMUrQKPw_ptuisb" alt="Sombra 6">
         <span class="badge-disp badge-libre" id="badge-s6">Disponible</span>
         <span class="badge-off">15% OFF</span>
         <span class="guest-badge">👥 hasta 4</span>
         <div class="gallery-thumbs">
-          <img class="thumb active" src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s6',this,'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=80')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1586105449897-20b5efeb3233?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s6',this,'https://images.unsplash.com/photo-1586105449897-20b5efeb3233?w=700&q=80')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s6',this,'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80')">
+          <img class="thumb active" src="https://res.cloudinary.com/dzld5gwmr/image/upload/a08e7e02-3461-4e58-966e-ed33d3d481b1-dJoPxoDQWMUrQKPw_ptuisb" onclick="event.stopPropagation();cambiarFoto('img-s6',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/a08e7e02-3461-4e58-966e-ed33d3d481b1-dJoPxoDQWMUrQKPw_ptuisb')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/3-Y4LPn48WOai4lM11_h70s8p" onclick="event.stopPropagation();cambiarFoto('img-s6',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/3-Y4LPn48WOai4lM11_h70s8p')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/5-AE073pMQX2FgPrPr_ftvo9n" onclick="event.stopPropagation();cambiarFoto('img-s6',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/5-AE073pMQX2FgPrPr_ftvo9n')">
         </div>
       </div>
       <div class="card-content">
@@ -987,7 +991,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           <div><div class="cabana-name">Sombra 6</div><div class="cabana-type">Cabaña · Aluminé 961 · Hasta 4 pax · 2 baños</div></div>
           <div><span class="stars">★★★★★</span><span class="reviews">(17)</span></div>
         </div>
-        <p class="cabana-desc">La única del complejo con 2 baños completos. PB: living/cocina/dorm matrimonial/baño. PA: dormitorio con 2 camas separadas/baño. Ideal para dos parejas o familia con privacidad total.</p>
+        <p class="cabana-desc">La única del complejo con 2 baños. PB: living, cocina, comedor, dormitorio matrimonial y baño. PA: dormitorio con camas separadas y baño. Ideal para dos parejas o familia con privacidad total.</p>
         <div class="amenities">
           <span class="amenity">🏡 2 plantas</span><span class="amenity">🚿 2 baños</span><span class="amenity">🛏 2 dormitorios</span><span class="amenity">🔥 Parrilla</span><span class="amenity">🌳 Parque</span><span class="amenity">📶 WiFi</span>
         </div>
@@ -1009,14 +1013,14 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
     <!-- SOMBRA 7 -->
     <div class="cabana-card fade-in" id="card-s7" onclick="abrirDetalle('s7')" data-cabana="Sombra 7" data-cap="5">
       <div class="card-gallery">
-        <img class="gallery-main" id="img-s7" style="cursor:pointer" onclick="abrirDetalle('s7')" src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=700&q=80" alt="Sombra 7">
+        <img class="gallery-main" id="img-s7" style="cursor:pointer" onclick="abrirDetalle('s7')" src="https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5172_q30o0k" alt="Sombra 7">
         <span class="badge-disp badge-libre" id="badge-s7">Disponible</span>
         <span class="badge-off">15% OFF</span>
         <span class="guest-badge">👥 hasta 5</span>
         <div class="gallery-thumbs">
-          <img class="thumb active" src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s7',this,'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=700&q=80')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s7',this,'https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=700&q=80')">
-          <img class="thumb" src="https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=120&q=70" onclick="event.stopPropagation();cambiarFoto('img-s7',this,'https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=700&q=80')">
+          <img class="thumb active" src="https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5172_q30o0k" onclick="event.stopPropagation();cambiarFoto('img-s7',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5172_q30o0k')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5203_oafj9l" onclick="event.stopPropagation();cambiarFoto('img-s7',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5203_oafj9l')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5176_maf9gr" onclick="event.stopPropagation();cambiarFoto('img-s7',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5176_maf9gr')">
         </div>
       </div>
       <div class="card-content">
@@ -1024,7 +1028,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           <div><div class="cabana-name">Sombra 7</div><div class="cabana-type">Cabaña · Aluminé 961 · Hasta 5 pax</div></div>
           <div><span class="stars">★★★★★</span><span class="reviews">(31)</span></div>
         </div>
-        <p class="cabana-desc">2 plantas con buena distribución. PB: living/cocina/comedor/baño/dorm matrimonial. PA: dormitorio con 3 camas separadas. Parque amplio y estacionamiento. Ideal para grupos y familias.</p>
+        <p class="cabana-desc">2 plantas — PB: living, cocina, comedor, baño y dormitorio matrimonial. PA: dormitorio con camas separadas. Parque amplio y estacionamiento. Ideal para grupos y familias.</p>
         <div class="amenities">
           <span class="amenity">🏡 2 plantas</span><span class="amenity">🛏 2 dormitorios</span><span class="amenity">🔥 Parrilla</span><span class="amenity">🌳 Parque amplio</span><span class="amenity">📶 WiFi</span><span class="amenity">🚗 Estacionamiento</span><span class="amenity">🍼 Cuna</span>
         </div>
@@ -1279,7 +1283,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
       <div class="vla-card">
         <div class="vla-icon">🍽️</div>
         <div class="vla-name">Gastronomía</div>
-        <div class="vla-desc">Trucha ahumada, venado, quesos y chocolates artesanales. La Av. Arrayanes concentra los mejores restaurantes y tiendas.</div>
+        <div class="vla-desc">Trucha ahumada, cordero, quesos y chocolates artesanales. La Av. Arrayanes concentra los mejores restaurantes y tiendas.</div>
       </div>
       <div class="vla-card">
         <div class="vla-icon">🚵</div>
@@ -1341,8 +1345,16 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
 <!-- FAQ -->
 <div class="faq-section">
   <div class="faq-title">Preguntas frecuentes</div>
-  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cómo funciona el proceso de reserva? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Elegís la cabaña, seleccionás las fechas y completás tus datos. Abonás el 30% de seña por transferencia bancaria, efectivo o Mercado Pago y enviás el comprobante por WhatsApp a Francisco (+54 9 2944 562177). Confirmamos tu reserva en menos de 2 horas.</div></div></div>
-  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cuál es la política de cancelación? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Evaluamos cada caso en particular. Ante cualquier imprevisto no dudes en contactarnos — somos dueños y estamos siempre disponibles para encontrar la mejor solución.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cómo funciona el proceso de reserva? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner" style="padding:4px 0">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#3d5a3e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">1</span><span>Elegís la cabaña y seleccionás las fechas</span></div>
+      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#3d5a3e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">2</span><span>Completás tus datos en el formulario</span></div>
+      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#3d5a3e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">3</span><span>Abonás el <strong>50% de seña</strong> por transferencia bancaria o Mercado Pago</span></div>
+      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#3d5a3e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">4</span><span>Enviás el comprobante por WhatsApp al <strong>+54 9 2944 562177</strong></span></div>
+      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#c4a35a;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">✓</span><span>Confirmamos tu reserva en <strong>cuestión de minutos</strong></span></div>
+    </div>
+  </div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cuál es la política de cancelación? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">La seña es no reembolsable. Ante cualquier imprevisto, si avisás con anticipación podemos reprogramar las fechas. Escribinos por WhatsApp y lo resolvemos.</div></div></div>
   <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cuáles son los horarios de check-in y check-out? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Check-in desde las 14:00 hs. Check-out hasta las 10:00 hs. Si necesitás horarios especiales consultanos con anticipación — hacemos lo posible para acomodarnos.</div></div></div>
   <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Se admiten mascotas? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">En algunas cabañas sí. Consultanos antes de reservar indicando qué mascota traés y te confirmamos disponibilidad.</div></div></div>
   <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Hay mínimo de noches? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Depende la temporada. En temporada alta y fines de semana largo el mínimo es 3 noches. En temporada baja desde 2 noches. Consultanos para fechas específicas.</div></div></div>
@@ -1471,13 +1483,13 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           <div class="c-row sena-v"><span>Seña a transferir ahora</span><span id="conf-sena"></span></div>
         </div>
         <div class="cbu-box">
-          <div class="cbu-label">CBU</div>
-          <div class="cbu-val">0000003100012345678901</div>
-          <div class="cbu-alias">Alias: SOMBRA.VERDE.VLA</div>
-          <div class="cbu-alias" style="margin-top:3px">Titular: Tu Nombre Acá</div>
+          <div class="cbu-label">CVU</div>
+          <div class="cbu-val">0000003100064350971270</div>
+          <div class="cbu-alias">Alias: franyarcho</div>
+          <div class="cbu-alias" style="margin-top:3px">Titular: Francisco Yarcho</div>
         </div>
         <div class="conf-note">
-          Transferí la seña al CBU de arriba y enviá el comprobante por WhatsApp a Francisco al <strong>+54 9 2944 562177</strong>. Confirmamos tu reserva en menos de 2 horas. El saldo (<span id="conf-saldo"></span>) se abona al check-in.
+          Transferí la seña al CBU de arriba y enviá el comprobante por WhatsApp a Francisco al <strong>+54 9 2944 562177</strong>. Confirmamos tu reserva en cuestión de minutos. El saldo (<span id="conf-saldo"></span>) se abona al check-in.
         </div>
         <button class="btn-wsp-final" onclick="enviarWsp()">💬 Ya transferí — enviar comprobante por WhatsApp</button>
       </div>
@@ -1528,16 +1540,12 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
 <div class="toast" id="toast"></div>
 
 <button class="wa-float" onclick="window.open('https://wa.me/5492944562177?text=Hola!%20Quiero%20consultar%20disponibilidad.','_blank')">
-  <svg viewBox="0 0 24 24" width="26" height="26" fill="white" xmlns="http://www.w3.org/2000/svg">
+  <svg viewBox="0 0 24 24" width="22" height="22" fill="white" xmlns="http://www.w3.org/2000/svg">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
   </svg>
+  <span class="wa-float-txt">¿Consultas? Escribinos</span>
 </button>
 
-      <div class="footer-sponsor-desc">Traslados Patagónicos · 5.0 ⭐</div>
-      <div class="footer-sponsor-badge">🎁 Descuento para huéspedes</div>
-    </div>
-  </a>
-</div>
 <footer>
   <strong>Sombra Verde</strong> · Villa La Angostura, Neuquén<br>
   <span style="margin-top:6px;display:block;">Reservas directas sin comisión · +54 9 2944 562177</span>
@@ -1555,13 +1563,13 @@ const CABANAS_IDS = {
 };
 
 const CABANAS_DATA = {
-  's1':{ nombre:'Sombra 1', tipo:'Cabaña · Michay 268 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Michay+268,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'Todo en planta baja — ideal para quienes buscan comodidad sin escaleras. 1 dormitorio matrimonial + diván cama en living. A metros del centro, supermercados y restaurantes caminando.', amenities:['🏠 Todo planta baja','📍 Céntrica','🔥 Parrilla','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🛏 1 dormitorio','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/oT9Ju7XPwheG5ZsDA', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'Todo planta baja'},{l:'Baños',v:'1 baño completo'},{l:'Sector',v:'A · Céntrico'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://raw.githubusercontent.com/sombraverdevla/sombra-verde-web/main/fffffff.jpg','https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=700&q=80','https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=700&q=80'] },
-  's2':{ nombre:'Sombra 2', tipo:'Cabaña · Michay 268 · Hasta 3 pax', mapaEmbed:'https://maps.google.com/maps?q=Michay+268,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'Todo en planta baja, cómoda y luminosa. 1 dormitorio matrimonial + sommier en living para el 3ro. A pasos del centro — supermercados, confiterías y el lago a pie.', amenities:['🏠 Todo planta baja','📍 Céntrica','🔥 Parrilla','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🛏 1 dormitorio','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/oT9Ju7XPwheG5ZsDA', info:[{l:'Capacidad',v:'hasta 3 personas'},{l:'Distribución',v:'Todo planta baja'},{l:'Baños',v:'1 baño completo'},{l:'Sector',v:'A · Céntrico'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=700&q=80','https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&q=80','https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&q=80'] },
-  's3':{ nombre:'Sombra 3', tipo:'Cabaña · Michay 268 · Hasta 3 pax', mapaEmbed:'https://maps.google.com/maps?q=Michay+268,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas con living/cocina/baño en PB y dormitorio en PA. 1 dormitorio matrimonial + sillón cama en living. Céntrica, tranquila y a metros de todo lo que necesitás.', amenities:['🏡 2 plantas','📍 Céntrica','🔥 Parrilla','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🛏 1 dormitorio','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/oT9Ju7XPwheG5ZsDA', info:[{l:'Capacidad',v:'hasta 3 personas'},{l:'Distribución',v:'2 plantas'},{l:'Baños',v:'1 baño completo'},{l:'Sector',v:'A · Céntrico'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80','https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=80','https://images.unsplash.com/photo-1586105449897-20b5efeb3233?w=700&q=80'] },
-  's4':{ nombre:'Sombra 4', tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas con living/cocina/baño en PB y 2 dormitorios en PA — 1 matrimonial y 1 con 3 camas separadas. Parque amplio, tranquila y con todo el espacio que necesitás.', amenities:['🏡 2 plantas','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque amplio','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.google.com/?q=Aluminé+961,+Villa+La+Angostura', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'2 plantas'},{l:'Baños',v:'1 baño completo'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=700&q=80','https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=700&q=80','https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=700&q=80'] },
-  's5':{ nombre:'Sombra 5', tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'Igual distribución que Sombra 4 — 2 plantas, living/cocina/baño en PB y 2 dormitorios en PA (1 matrimonial + 1 con 3 camas). Parque amplio y estacionamiento propio.', amenities:['🏡 2 plantas','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque amplio','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.google.com/?q=Aluminé+961,+Villa+La+Angostura', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'2 plantas'},{l:'Baños',v:'1 baño completo'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://images.unsplash.com/photo-1470770903676-69b98201ea1c?w=700&q=80','https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=700&q=80','https://images.unsplash.com/photo-1505843513577-22bb7d21e455?w=700&q=80'] },
-  's6':{ nombre:'Sombra 6', tipo:'Cabaña · Aluminé 961 · Hasta 4 pax · 2 baños', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'La única del complejo con 2 baños completos. PB: living/cocina/dorm matrimonial/baño. PA: dormitorio con 2 camas separadas/baño. Ideal para dos parejas o familia con privacidad total.', amenities:['🏡 2 plantas','🚿 2 baños','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque','📶 WiFi','🚗 Estacionamiento','📺 Smart TV'], mapa:'https://maps.google.com/?q=Aluminé+961,+Villa+La+Angostura', info:[{l:'Capacidad',v:'hasta 4 personas'},{l:'Distribución',v:'2 plantas'},{l:'Baños',v:'2 baños completos'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=700&q=80','https://images.unsplash.com/photo-1586105449897-20b5efeb3233?w=700&q=80','https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&q=80'] },
-  's7':{ nombre:'Sombra 7', tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas con buena distribución. PB: living/cocina/comedor/baño/dorm matrimonial. PA: dormitorio con 3 camas separadas. Parque amplio y estacionamiento. Ideal para grupos y familias.', amenities:['🏡 2 plantas','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque amplio','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.google.com/?q=Aluminé+961,+Villa+La+Angostura', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'2 plantas'},{l:'Baños',v:'1 baño completo'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=700&q=80','https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?w=700&q=80','https://images.unsplash.com/photo-1487730116645-74489c95b41b?w=700&q=80'] }
+  's1':{ nombre:'Sombra 1', tipo:'Cabaña · Michay 268 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Michay+268,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'Todo en planta baja — 2 dormitorios: 1 matrimonial y 1 con camas separadas (una de ellas es diván, para el 5to huésped). A metros del centro, supermercados y restaurantes caminando.', amenities:['🏠 Todo planta baja','📍 Céntrica','🛏 2 dormitorios','🔥 Parrilla','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/oT9Ju7XPwheG5ZsDA', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'Todo planta baja'},{l:'Dormitorios',v:'1 matrimonial + 1 con camas separadas'},{l:'Baños',v:'1 baño completo'},{l:'Sector',v:'A · Céntrico'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/c62cfb12-9d48-458e-a8c5-2921f1288e67-YNqMzqeOZyS0WQXP_mgj96u','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-14-AGBbxLO01qt1Nq9W_dngutm','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-11-mePJ9OlB92foBWJ6_ckft9m','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-15-YNq2w9vz8Oie4Vyn_psg3mm','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-17-AE0r15L1yQi41QNK_uvodpl','https://res.cloudinary.com/dzld5gwmr/image/upload/9b7e4d9b-3250-4c59-afc5-2901e024608f-m6LbN8MX9MtGrKlk_hbb9fs','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-12-mnlJMZ106Zi7Ev9G_csesn5','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-9-YBgb2L3qokIQRqWL_n6h9qn','https://res.cloudinary.com/dzld5gwmr/image/upload/whatsapp-image-2025-07-23-at-10.03.47-1-m2WEXB0vwvioKMjr_a7bl5o','https://res.cloudinary.com/dzld5gwmr/image/upload/a-dOqDQMENGrUQMGw3_w8aemh'] },
+  's2':{ nombre:'Sombra 2', tipo:'Cabaña · Michay 268 · Hasta 3 pax', mapaEmbed:'https://maps.google.com/maps?q=Michay+268,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'Todo en planta baja — 1 dormitorio matrimonial y sommier en el living para el 3er huésped. A pasos del centro, supermercados, confiterías y el lago a pie.', amenities:['🏠 Todo planta baja','📍 Céntrica','🛏 1 dormitorio','🔥 Parrilla','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/oT9Ju7XPwheG5ZsDA', info:[{l:'Capacidad',v:'hasta 3 personas'},{l:'Distribución',v:'Todo planta baja'},{l:'Dormitorios',v:'1 matrimonial + sommier en living'},{l:'Baños',v:'1 baño completo'},{l:'Sector',v:'A · Céntrico'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/1-6-d95ZN585j5hV3vJ0_gn6h4e','https://res.cloudinary.com/dzld5gwmr/image/upload/a-YNqMzVVbMVt62KK0_yzhz5r','https://res.cloudinary.com/dzld5gwmr/image/upload/b-A0xvLgg9lrtB2Wlo_lxwxdz','https://res.cloudinary.com/dzld5gwmr/image/upload/3o7a9558-AoP4ayZG8ouW6x4g_bfmlcf','https://res.cloudinary.com/dzld5gwmr/image/upload/3-dJoPxrGwL1Sr6M3J_zr4ou9','https://res.cloudinary.com/dzld5gwmr/image/upload/3o7a9536-YyvDeQX76WIMbaKP_nf2jox','https://res.cloudinary.com/dzld5gwmr/image/upload/7-m5K8OxeQe3IWpRPW_vkywcp','https://res.cloudinary.com/dzld5gwmr/image/upload/d-mxB2y11bl1sKOJg8_vpzjle'] },
+  's3':{ nombre:'Sombra 3', tipo:'Cabaña · Michay 268 · Hasta 3 pax', mapaEmbed:'https://maps.google.com/maps?q=Michay+268,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas — PB: cocina, living, comedor y sillón cama. PA: dormitorio matrimonial y baño completo. Céntrica, tranquila y a metros de todo lo que necesitás.', amenities:['🏡 2 plantas','📍 Céntrica','🛏 1 dormitorio','🔥 Parrilla','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/oT9Ju7XPwheG5ZsDA', info:[{l:'Capacidad',v:'hasta 3 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial (PA) + sillón cama (PB)'},{l:'Baños',v:'1 baño completo (PA)'},{l:'Sector',v:'A · Céntrico'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/img_1893-AQEe6v7ybXuZB7B3_t7qyjt','https://res.cloudinary.com/dzld5gwmr/image/upload/b3be4030-48ec-4ba2-b70e-17c3e365cf30-A85M7jGON1s3zrRg_bxgotd','https://res.cloudinary.com/dzld5gwmr/image/upload/b3be4030-48ec-4ba2-b70e-17c3e365cf30-A85M7jGON1s3zrRg_c4qiud','https://res.cloudinary.com/dzld5gwmr/image/upload/974750a4-caa1-4466-a535-c20e1b3a0df0-AzGMa1P2DztJKqpp_tsqd19','https://res.cloudinary.com/dzld5gwmr/image/upload/img_1922-m5K8Ox04DZcR3NXd_juvpgb','https://res.cloudinary.com/dzld5gwmr/image/upload/img_1890-m5K8Ox04yeSEyK8D_vblkep','https://res.cloudinary.com/dzld5gwmr/image/upload/img_1907-YrD4OoV2OQF001rE_en60bl','https://res.cloudinary.com/dzld5gwmr/image/upload/img_1928-mv0PMyVe7xUBwzM5_gnikdw'] },
+  's4':{ nombre:'Sombra 4', tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas — PB: cocina, living y comedor. PA: dormitorio matrimonial, dormitorio con 3 camas separadas y baño completo. Parque amplio, tranquila y con todo el espacio que necesitás.', amenities:['🏡 2 plantas','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque amplio','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.google.com/?q=Aluminé+961,+Villa+La+Angostura', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial + 1 con 3 camas sep. (PA)'},{l:'Baños',v:'1 baño completo (PA)'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/16-mnl4Xl1qynFblejQ_hk683u','https://res.cloudinary.com/dzld5gwmr/image/upload/630c7eff-e2b3-4047-8a9a-a7abeafa5f22-AE073XLPrZCLQeBg_p2sxsf','https://res.cloudinary.com/dzld5gwmr/image/upload/90625f19-af4b-4a0f-b27b-2e7e34738232-m2WqO5V8aaCn2eRz_rf1hp6','https://res.cloudinary.com/dzld5gwmr/image/upload/1784012b-a510-4954-8b96-65da39baae13-YNqMzV6BW7h0RG2Z_ofcxpv','https://res.cloudinary.com/dzld5gwmr/image/upload/1-Yan0eBe11LiZkxzP_ceytkm','https://res.cloudinary.com/dzld5gwmr/image/upload/14-Awv80r081KhBkVRk_l3xgfa','https://res.cloudinary.com/dzld5gwmr/image/upload/9b-m2WqO4OqJVtMn1wW_dkmhcc','https://res.cloudinary.com/dzld5gwmr/image/upload/6a-m2WqO4OqxGtq9yM5_jbemof','https://res.cloudinary.com/dzld5gwmr/image/upload/11-AGBz0G0zzPH32Jby_i7ydgt'] },
+  's5':{ nombre:'Sombra 5', tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas — PB: cocina, living y comedor. PA: dormitorio matrimonial, dormitorio con 3 camas separadas y baño completo. Parque amplio y estacionamiento propio.', amenities:['🏡 2 plantas','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque amplio','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.google.com/?q=Aluminé+961,+Villa+La+Angostura', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial + 1 con 3 camas sep. (PA)'},{l:'Baños',v:'1 baño completo (PA)'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/l-Yle47MjQRDC6Wqq1_vschvm','https://res.cloudinary.com/dzld5gwmr/image/upload/j-YBgjDpVjxpCvkrlL_sathgj','https://res.cloudinary.com/dzld5gwmr/image/upload/c-YyvDeonDvaCw7VDJ_skvrwb','https://res.cloudinary.com/dzld5gwmr/image/upload/h-Awv80rZ93QT7XwB5_anx8vd','https://res.cloudinary.com/dzld5gwmr/image/upload/i-A0xvLNqjRPFjqZ84_a8gewl','https://res.cloudinary.com/dzld5gwmr/image/upload/1-mv0PMjeJprfaaz3W_jbyldm','https://res.cloudinary.com/dzld5gwmr/image/upload/5-AoP4ael4WnSEnjKd_sgdn93','https://res.cloudinary.com/dzld5gwmr/image/upload/d-AQEe6J1eE6Tgvl1z_w72fy1'] },
+  's6':{ nombre:'Sombra 6', tipo:'Cabaña · Aluminé 961 · Hasta 4 pax · 2 baños', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'La única del complejo con 2 baños. PB: living, cocina, comedor, dormitorio matrimonial y baño. PA: dormitorio con camas separadas y baño. Ideal para dos parejas o familia con privacidad total.', amenities:['🏡 2 plantas','🚿 2 baños','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque','📶 WiFi','🚗 Estacionamiento','📺 Smart TV'], mapa:'https://maps.google.com/?q=Aluminé+961,+Villa+La+Angostura', info:[{l:'Capacidad',v:'hasta 4 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial (PB) + 1 camas sep. (PA)'},{l:'Baños',v:'2 baños completos'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/a08e7e02-3461-4e58-966e-ed33d3d481b1-dJoPxoDQWMUrQKPw_ptuisb','https://res.cloudinary.com/dzld5gwmr/image/upload/3-Y4LPn48WOai4lM11_h70s8p','https://res.cloudinary.com/dzld5gwmr/image/upload/5-AE073pMQX2FgPrPr_ftvo9n','https://res.cloudinary.com/dzld5gwmr/image/upload/6-A1azVKQqenh1yLqM_nzuhom','https://res.cloudinary.com/dzld5gwmr/image/upload/2-AMqDjnxQzRFy3yqG_bkmafr','https://res.cloudinary.com/dzld5gwmr/image/upload/7-AzGMar8ggXUkEaWP_yyvnd9'] },
+  's7':{ nombre:'Sombra 7', tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas — PB: living, cocina, comedor, baño y dormitorio matrimonial. PA: dormitorio con camas separadas. Parque amplio y estacionamiento. Ideal para grupos y familias.', amenities:['🏡 2 plantas','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque amplio','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.google.com/?q=Aluminé+961,+Villa+La+Angostura', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial (PB) + 1 camas sep. (PA)'},{l:'Baños',v:'1 baño completo (PB)'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5172_q30o0k','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5203_oafj9l','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5176_maf9gr','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5180_y8srkk','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5214_v0oyw8'] }
 };
 const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const DIAS  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
@@ -1770,7 +1778,6 @@ function onPersonasChange(sel) {
     numInput.style.display = 'none';
     numInput.value = '';
   }
-  filtrar();
 }
 
 function getPersonas() {
@@ -1868,8 +1875,9 @@ function filtrar() {
   // Combinaciones para grupos grandes
   mostrarCombinaciones(pas, ci, co, noches);
 
-  // Scroll al resultado solo si el usuario ingresó algún filtro
-  if (ci || co || pas) {
+  // Scroll al resultado solo si el usuario presionó Buscar
+  if (window._filtrarConScroll) {
+    window._filtrarConScroll = false;
     const target = document.getElementById('cabanas-grid');
     if (target) {
       setTimeout(() => {
@@ -1890,7 +1898,8 @@ function abrirDetalle(id) {
   document.getElementById('detail-desc').textContent = d.desc;
   document.getElementById('detail-mapa').href = d.mapa;
   document.getElementById('detail-amenities').innerHTML = d.amenities.map(a => `<span class="detail-amenity">${a}</span>`).join('');
-  document.getElementById('detail-info').innerHTML = d.info.map(i => `<div class="detail-info-item"><div class="detail-info-label">${i.l}</div><div class="detail-info-val">${i.v}</div></div>`).join('');
+  const INFO_ICONS = {'Capacidad':'👥','Distribución':'🏠','Dormitorios':'🛏','Baños':'🚿','Sector':'📍','Check-in':'🕑','Check-out':'🕙'};
+  document.getElementById('detail-info').innerHTML = d.info.map(i => `<div class="detail-info-item"><div class="detail-info-label">${INFO_ICONS[i.l] ? INFO_ICONS[i.l] + ' ' : ''}${i.l}</div><div class="detail-info-val">${i.v}</div></div>`).join('');
   // Mapa embed
   document.getElementById('detail-mapa-embed').innerHTML = `<iframe src="${d.mapaEmbed}" width="100%" height="160" style="border:none;display:block;" allowfullscreen loading="lazy"></iframe>`;
   const pn = getPrecioPromedioMes(d.nombre) || getPrecioDemo(id, null);
@@ -2110,6 +2119,7 @@ async function confirmar() {
   const primerNombre = partes[0];
 
   // Escribir en Firebase
+  const tarifaPN = tienePrecios && noches > 0 ? Math.round(total / noches) : 0;
   const nuevaReserva = {
     id:         genId(),
     apellido:   apellido || primerNombre,
@@ -2122,7 +2132,7 @@ async function confirmar() {
     checkout:   selEnd,
     adultos:    Number(pers) || 1,
     ninos:      0,
-    tarifa:     pn || 0,
+    tarifa:     tarifaPN,
     sena:       sena,
     sena1:      0, sena1fecha: '',
     sena2:      0, sena2fecha: '',
@@ -2143,6 +2153,21 @@ function enviarWsp() {
   const msg  = `Hola! Soy ${d.nombre}. Quiero reservar ${modalCab} del ${fmtD(selStart)} al ${fmtD(selEnd)} (${d.noches} noches). Realicé la transferencia de la seña de ${fmt(d.sena)}. Te mando el comprobante.`;
   window.open('https://wa.me/5492944562177?text=' + encodeURIComponent(msg), '_blank');
   setProgreso(5);
+
+  // Notificación por email
+  emailjs.send('service_0dwfzv2', 'template_yna33f4', {
+    cabaña:   modalCab,
+    checkin:  fmtD(selStart),
+    checkout: fmtD(selEnd),
+    noches:   d.noches,
+    personas: document.getElementById('f-pers') ? document.getElementById('f-pers').value : '—',
+    nombre:   d.nombre,
+    telefono: d.tel || '—',
+    email:    document.getElementById('f-email') ? document.getElementById('f-email').value : '—',
+    total:    d.total ? fmt(d.total) : 'A confirmar',
+    sena:     d.sena  ? fmt(d.sena)  : 'A confirmar',
+    obs:      document.getElementById('f-consulta') ? document.getElementById('f-consulta').value || '—' : '—'
+  }).catch(e => console.warn('EmailJS error:', e));
 }
 
 // ─── HELPERS ───────────────────────────────────────────────────
@@ -2311,8 +2336,8 @@ const LANGS = {
     reviewsTitle: 'Lo que dicen nuestros huéspedes',
     faqTitle: 'Preguntas frecuentes',
     faqs: [
-      ['¿Cómo funciona el proceso de reserva?', 'Elegís la cabaña, seleccionás las fechas y completás tus datos. Abonás el 30% de seña por transferencia bancaria, efectivo o Mercado Pago y enviás el comprobante por WhatsApp a Francisco (+54 9 2944 562177). Confirmamos tu reserva en menos de 2 horas.'],
-      ['¿Cuál es la política de cancelación?', 'Evaluamos cada caso en particular. Ante cualquier imprevisto no dudes en contactarnos — somos dueños y estamos siempre disponibles para encontrar la mejor solución.'],
+      ['¿Cómo funciona el proceso de reserva?', 'Elegís la cabaña, seleccionás las fechas y completás tus datos. Abonás el 50% de seña por transferencia bancaria o Mercado Pago y enviás el comprobante por WhatsApp a Francisco (+54 9 2944 562177). Confirmamos tu reserva en cuestión de minutos.'],
+      ['¿Cuál es la política de cancelación?', 'La seña es no reembolsable. Ante cualquier imprevisto, si avisás con anticipación podemos reprogramar las fechas. Escribinos por WhatsApp y lo resolvemos.'],
       ['¿Cuáles son los horarios de check-in y check-out?', 'Check-in desde las 14:00 hs. Check-out hasta las 10:00 hs. Si necesitás horarios especiales consultanos con anticipación — hacemos lo posible para acomodarnos.'],
       ['¿Se admiten mascotas?', 'En algunas cabañas sí. Consultanos antes de reservar indicando qué mascota traés y te confirmamos disponibilidad.'],
       ['¿Hay mínimo de noches?', 'Depende la temporada. En temporada alta y fines de semana largo el mínimo es 3 noches. En temporada baja desde 2 noches. Consultanos para fechas específicas.'],
@@ -2338,7 +2363,7 @@ const LANGS = {
     confTitle: '¡Casi listo,', confSub: 'Transferí la seña para confirmar tu reserva',
     confCab: 'Cabaña', confFechas: 'Fechas', confPers: 'Personas',
     confTotal: 'Total estadía', confSena: 'Seña a transferir ahora',
-    confNote: 'Transferí la seña al CBU de arriba y enviá el comprobante por WhatsApp a Francisco al <strong>+54 9 2944 562177</strong>. Confirmamos tu reserva en menos de 2 horas. El saldo (<span id="conf-saldo"></span>) se abona al check-in.',
+    confNote: 'Transferí la seña al CBU de arriba y enviá el comprobante por WhatsApp a Francisco al <strong>+54 9 2944 562177</strong>. Confirmamos tu reserva en cuestión de minutos. El saldo (<span id="conf-saldo"></span>) se abona al check-in.',
     btnWspFinal: '💬 Ya transferí — enviar comprobante por WhatsApp',
     footerLine1: '<strong>Sombra Verde</strong> · Villa La Angostura, Neuquén',
     footerLine2: 'Reservas directas sin comisión · +54 9 2944 562177',
@@ -2353,7 +2378,7 @@ const LANGS = {
       { name: 'Trekking', desc: 'Senderos para todos los niveles: Cascada Inacayal, Belvedere, Río Bonito y la Huella Andina. Bosques de coihues y lengas.' },
       { name: 'Cabalgatas', desc: 'Recorridos a caballo por senderos históricos hasta miradores naturales con vistas al lago y la montaña.' },
       { name: 'Pesca con mosca', desc: 'El Río Correntoso, uno de los más cortos del mundo, es referente mundial de la pesca deportiva con mosca.' },
-      { name: 'Gastronomía', desc: 'Trucha ahumada, venado, quesos y chocolates artesanales. La Av. Arrayanes concentra los mejores restaurantes y tiendas.' },
+      { name: 'Gastronomía', desc: 'Trucha ahumada, cordero, quesos y chocolates artesanales. La Av. Arrayanes concentra los mejores restaurantes y tiendas.' },
       { name: 'Mountain Bike', desc: 'Rutas de ripio y senderos de tierra hacia el Lago Espejo y Correntoso. Alquilás bici en el centro o en Puerto Manzano.' },
       { name: 'Playas y balnearios', desc: 'Lago Correntoso, Puerto Manzano y Bahía Mansa ofrecen playas de arena volcánica con aguas cristalinas ideales para el verano.' }
     ],
@@ -2367,13 +2392,13 @@ const LANGS = {
       { titulo: 'Desde Chile', desc: 'Cruzando por el paso Cardenal Samoré desde Osorno o Puerto Montt. Una ruta escénica entre bosques y volcanes que muchos turistas hacen como parte de su viaje.' }
     ],
     cabanas: {
-      s1: { tipo:'Cabaña · Michay 268 · Hasta 5 pax', desc:'Todo en planta baja — ideal para quienes buscan comodidad sin escaleras. 1 dormitorio matrimonial + diván cama en living. A metros del centro, supermercados y restaurantes caminando.' },
-      s2: { tipo:'Cabaña · Michay 268 · Hasta 3 pax', desc:'Todo en planta baja, cómoda y luminosa. 1 dormitorio matrimonial + sommier en living para el 3ro. A pasos del centro — supermercados, confiterías y el lago a pie.' },
-      s3: { tipo:'Cabaña · Michay 268 · Hasta 3 pax', desc:'2 plantas con living/cocina/baño en PB y dormitorio en PA. 1 dormitorio matrimonial + sillón cama en living. Céntrica, tranquila y a metros de todo lo que necesitás.' },
-      s4: { tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', desc:'2 plantas con living/cocina/baño en PB y 2 dormitorios en PA — 1 matrimonial y 1 con 3 camas separadas. Parque amplio, tranquila y con todo el espacio que necesitás.' },
-      s5: { tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', desc:'Igual distribución que Sombra 4 — 2 plantas, living/cocina/baño en PB y 2 dormitorios en PA (1 matrimonial + 1 con 3 camas). Parque amplio y estacionamiento propio.' },
-      s6: { tipo:'Cabaña · Aluminé 961 · Hasta 4 pax · 2 baños', desc:'La única del complejo con 2 baños completos. PB: living/cocina/dorm matrimonial/baño. PA: dormitorio con 2 camas separadas/baño. Ideal para dos parejas o familia con privacidad total.' },
-      s7: { tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', desc:'2 plantas con buena distribución. PB: living/cocina/comedor/baño/dorm matrimonial. PA: dormitorio con 3 camas separadas. Parque amplio y estacionamiento. Ideal para grupos y familias.' }
+      s1: { tipo:'Cabaña · Michay 268 · Hasta 5 pax', desc:'Todo en planta baja — 2 dormitorios: 1 matrimonial y 1 con camas separadas (una de ellas es diván, para el 5to huésped). A metros del centro, supermercados y restaurantes caminando.' },
+      s2: { tipo:'Cabaña · Michay 268 · Hasta 3 pax', desc:'Todo en planta baja — 1 dormitorio matrimonial y sommier en el living para el 3er huésped. A pasos del centro, supermercados, confiterías y el lago a pie.' },
+      s3: { tipo:'Cabaña · Michay 268 · Hasta 3 pax', desc:'2 plantas — PB: cocina, living, comedor y sillón cama. PA: dormitorio matrimonial y baño completo. Céntrica, tranquila y a metros de todo lo que necesitás.' },
+      s4: { tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', desc:'2 plantas — PB: cocina, living y comedor. PA: dormitorio matrimonial, dormitorio con 3 camas separadas y baño completo. Parque amplio, tranquila y con todo el espacio que necesitás.' },
+      s5: { tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', desc:'2 plantas — PB: cocina, living y comedor. PA: dormitorio matrimonial, dormitorio con 3 camas separadas y baño completo. Parque amplio y estacionamiento propio.' },
+      s6: { tipo:'Cabaña · Aluminé 961 · Hasta 4 pax · 2 baños', desc:'La única del complejo con 2 baños. PB: living, cocina, comedor, dormitorio matrimonial y baño. PA: dormitorio con camas separadas y baño. Ideal para dos parejas o familia con privacidad total.' },
+      s7: { tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', desc:'2 plantas — PB: living, cocina, comedor, baño y dormitorio matrimonial. PA: dormitorio con camas separadas. Parque amplio y estacionamiento. Ideal para grupos y familias.' }
     }
   },
   en: {
@@ -2405,7 +2430,7 @@ const LANGS = {
     faqTitle: 'Frequently asked questions',
     faqs: [
       ['How does the booking process work?', 'Choose your cabin, select dates and fill in your details. Pay a 30% deposit via bank transfer, cash or Mercado Pago and send the receipt via WhatsApp to Francisco (+54 9 2944 562177). We confirm your booking within 2 hours.'],
-      ['What is the cancellation policy?', 'We evaluate each case individually. If anything comes up, don\'t hesitate to contact us — we\'re the owners and always available to find the best solution.'],
+      ['What is the cancellation policy?', 'The deposit is non-refundable. If anything comes up, let us know in advance and we can reschedule your dates. Just message us on WhatsApp.'],
       ['What are the check-in and check-out times?', 'Check-in from 2:00 PM. Check-out by 10:00 AM. If you need special hours, let us know in advance — we\'ll do our best to accommodate you.'],
       ['Are pets allowed?', 'In some cabins, yes. Contact us before booking letting us know what pet you\'re bringing and we\'ll confirm availability.'],
       ['Is there a minimum stay?', 'It depends on the season. During high season and long weekends the minimum is 3 nights. In low season, from 2 nights. Contact us for specific dates.'],
@@ -2446,7 +2471,7 @@ const LANGS = {
       { name: 'Trekking', desc: 'Trails for all levels: Inacayal Waterfall, Belvedere, Río Bonito and the Huella Andina. Forests of coihues and lengas.' },
       { name: 'Horse riding', desc: 'Horseback rides through historic trails to natural viewpoints with lake and mountain views.' },
       { name: 'Fly fishing', desc: 'The Correntoso River, one of the shortest in the world, is a world-class fly fishing destination.' },
-      { name: 'Gastronomy', desc: 'Smoked trout, venison, artisan cheeses and chocolates. Av. Arrayanes has the best restaurants and shops.' },
+      { name: 'Gastronomy', desc: 'Smoked trout, lamb, artisan cheeses and chocolates. Av. Arrayanes has the best restaurants and shops.' },
       { name: 'Mountain Bike', desc: 'Gravel roads and dirt trails to Lago Espejo and Correntoso. Bike rentals available downtown and at Puerto Manzano.' },
       { name: 'Beaches', desc: 'Lago Correntoso, Puerto Manzano and Bahía Mansa offer black sand beaches with crystal-clear water, perfect for summer.' }
     ],
@@ -2462,7 +2487,7 @@ const LANGS = {
     cabanas: {
       s1: { tipo:'Cabin · Michay 268 · Up to 5 guests', desc:'All on the ground floor — ideal for those looking for comfort without stairs. 1 double bedroom + sofa bed in living room. Steps from downtown, supermarkets and restaurants within walking distance.' },
       s2: { tipo:'Cabin · Michay 268 · Up to 3 guests', desc:'All on the ground floor, cozy and bright. 1 double bedroom + single bed in living room for the 3rd guest. Steps from downtown — supermarkets, cafés and the lake on foot.' },
-      s3: { tipo:'Cabin · Michay 268 · Up to 3 guests', desc:'2-story cabin with living/kitchen/bathroom on ground floor and bedroom upstairs. 1 double bedroom + sofa bed in living room. Central, quiet and close to everything you need.' },
+      s3: { tipo:'Cabin · Michay 268 · Up to 3 guests', desc:'2-story cabin with living/kitchen on ground floor and bedroom/bathroom upstairs. 1 double bedroom + sofa bed in living room. Central, quiet and close to everything you need.' },
       s4: { tipo:'Cabin · Aluminé 961 · Up to 5 guests', desc:'2-story cabin with living/kitchen/bathroom on ground floor and 2 bedrooms upstairs — 1 double and 1 with 3 single beds. Spacious garden, peaceful and with all the space you need.' },
       s5: { tipo:'Cabin · Aluminé 961 · Up to 5 guests', desc:'Same layout as Sombra 4 — 2 stories, living/kitchen/bathroom on ground floor and 2 bedrooms upstairs (1 double + 1 with 3 single beds). Spacious garden and private parking.' },
       s6: { tipo:'Cabin · Aluminé 961 · Up to 4 guests · 2 bathrooms', desc:'The only cabin in the complex with 2 full bathrooms. Ground floor: living/kitchen/double bedroom/bathroom. Upper floor: bedroom with 2 single beds/bathroom. Perfect for two couples or families wanting total privacy.' },
