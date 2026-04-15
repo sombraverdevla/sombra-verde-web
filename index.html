@@ -3,7 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sombra Verde · Cabañas Villa La Angostura</title>
+<title>Sombra Verde · Alquiler de Cabañas en Villa La Angostura, Neuquén</title>
+<meta name="description" content="Alquiler de cabañas turísticas en Villa La Angostura, Patagonia. 7 cabañas en dos sectores céntricos. Reserva directa sin comisión. Superanfitrión Airbnb · Preferidos Booking · 4.8★ en Google.">
+<meta name="keywords" content="cabañas Villa La Angostura, alquiler cabañas Patagonia, cabañas Neuquén, alojamiento Villa La Angostura, cabaña Nahuel Huapi, turismo Patagonia, Sombra Verde">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://sombraverdevla.netlify.app/">
+
+<!-- Open Graph (WhatsApp, Facebook, Instagram) -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sombraverdevla.netlify.app/">
+<meta property="og:title" content="Sombra Verde · Alquiler de Cabañas en Villa La Angostura">
+<meta property="og:description" content="7 cabañas turísticas en Villa La Angostura, Patagonia. Reserva directa sin comisión. 4.8★ · 224 reseñas en Google.">
+<meta property="og:image" content="https://res.cloudinary.com/dzld5gwmr/image/upload/DSC07952_1-1-1200x802_xgkqwe">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="802">
+<meta property="og:locale" content="es_AR">
+<meta property="og:site_name" content="Sombra Verde VLA">
+
+<!-- Twitter/X Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Sombra Verde · Cabañas en Villa La Angostura">
+<meta name="twitter:description" content="7 cabañas turísticas en Villa La Angostura, Patagonia. Reserva directa sin comisión.">
+<meta name="twitter:image" content="https://res.cloudinary.com/dzld5gwmr/image/upload/DSC07952_1-1-1200x802_xgkqwe">
+
+<!-- Schema.org structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LodgingBusiness",
+  "name": "Sombra Verde VLA - Alquiler Turístico",
+  "description": "Complejo de 7 cabañas turísticas en Villa La Angostura, Patagonia Argentina. Dos sectores céntricos, atención personalizada, reserva directa.",
+  "url": "https://sombraverdevla.netlify.app/",
+  "telephone": "+54-9-2944-562177",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Michay 268 / Aluminé 961",
+    "addressLocality": "Villa La Angostura",
+    "addressRegion": "Neuquén",
+    "addressCountry": "AR"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -40.7662965,
+    "longitude": -71.6424125
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "reviewCount": "224",
+    "bestRating": "5"
+  },
+  "priceRange": "$$",
+  "amenityFeature": [
+    {"@type": "LocationFeatureSpecification", "name": "WiFi", "value": true},
+    {"@type": "LocationFeatureSpecification", "name": "Estacionamiento", "value": true},
+    {"@type": "LocationFeatureSpecification", "name": "Parrilla", "value": true},
+    {"@type": "LocationFeatureSpecification", "name": "Smart TV", "value": true}
+  ],
+  "sameAs": [
+    "https://www.instagram.com/sombraverde.vla",
+    "https://maps.app.goo.gl/M17LHwKJcSRuQHsi8"
+  ]
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -57,6 +119,14 @@ onSnapshot(doc(db, 'sv', 'cabanas'), (snap) => {
   }
 });
 
+// Escuchar eventos/temporadas (estadía mínima) en tiempo real
+onSnapshot(doc(db, 'sv', 'eventos'), (snap) => {
+  if (snap.exists()) {
+    try { window.eventosDB = JSON.parse(snap.data().data); }
+    catch(e) {}
+  }
+});
+
 // ─── GUARDAR RESERVA EN FIREBASE ──────────────────────────────
 window.guardarReservaFirebase = async function(nueva) {
   try {
@@ -92,7 +162,9 @@ header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:cen
 .header-sub{font-size:.75rem;color:var(--sage);}
 
 /* HERO */
-.hero{background:var(--forest);padding:2.5rem 2rem 0;text-align:center;position:relative;}
+.hero{background:var(--forest);padding:6rem 2rem 4rem;text-align:center;position:relative;background-image:url('https://res.cloudinary.com/dzld5gwmr/image/upload/DSC07952_1-1-1200x802_xgkqwe');background-size:cover;background-position:center;}
+.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,26,15,.55) 0%,rgba(15,26,15,.70) 100%);z-index:0;}
+.hero>*{position:relative;z-index:1;}
 .hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 100%,rgba(61,90,62,.4) 0%,transparent 70%);}
 .hero-tag{display:inline-block;font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:.5rem;position:relative;}
 .hero h1{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.8rem);color:var(--cream);line-height:1.15;margin-bottom:.4rem;position:relative;}
@@ -100,9 +172,9 @@ header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:cen
 .hero-sub{color:var(--sage);font-size:.83rem;font-weight:300;position:relative;margin-bottom:2rem;}
 
 /* SEARCH */
-.search-wrap{background:var(--forest);padding:0 2rem 2.5rem;}
+.search-wrap{background:var(--forest);padding:1.5rem 2rem 2.5rem;}
 .search-box{background:white;border-radius:16px;padding:1.3rem;max-width:860px;margin:0 auto;box-shadow:0 8px 40px rgba(0,0,0,.25);}
-.search-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:.9rem;align-items:end;}
+.search-grid{display:grid;grid-template-columns:2fr 1fr auto;gap:.9rem;align-items:end;}
 .field label{display:block;font-size:.65rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--terra);margin-bottom:5px;}
 .field input,.field select{width:100%;padding:10px 12px;border:1.5px solid var(--warm);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.86rem;color:var(--dark);background:var(--cream);outline:none;transition:border-color .2s;}
 .field input:focus,.field select:focus{border-color:var(--moss);}
@@ -125,7 +197,8 @@ header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:cen
 .cabana-card{background:white;border-radius:16px;overflow:hidden;display:grid;grid-template-columns:320px 1fr;box-shadow:0 2px 12px rgba(0,0,0,.07);transition:box-shadow .2s,transform .2s;border:1px solid rgba(0,0,0,.06);cursor:pointer;}
 .cabana-card:hover{box-shadow:0 8px 28px rgba(0,0,0,.12);transform:translateY(-2px);}
 .cabana-card.hidden{display:none;}
-.cabana-card.no-disponible{opacity:.55;pointer-events:none;}
+.cabana-card.no-disponible{filter:grayscale(1);opacity:.72;pointer-events:none;position:relative;}
+.cabana-card.no-disponible .card-gallery::after{content:'No disponible';position:absolute;inset:0;background:rgba(0,0,0,.52);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Sans',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;z-index:5;}
 .cabana-card .btn-reservar,.cabana-card .btn-cal{position:relative;z-index:2;}
 
 .card-gallery{position:relative;height:340px;overflow:hidden;}
@@ -370,9 +443,9 @@ header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:cen
 /* ── Cómo llegar ── */
 .llegar-section{padding:3rem 2rem;background:var(--cream);border-top:1px solid var(--warm);}
 .llegar-inner{max-width:900px;margin:0 auto;text-align:center;}
-.llegar-titulo{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--forest);margin-bottom:.3rem;}
-.llegar-sub{font-size:.82rem;color:#777;margin-bottom:1.8rem;}
-.llegar-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem;}
+.llegar-titulo{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--forest);margin-bottom:.3rem;text-align:center;}
+.llegar-sub{font-size:.82rem;color:#777;margin-bottom:1.8rem;text-align:center;}
+.llegar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
 .llegar-card{background:#fff;border-radius:14px;padding:1.3rem;border:1px solid var(--warm);}
 /* ── Banner Angostura VIP ── */
 .avip-banner{display:flex;align-items:center;gap:1.2rem;background:linear-gradient(135deg,#0d2137,#1a3a5c);border-radius:16px;padding:1.1rem 1.4rem;margin-top:1.4rem;text-decoration:none;transition:all .25s;box-shadow:0 4px 20px rgba(26,58,92,.25);max-width:900px;margin-left:auto;margin-right:auto;}
@@ -406,7 +479,7 @@ header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:cen
 .puntaje-stars{font-size:.7rem;color:var(--accent);letter-spacing:-1px;}
 .puntaje-sep{width:1px;height:20px;background:rgba(255,255,255,.2);}
 .puntaje-logo{font-size:.8rem;}
-.reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-bottom:1.5rem;}
+.reviews-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:1.5rem;}
 .review-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:1.1rem 1.2rem;}
 .review-top{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;}
 .reviewer-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);color:var(--dark);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600;flex-shrink:0;}
@@ -426,7 +499,7 @@ header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:cen
 
 /* FAQ */
 .faq-section{max-width:740px;margin:0 auto;padding:2rem 2rem 3rem;}
-.faq-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--forest);margin-bottom:1.1rem;}
+.faq-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--forest);margin-bottom:1.1rem;text-align:center;}
 .faq-item{background:white;border-radius:11px;margin-bottom:.5rem;border:1px solid rgba(0,0,0,.06);overflow:hidden;}
 .faq-q{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.1rem;cursor:pointer;font-size:.87rem;font-weight:500;color:var(--forest);transition:background .15s;user-select:none;}
 .faq-q:hover{background:var(--cream);}
@@ -505,6 +578,9 @@ header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:cen
 .no-results h3{font-family:'Playfair Display',serif;color:var(--forest);margin-bottom:.4rem;}
 .no-results p{color:#777;font-size:.85rem;}
 
+.cert-label{font-size:.72rem;font-weight:600;color:#333;}
+@media(max-width:520px){.cert-label{display:none;}}
+
 /* WA FLOAT */
 .wa-float{position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;background:#25D366;color:white;border:none;height:50px;border-radius:25px;font-size:1.3rem;cursor:pointer;box-shadow:0 4px 16px rgba(0,0,0,.2);transition:transform .2s;display:flex;align-items:center;gap:8px;padding:0 18px 0 14px;}
 .wa-float:hover{transform:scale(1.05);}
@@ -555,6 +631,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
   .search-wrap{padding:0 1rem 1.5rem;}
   .search-box{padding:1rem;}
   .search-grid{grid-template-columns:1fr 1fr;gap:.6rem;}
+  .search-grid .field:first-child{grid-column:1/-1;}
   .btn-search{grid-column:1/-1;width:100%;}
 
   /* Proceso */
@@ -598,7 +675,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
   .counter-num{font-size:1.4rem;}
 
   /* Reseñas */
-  .reviews-grid{grid-template-columns:1fr;}
+  .reviews-grid{grid-template-columns:repeat(5,80vw);overflow-x:auto;padding-bottom:.5rem;}
 
   /* Proceso — ocultar flechas en mobile muy chico */
   @media(max-width:400px){
@@ -651,6 +728,39 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
   .proceso-arrow{display:none;}
   .vla-grid{grid-template-columns:1fr;}
 }
+
+/* RANGE PICKER */
+#range-picker-overlay{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,.35);align-items:center;justify-content:center;}
+#range-picker-overlay.open{display:flex;}
+#range-picker-box{background:#fff;border-radius:18px;padding:1.5rem;box-shadow:0 20px 60px rgba(0,0,0,.25);max-width:720px;width:95vw;font-family:'DM Sans',sans-serif;}
+.rp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;}
+.rp-title{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--forest);}
+.rp-hint{font-size:.75rem;color:#999;margin-top:2px;}
+.rp-close{background:none;border:none;font-size:1.4rem;cursor:pointer;color:#999;line-height:1;}
+.rp-months{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;}
+.rp-month{}
+.rp-month-title{text-align:center;font-weight:600;font-size:.85rem;color:var(--forest);margin-bottom:.7rem;display:flex;align-items:center;justify-content:space-between;}
+.rp-nav{background:none;border:none;cursor:pointer;font-size:1.1rem;color:var(--moss);padding:0 6px;}
+.rp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;}
+.rp-dow{text-align:center;font-size:.6rem;font-weight:600;color:#aaa;text-transform:uppercase;padding:3px 0;}
+.rp-day{text-align:center;padding:7px 4px;border-radius:8px;font-size:.8rem;cursor:pointer;transition:background .12s,color .12s;border:none;background:none;width:100%;}
+.rp-day:hover:not(.rp-past):not(.rp-occ){background:var(--warm);}
+.rp-day.rp-past{color:#ccc;cursor:not-allowed;}
+.rp-day.rp-occ{background:#fde8e8;color:#c0392b;cursor:not-allowed;border-radius:0;}
+.rp-day.rp-occ-start{border-radius:8px 0 0 8px;}
+.rp-day.rp-occ-end{border-radius:0 8px 8px 0;}
+.rp-day.rp-sel-start,.rp-day.rp-sel-end{background:var(--moss);color:#fff;font-weight:600;}
+.rp-day.rp-sel-start{border-radius:8px 0 0 8px;}
+.rp-day.rp-sel-end{border-radius:0 8px 8px 0;}
+.rp-day.rp-sel-start.rp-sel-end{border-radius:8px;}
+.rp-day.rp-in-range{background:rgba(61,90,62,.12);border-radius:0;}
+.rp-day.rp-empty{cursor:default;}
+.rp-footer{margin-top:1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.rp-selected-label{font-size:.82rem;color:var(--terra);}
+.rp-confirm{background:var(--moss);color:#fff;border:none;padding:10px 24px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.86rem;font-weight:500;cursor:pointer;}
+.rp-confirm:disabled{background:#ccc;cursor:not-allowed;}
+.rp-clear{background:none;border:1px solid #ddd;color:#999;padding:9px 16px;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.82rem;cursor:pointer;}
+@media(max-width:600px){.rp-months{grid-template-columns:1fr;}.rp-nav.rp-nav-next-hidden{display:none;}}
 </style>
 </head>
 <body>
@@ -707,31 +817,64 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
 </div>
 
 <div class="hero">
-  <div class="hero-tag">Patagonia Argentina</div>
-  <h1>Tu refugio en<br><em>Villa La Angostura</em></h1>
-  <p class="hero-sub">7 cabañas · Dos sectores céntricos · Dueños presentes · Abierto todo el año</p>
+  <div class="hero-tag">Patagonia Argentina · Villa La Angostura</div>
+  <h1 style="font-size:clamp(1.6rem,4vw,2.6rem);letter-spacing:-.01em;line-height:1.2;">
+    Alquiler de cabañas<br>
+    <em style="font-size:clamp(1.9rem,5vw,3.2rem);letter-spacing:-.02em;">en Villa La Angostura</em>
+  </h1>
+  <p class="hero-sub">7 cabañas · Dos sectores céntricos · Atención personalizada · Abierto todo el año</p>
+  <p class="hero-sub" style="margin-top:.4rem;color:var(--accent);font-weight:500;">★★★★★ 4.8 · 224 reseñas en Google</p>
 </div>
 
 <div class="search-wrap">
   <div class="search-box">
-    <div class="search-grid">
-      <div class="field"><label>Check-in</label><input type="date" id="checkin" onchange="onCheckinChange()"></div>
-      <div class="field"><label>Check-out</label><input type="date" id="checkout" onchange="filtrar()"></div>
-      <div class="field">
-        <label>Personas</label>
-        <select id="personas" onchange="onPersonasChange(this)">
-          <option value="">Todas</option>
-          <option value="1">1 persona</option>
-          <option value="2">2 personas</option>
-          <option value="3">3 personas</option>
-          <option value="4">4 personas</option>
-          <option value="5">5 personas</option>
-          <option value="mas">6 o más →</option>
-        </select>
-        <input type="number" id="personas-num" min="6" max="25" placeholder="¿Cuántos?" style="display:none;margin-top:4px;width:100%;border:1px solid #ddd;border-radius:8px;padding:7px 10px;font-size:.9rem;font-family:inherit;" oninput="filtrar()">
+    <div style="display:flex;flex-direction:column;gap:.75rem;">
+      <!-- Fechas -->
+      <div class="field" style="position:relative;">
+        <label>Fechas</label>
+        <div id="date-range-display" onclick="abrirRangePicker()" style="width:100%;padding:10px 12px;border:1.5px solid var(--warm);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.86rem;color:var(--dark);background:var(--cream);cursor:pointer;display:flex;align-items:center;gap:8px;user-select:none;">
+          <span style="font-size:1rem;">📅</span>
+          <span id="date-range-label" style="color:#999;">Check-in → Check-out</span>
+        </div>
+        <input type="date" id="checkin" style="display:none" onchange="onCheckinChange()">
+        <input type="date" id="checkout" style="display:none" onchange="filtrar()">
       </div>
-      <button class="btn-search" onclick="window._filtrarConScroll=true;filtrar()">Buscar</button>
+      <!-- Huéspedes inline -->
+      <div class="field">
+        <label>Huéspedes</label>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
+          <!-- Adultos -->
+          <div style="background:var(--cream);border:1.5px solid var(--warm);border-radius:10px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:.5rem;">
+            <div>
+              <div style="font-size:.8rem;font-weight:500;color:var(--dark);">Adultos</div>
+              <div style="font-size:.65rem;color:#bbb;">13 años o más</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:.5rem;flex-shrink:0;">
+              <button onclick="cambiarHuespedes('adultos',-1)" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #ddd;background:#fff;font-size:1rem;cursor:pointer;color:#666;display:flex;align-items:center;justify-content:center;">−</button>
+              <span id="count-adultos" style="font-size:.95rem;font-weight:700;color:var(--dark);min-width:16px;text-align:center;">2</span>
+              <button onclick="cambiarHuespedes('adultos',1)" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--moss);background:#fff;font-size:1rem;cursor:pointer;color:var(--moss);display:flex;align-items:center;justify-content:center;">+</button>
+            </div>
+          </div>
+          <!-- Menores -->
+          <div style="background:var(--cream);border:1.5px solid var(--warm);border-radius:10px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:.5rem;">
+            <div>
+              <div style="font-size:.8rem;font-weight:500;color:var(--dark);">Menores</div>
+              <div style="font-size:.65rem;color:#bbb;">Hasta 12 años</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:.5rem;flex-shrink:0;">
+              <button onclick="cambiarHuespedes('menores',-1)" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #ddd;background:#fff;font-size:1rem;cursor:pointer;color:#666;display:flex;align-items:center;justify-content:center;">−</button>
+              <span id="count-menores" style="font-size:.95rem;font-weight:700;color:var(--dark);min-width:16px;text-align:center;">0</span>
+              <button onclick="cambiarHuespedes('menores',1)" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--moss);background:#fff;font-size:1rem;cursor:pointer;color:var(--moss);display:flex;align-items:center;justify-content:center;">+</button>
+            </div>
+          </div>
+        </div>
+        <select id="personas" style="display:none" onchange="onPersonasChange(this)"><option value="">Todas</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="mas">mas</option></select>
+        <input type="number" id="personas-num" min="1" max="25" style="display:none;" oninput="filtrar()">
+      </div>
+      <!-- Buscar -->
+      <button class="btn-search" style="width:100%;" onclick="window._filtrarConScroll=true;filtrar()">Buscar</button>
     </div>
+    <p style="font-size:.72rem;color:#999;margin-top:.7rem;text-align:center;">Elegí fechas de llegada y salida, sumá adultos y menores, y buscá tu cabaña ideal.</p>
   </div>
 </div>
 
@@ -769,6 +912,50 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
       <div class="proceso-icon">🌿</div>
       <div class="proceso-label">¡Disfrutá Sombra Verde!</div>
     </div>
+  </div>
+</div>
+
+<div style="background:#fff;border-top:1px solid var(--warm);border-bottom:1px solid var(--warm);padding:.7rem 2rem;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:.5rem 1.4rem;flex-wrap:wrap;">
+
+    <!-- Municipalidad -->
+    <div style="display:flex;align-items:center;gap:6px;" title="Habilitados por la Municipalidad de VLA">
+      <div style="width:30px;height:30px;border-radius:6px;background:linear-gradient(135deg,#1a6b3c,#2d9e5f);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 2L2 7v2h20V7L12 2zm-8 7v10h4v-6h8v6h4V9H4zm6 10v-4h4v4h-4z"/></svg>
+      </div>
+      <span class="cert-label">Habilitado por Municipalidad VLA</span>
+    </div>
+
+    <span style="color:#e0e0e0;">|</span>
+
+    <!-- Airbnb -->
+    <div style="display:flex;align-items:center;gap:6px;" title="Superanfitrión Airbnb">
+      <div style="width:30px;height:30px;border-radius:6px;background:#FF5A5F;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm-.5 5.5c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm4.5 13h-2.5v-6H9.5v6H7c0-3.5 1.5-5.5 3-6.5-.8-.5-1.5-1.4-1.5-2.5 0-1.9 1.6-3.5 3.5-3.5s3.5 1.6 3.5 3.5c0 1.1-.7 2-1.5 2.5 1.5 1 3 3 3 6.5z"/></svg>
+      </div>
+      <span class="cert-label">Superanfitrión Airbnb</span>
+    </div>
+
+    <span style="color:#e0e0e0;">|</span>
+
+    <!-- Booking -->
+    <div style="display:flex;align-items:center;gap:6px;" title="Preferidos por huéspedes · Booking">
+      <div style="width:30px;height:30px;border-radius:6px;background:#003580;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M6 2h12a2 2 0 012 2v16a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2zm2 4v2h8V6H8zm0 4v2h8v-2H8zm0 4v2h5v-2H8z"/></svg>
+      </div>
+      <span class="cert-label">Preferidos · Booking</span>
+    </div>
+
+    <span style="color:#e0e0e0;">|</span>
+
+    <!-- Google -->
+    <div style="display:flex;align-items:center;gap:6px;" title="4.8 · 224 reseñas en Google">
+      <div style="width:30px;height:30px;border-radius:6px;background:#fff;border:1.5px solid #e0e0e0;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      </div>
+      <span class="cert-label">4.8 ★ · 224 reseñas Google</span>
+    </div>
+
   </div>
 </div>
 
@@ -834,8 +1021,8 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         <span class="guest-badge">👥 hasta 3</span>
         <div class="gallery-thumbs">
           <img class="thumb active" src="https://res.cloudinary.com/dzld5gwmr/image/upload/1-6-d95ZN585j5hV3vJ0_gn6h4e" onclick="event.stopPropagation();cambiarFoto('img-s2',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/1-6-d95ZN585j5hV3vJ0_gn6h4e')">
-          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/a-YNqMzVVbMVt62KK0_yzhz5r" onclick="event.stopPropagation();cambiarFoto('img-s2',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/a-YNqMzVVbMVt62KK0_yzhz5r')">
-          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/b-A0xvLgg9lrtB2Wlo_lxwxdz" onclick="event.stopPropagation();cambiarFoto('img-s2',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/b-A0xvLgg9lrtB2Wlo_lxwxdz')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4492_qxrzu1" onclick="event.stopPropagation();cambiarFoto('img-s2',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4492_qxrzu1')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4480_blxjdj" onclick="event.stopPropagation();cambiarFoto('img-s2',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4480_blxjdj')">
         </div>
       </div>
       <div class="card-content">
@@ -865,14 +1052,14 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
     <!-- SOMBRA 3 -->
     <div class="cabana-card fade-in" id="card-s3" onclick="abrirDetalle('s3')" data-cabana="Sombra 3" data-cap="3">
       <div class="card-gallery">
-        <img class="gallery-main" id="img-s3" style="cursor:pointer" onclick="abrirDetalle('s3')" src="https://res.cloudinary.com/dzld5gwmr/image/upload/img_1893-AQEe6v7ybXuZB7B3_t7qyjt" alt="Sombra 3">
+        <img class="gallery-main" id="img-s3" style="cursor:pointer" onclick="abrirDetalle('s3')" src="https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4444_nej9sv" alt="Sombra 3">
         <span class="badge-disp badge-libre" id="badge-s3">Disponible</span>
         <span class="badge-off">15% OFF</span>
-        <span class="guest-badge">👥 hasta 4</span>
+        <span class="guest-badge">👥 hasta 3</span>
         <div class="gallery-thumbs">
-          <img class="thumb active" src="https://res.cloudinary.com/dzld5gwmr/image/upload/img_1893-AQEe6v7ybXuZB7B3_t7qyjt" onclick="event.stopPropagation();cambiarFoto('img-s3',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/img_1893-AQEe6v7ybXuZB7B3_t7qyjt')">
-          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/b3be4030-48ec-4ba2-b70e-17c3e365cf30-A85M7jGON1s3zrRg_bxgotd" onclick="event.stopPropagation();cambiarFoto('img-s3',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/b3be4030-48ec-4ba2-b70e-17c3e365cf30-A85M7jGON1s3zrRg_bxgotd')">
-          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/img_1922-m5K8Ox04DZcR3NXd_juvpgb" onclick="event.stopPropagation();cambiarFoto('img-s3',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/img_1922-m5K8Ox04DZcR3NXd_juvpgb')">
+          <img class="thumb active" src="https://res.cloudinary.com/dzld5gwmr/image/upload/img_1893-AQEe6v7ybXuZB7B3_t7qyjt" onclick="event.stopPropagation();cambiarFoto('img-s3',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4444_nej9sv')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4473_mlqlyc" onclick="event.stopPropagation();cambiarFoto('img-s3',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4473_mlqlyc')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4460_sxmeeh" onclick="event.stopPropagation();cambiarFoto('img-s3',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4460_sxmeeh')">
         </div>
       </div>
       <div class="card-content">
@@ -939,14 +1126,14 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
     <!-- SOMBRA 5 -->
     <div class="cabana-card fade-in" id="card-s5" onclick="abrirDetalle('s5')" data-cabana="Sombra 5" data-cap="5">
       <div class="card-gallery">
-        <img class="gallery-main" id="img-s5" style="cursor:pointer" onclick="abrirDetalle('s5')" src="https://res.cloudinary.com/dzld5gwmr/image/upload/l-Yle47MjQRDC6Wqq1_vschvm" alt="Sombra 5">
+        <img class="gallery-main" id="img-s5" style="cursor:pointer" onclick="abrirDetalle('s5')" src="https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5163_lua9n8" alt="Sombra 5">
         <span class="badge-disp badge-libre" id="badge-s5">Disponible</span>
         <span class="badge-off">15% OFF</span>
         <span class="guest-badge">👥 hasta 5</span>
         <div class="gallery-thumbs">
-          <img class="thumb active" src="https://res.cloudinary.com/dzld5gwmr/image/upload/l-Yle47MjQRDC6Wqq1_vschvm" onclick="event.stopPropagation();cambiarFoto('img-s5',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/l-Yle47MjQRDC6Wqq1_vschvm')">
-          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/j-YBgjDpVjxpCvkrlL_sathgj" onclick="event.stopPropagation();cambiarFoto('img-s5',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/j-YBgjDpVjxpCvkrlL_sathgj')">
-          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/c-YyvDeonDvaCw7VDJ_skvrwb" onclick="event.stopPropagation();cambiarFoto('img-s5',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/c-YyvDeonDvaCw7VDJ_skvrwb')">
+          <img class="thumb active" src="https://res.cloudinary.com/dzld5gwmr/image/upload/l-Yle47MjQRDC6Wqq1_vschvm" onclick="event.stopPropagation();cambiarFoto('img-s5',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5163_lua9n8')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5238_j6shh6" onclick="event.stopPropagation();cambiarFoto('img-s5',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5238_j6shh6')">
+          <img class="thumb" src="https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5243_n8lf96" onclick="event.stopPropagation();cambiarFoto('img-s5',this,'https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5243_n8lf96')">
         </div>
       </div>
       <div class="card-content">
@@ -1050,7 +1237,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
   </div>
   <div class="mix-box" id="mix-box">
     <h4>🏡 ¿Necesitás más espacio?</h4>
-    <p>Ninguna cabaña individual tiene capacidad para tu grupo, pero podés combinar dos cabañas del mismo sector a precio especial.</p>
+    <p id="mix-box-desc">Podés combinar cabañas del mismo sector a precio especial.</p>
     <div class="mix-combos" id="mix-combos"></div>
   </div>
   <div class="no-results" id="no-results">
@@ -1069,9 +1256,12 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           <div class="map-label-title">Sector A · Sombra 1, 2 y 3</div>
           <div class="map-label-sub">Michay 268 · A metros del centro</div>
         </div>
-        <a class="map-label-link" href="https://maps.app.goo.gl/oT9Ju7XPwheG5ZsDA" target="_blank">Ver en Maps ↗</a>
+        <a class="map-label-link" href="https://maps.app.goo.gl/5waEAutJ9CfH24Ja9" target="_blank">Ver en Maps ↗</a>
       </div>
-      <iframe src="https://maps.google.com/maps?q=Michay+268,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14" allowfullscreen loading="lazy"></iframe>
+      <a href="https://maps.app.goo.gl/5waEAutJ9CfH24Ja9" target="_blank" style="display:flex;height:180px;align-items:center;justify-content:center;background:#e8ede8;border-radius:0 0 12px 12px;text-decoration:none;gap:8px;color:var(--moss);font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;border-top:1px solid var(--warm);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Michay 268 · Ver en Google Maps
+      </a>
     </div>
     <div class="map-card">
       <div class="map-label">
@@ -1079,9 +1269,12 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           <div class="map-label-title">Sector B · Sombra 4, 5, 6 y 7</div>
           <div class="map-label-sub">Aluminé 961 · Barrio Norte</div>
         </div>
-        <a class="map-label-link" href="https://maps.google.com/?q=Aluminé+961,+Villa+La+Angostura,+Neuquén" target="_blank">Ver en Maps ↗</a>
+        <a class="map-label-link" href="https://maps.app.goo.gl/21TMtnZsw2DeXh7g6" target="_blank">Ver en Maps ↗</a>
       </div>
-      <iframe src="https://maps.google.com/maps?q=Alumin%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14" allowfullscreen loading="lazy"></iframe>
+      <a href="https://maps.app.goo.gl/21TMtnZsw2DeXh7g6" target="_blank" style="display:flex;height:180px;align-items:center;justify-content:center;background:#e8ede8;border-radius:0 0 12px 12px;text-decoration:none;gap:8px;color:var(--moss);font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;border-top:1px solid var(--warm);">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Aluminé 961 · Ver en Google Maps
+      </a>
     </div>
   </div>
 </div>
@@ -1123,89 +1316,178 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
       <div class="reviews-title">Lo que dicen nuestros huéspedes</div>
       <div class="puntajes-row">
         <div class="puntaje-item">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#003580"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-          <span class="puntaje-logo" style="color:#003580;font-weight:700;font-size:.85rem;">Booking</span>
-          <span class="puntaje-val">9.4</span>
-          <span class="puntaje-stars">★★★★★</span>
-        </div>
-        <div class="puntaje-sep"></div>
-        <div class="puntaje-item">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#FF5A5F"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
-          <span class="puntaje-logo" style="color:#FF5A5F;font-weight:700;font-size:.85rem;">Airbnb</span>
-          <span class="puntaje-val">4.92</span>
-          <span class="puntaje-stars">★★★★★</span>
-        </div>
-        <div class="puntaje-sep"></div>
-        <div class="puntaje-item">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#4285F4"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-          <span class="puntaje-logo" style="color:#4285F4;font-weight:700;font-size:.85rem;">Google</span>
           <span class="puntaje-val">4.8</span>
           <span class="puntaje-stars">★★★★★</span>
+          <span style="font-size:.7rem;color:var(--sage);margin-left:4px;">224 reseñas</span>
+        </div>
+        <div class="puntaje-sep"></div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <svg width="16" height="16" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+          <span style="font-size:.75rem;color:var(--sage);">Google</span>
         </div>
       </div>
     </div>
-
     <div class="reviews-grid">
 
       <div class="review-card">
         <div class="review-top">
-          <div class="reviewer-avatar">MG</div>
+          <div class="reviewer-avatar">SE</div>
           <div class="reviewer-info">
-            <div class="reviewer-name">Martina G.</div>
-            <div class="reviewer-meta">Buenos Aires · Sombra 1</div>
+            <div class="reviewer-name">Sergio Etchevarria</div>
+            <div class="reviewer-meta">Hace un mes · Google</div>
           </div>
-          <div class="review-platform booking-badge">Booking</div>
+          <span class="review-platform google-badge">Google</span>
         </div>
         <div class="review-stars">★★★★★</div>
-        <p class="review-text">"Espectacular estadía. La cabaña estaba impecable, todo en planta baja ideal para nosotros con el bebé. La ubicación es inmejorable — a dos cuadras del centro caminando. Francisco estuvo siempre disponible. Volvemos seguro."</p>
+        <div class="review-text">"La cabaña está en una buena ubicación, tres cuadras del centro comercial, tiene todo lo necesario para una estadía cómoda, bien equipada. Francisco estuvo siempre respondiendo a nuestras inquietudes. Recomendable."</div>
       </div>
 
       <div class="review-card">
         <div class="review-top">
-          <div class="reviewer-avatar">RL</div>
+          <div class="reviewer-avatar">MM</div>
           <div class="reviewer-info">
-            <div class="reviewer-name">Rodrigo L.</div>
-            <div class="reviewer-meta">Rosario · Sombra 4</div>
+            <div class="reviewer-name">Macarena Maguregui</div>
+            <div class="reviewer-meta">Hace 2 meses · Local Guide · Google</div>
           </div>
-          <div class="review-platform airbnb-badge">Airbnb</div>
+          <span class="review-platform google-badge">Google</span>
         </div>
         <div class="review-stars">★★★★★</div>
-        <p class="review-text">"Fuimos cuatro amigos y quedamos muy conformes. La cabaña tiene todo lo que necesitás, el parque es amplio y la parrilla excelente. La atención del dueño fue muy buena, respondió siempre rápido. Totalmente recomendable."</p>
+        <div class="review-text">"Nos alojamos unos días y la experiencia fue excelente. El lugar es muy cómodo, muy bien equipado, tranquilo y con una ubicación ideal, cerca del centro. Perfecto para descansar. Sin duda volveríamos."</div>
       </div>
 
       <div class="review-card">
         <div class="review-top">
-          <div class="reviewer-avatar">CF</div>
+          <div class="reviewer-avatar">AG</div>
           <div class="reviewer-info">
-            <div class="reviewer-name">Carolina F.</div>
-            <div class="reviewer-meta">Córdoba · Sombra 6</div>
+            <div class="reviewer-name">Alejandro Gallardo</div>
+            <div class="reviewer-meta">Hace 3 meses · Local Guide · Google</div>
           </div>
-          <div class="review-platform google-badge">Google</div>
+          <span class="review-platform google-badge">Google</span>
         </div>
         <div class="review-stars">★★★★★</div>
-        <p class="review-text">"Superanfitrión. La cabaña Sombra 6 fue perfecta para nosotros — dos parejas con baño privado cada una. Tranquila, limpia y muy bien equipada. Villa La Angostura es un lugar increíble y Sombra Verde lo mejor para alojarse."</p>
+        <div class="review-text">"Hermosa cabaña. Muy buena calidad de instalaciones y contacto frecuente con su anfitrión por cualquier duda o consulta. Cerca del centro y de negocios para abastecerse. Muy recomendable. Volveríamos."</div>
       </div>
 
       <div class="review-card">
         <div class="review-top">
-          <div class="reviewer-avatar">JP</div>
+          <div class="reviewer-avatar">SJ</div>
           <div class="reviewer-info">
-            <div class="reviewer-name">Juan P.</div>
-            <div class="reviewer-meta">CABA · Sombra 2</div>
+            <div class="reviewer-name">Sara Jarenko</div>
+            <div class="reviewer-meta">Hace 4 meses · Google</div>
           </div>
-          <div class="review-platform booking-badge">Booking</div>
+          <span class="review-platform google-badge">Google</span>
         </div>
         <div class="review-stars">★★★★★</div>
-        <p class="review-text">"Llegamos de noche y todo estaba listo. La cabaña pequeña y cómoda, ideal para dos personas. A una cuadra del supermercado y del centro. Precio muy razonable para la calidad. Sin dudas la mejor opción céntrica de VLA."</p>
+        <div class="review-text">"Hermoso lugar, muy cómodo y buena ubicación. Cuenta con todo lo necesario para una estadía perfecta, la zona una belleza y super tranquilo para el descanso. Excelente disponibilidad para lo que necesiten."</div>
+      </div>
+
+      <div class="review-card">
+        <div class="review-top">
+          <div class="reviewer-avatar">FZ</div>
+          <div class="reviewer-info">
+            <div class="reviewer-name">Fabian Zorrilla</div>
+            <div class="reviewer-meta">Hace 5 meses · Google</div>
+          </div>
+          <span class="review-platform google-badge">Google</span>
+        </div>
+        <div class="review-stars">★★★★★</div>
+        <div class="review-text">"Muy buena ubicación. Se comunicó vía WhatsApp, muy atento. Muy bien equipado. Calefacción muy buena. Predio super tranquilo. Pagamos vía transferencia, así que super seguro todo."</div>
       </div>
 
     </div>
-
-    <div class="reviews-superhost">
-      <span class="sh-badge airbnb-sh">🏅 Superanfitrión Airbnb</span>
-      <span class="sh-badge booking-sh">🏆 Preferido por huéspedes · Booking</span>
+    <div class="reviews-superhost" style="margin-top:1.2rem;">
+      <a href="https://maps.app.goo.gl/M17LHwKJcSRuQHsi8" target="_blank" style="font-size:.78rem;padding:6px 14px;border-radius:20px;font-weight:500;background:rgba(66,133,244,.1);color:#4285F4;border:1px solid rgba(66,133,244,.3);text-decoration:none;">Ver todas las reseñas en Google ↗</a>
     </div>
+  </div>
+</div>
 
+<!-- FAQ -->
+<div class="faq-section">
+  <div class="faq-title">Preguntas frecuentes</div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cómo funciona el proceso de reserva? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner" style="padding:4px 0">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#3d5a3e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">1</span><span>Elegís la cabaña y seleccionás las fechas</span></div>
+      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#3d5a3e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">2</span><span>Completás tus datos en el formulario</span></div>
+      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#3d5a3e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">3</span><span>Abonás el <strong>50% de seña</strong> por transferencia bancaria o Mercado Pago</span></div>
+      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#3d5a3e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">4</span><span>Enviás el comprobante por WhatsApp al <strong>+54 9 2944 562177</strong></span></div>
+      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#c4a35a;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">✓</span><span>Confirmamos tu reserva en <strong>cuestión de minutos</strong></span></div>
+    </div>
+  </div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cuál es la política de cancelación? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">La seña es no reembolsable. Ante cualquier imprevisto, si avisás con anticipación podemos reprogramar las fechas. Escribinos por WhatsApp y lo resolvemos.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cuáles son los horarios de check-in y check-out? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Check-in desde las 14:00 hs. Check-out hasta las 10:00 hs. Si necesitás horarios especiales consultanos con anticipación — hacemos lo posible para acomodarnos.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Se admiten mascotas? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">En algunas cabañas sí. Consultanos antes de reservar indicando qué mascota traés y te confirmamos disponibilidad.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Hay mínimo de noches? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Depende la temporada. En temporada alta y fines de semana largo el mínimo es 3 noches. En temporada baja desde 2 noches. Consultanos para fechas específicas.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Qué formas de pago aceptan? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Aceptamos efectivo, transferencia bancaria, Mercado Pago y dólares billete. El saldo restante se abona al momento del check-in.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Qué incluye cada cabaña? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Todas las cabañas incluyen ropa de cama, toallas, cocina totalmente equipada, WiFi, Smart TV, calefacción, parrilla individual y estacionamiento propio. El complejo cuenta con parque amplio compartido.</div></div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Dónde están ubicadas las cabañas? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Tenemos dos sectores. Sector A (Sombra 1, 2 y 3) en Michay 268 — a metros del centro, supermercados y restaurantes caminando. Sector B (Sombra 4, 5, 6 y 7) en Alumine 961, Barrio Norte — a 20 minutos caminando del centro, más tranquilo y con parque amplio.</div></div></div>
+</div>
+
+<!-- CÓMO LLEGAR -->
+<div class="llegar-section">
+  <div class="llegar-inner">
+    <div class="llegar-titulo">¿Cómo llegar a Villa La Angostura?</div>
+    <div class="llegar-sub">Patagonia Argentina · Provincia de Neuquén</div>
+    <div class="llegar-grid">
+      <div class="llegar-card">
+        <div class="llegar-card-top"><div class="llegar-card-icon">✈️</div><div class="llegar-card-titulo">En avión + traslado</div></div>
+        <div class="llegar-card-desc">Volá al Aeropuerto de Bariloche (BRC), el más cercano a 80 km. Desde ahí hay minivans y buses directos a VLA. También podés volar a Chapelco (San Martín de los Andes) como alternativa.</div>
+      </div>
+      <div class="llegar-card">
+        <div class="llegar-card-top"><div class="llegar-card-icon">🚌</div><div class="llegar-card-titulo">En autobús</div></div>
+        <div class="llegar-card-desc">Empresas como Via Bariloche y Albus conectan VLA con Bariloche, San Martín de los Andes y Neuquén. Desde Buenos Aires podés llegar con trasbordo en Bariloche.</div>
+      </div>
+      <div class="llegar-card">
+        <div class="llegar-card-top"><div class="llegar-card-icon">🚗</div><div class="llegar-card-titulo">En auto</div></div>
+        <div class="llegar-card-desc">Desde Neuquén capital por Ruta 22 y luego Ruta 40. Desde Buenos Aires por Ruta Nacional 40 atravesando la Patagonia. El camino ofrece paisajes espectaculares.</div>
+      </div>
+      <div class="llegar-card">
+        <div class="llegar-card-top"><div class="llegar-card-icon">🗺️</div><div class="llegar-card-titulo">Desde Chile</div></div>
+        <div class="llegar-card-desc">Cruzando por el paso Cardenal Samoré desde Osorno o Puerto Montt. Una ruta escénica entre bosques y volcanes que muchos turistas hacen como parte de su viaje.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Banner Angostura VIP -->
+  <a class="avip-banner" href="https://www.instagram.com/angosturavip" target="_blank">
+    <img src="data:image/png;base64,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" alt="Angostura VIP">
+    <div class="avip-info">
+      <div class="avip-name">Angostura VIP · Traslados Patagónicos</div>
+      <div class="avip-desc">Transfer puerta a puerta desde el aeropuerto de Bariloche · Minivans, combis y remises para grupos y familias · 5.0 ⭐ 147 opiniones en Google</div>
+      <div class="avip-badge">🎁 Descuento especial para huéspedes de Sombra Verde · Consultanos al reservar · 📞 0294 430-4014 · @angosturavip</div>
+    </div>
+    <div class="avip-cta">Ver más ↗</div>
+  </a>
+
+  </div>
+</div>
+
+<!-- QUÉ HACER EN VLA -->
+<div class="vla-section">
+  <div class="vla-inner">
+    <div onclick="toggleVla()" style="cursor:pointer;">
+      <div style="text-align:center;margin-bottom:.8rem;">
+        <div class="vla-titulo">¿Qué hacer en Villa La Angostura?</div>
+        <div class="vla-sub">Naturaleza, aventura y gastronomía todo el año en la Patagonia</div>
+      </div>
+      <div style="text-align:center;margin-bottom:.5rem;">
+        <button id="vla-toggle-btn" style="background:var(--cream);border:1.5px solid var(--warm);border-radius:10px;padding:7px 16px;font-size:.8rem;color:var(--terra);cursor:pointer;font-family:inherit;white-space:nowrap;">Ver actividades ▾</button>
+      </div>
+    </div>
+    <div id="vla-grid-wrap" style="max-height:0;overflow:hidden;transition:max-height .4s ease;">
+      <div style="height:1rem;"></div>
+      <div class="vla-grid">
+        <div class="vla-card"><div class="vla-icon">🌲</div><div class="vla-name">Bosque de Arrayanes</div><div class="vla-desc">Sendero de 12 km por la Península de Quetrihué con arrayanes centenarios de hasta 600 años. Se puede ir a pie, en bici o en excursión lacustre.</div></div>
+        <div class="vla-card"><div class="vla-icon">🚣</div><div class="vla-name">Kayak y navegación</div><div class="vla-desc">Recorrés el Lago Nahuel Huapi y sus bahías en kayak, SUP o velero. Una de las actividades más populares en verano.</div></div>
+        <div class="vla-card"><div class="vla-icon">⛷️</div><div class="vla-name">Cerro Bayo</div><div class="vla-desc">Centro de ski en invierno y trekking + telesilla en verano. Vistas panorámicas de los lagos y la cordillera a 1.500 msnm.</div></div>
+        <div class="vla-card"><div class="vla-icon">🏞️</div><div class="vla-name">Ruta de los 7 Lagos</div><div class="vla-desc">112 km de paisaje único entre VLA y San Martín de los Andes atravesando siete lagos patagónicos. Imperdible en auto o bici.</div></div>
+        <div class="vla-card"><div class="vla-icon">🥾</div><div class="vla-name">Trekking</div><div class="vla-desc">Senderos para todos los niveles: Cascada Inacayal, Belvedere, Río Bonito y la Huella Andina. Bosques de coihues y lengas.</div></div>
+        <div class="vla-card"><div class="vla-icon">🐴</div><div class="vla-name">Cabalgatas</div><div class="vla-desc">Recorridos a caballo por senderos históricos hasta miradores naturales con vistas al lago y la montaña.</div></div>
+        <div class="vla-card"><div class="vla-icon">🎣</div><div class="vla-name">Pesca con mosca</div><div class="vla-desc">El Río Correntoso, uno de los más cortos del mundo, es referente mundial de la pesca deportiva con mosca.</div></div>
+        <div class="vla-card"><div class="vla-icon">🍽️</div><div class="vla-name">Gastronomía</div><div class="vla-desc">Trucha ahumada, cordero, quesos y chocolates artesanales. La Av. Arrayanes concentra los mejores restaurantes y tiendas.</div></div>
+        <div class="vla-card"><div class="vla-icon">🚵</div><div class="vla-name">Mountain Bike</div><div class="vla-desc">Rutas de ripio y senderos de tierra hacia el Lago Espejo y Correntoso. Alquilás bici en el centro o en Puerto Manzano.</div></div>
+        <div class="vla-card"><div class="vla-icon">🏖️</div><div class="vla-name">Playas y balnearios</div><div class="vla-desc">Lago Correntoso, Puerto Manzano y Bahía Mansa ofrecen playas de arena volcánica con aguas cristalinas ideales para el verano.</div></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1239,131 +1521,6 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
   </div>
 </div>
 
-<!-- QUÉ HACER EN VLA -->
-<div class="vla-section">
-  <div class="vla-inner">
-    <div class="vla-titulo">¿Qué hacer en Villa La Angostura?</div>
-    <div class="vla-sub">Naturaleza, aventura y gastronomía todo el año en la Patagonia</div>
-    <div class="vla-grid">
-      <div class="vla-card">
-        <div class="vla-icon">🌲</div>
-        <div class="vla-name">Bosque de Arrayanes</div>
-        <div class="vla-desc">Sendero de 12 km por la Península de Quetrihué con arrayanes centenarios de hasta 600 años. Se puede ir a pie, en bici o en excursión lacustre.</div>
-      </div>
-      <div class="vla-card">
-        <div class="vla-icon">🚣</div>
-        <div class="vla-name">Kayak y navegación</div>
-        <div class="vla-desc">Recorrés el Lago Nahuel Huapi y sus bahías en kayak, SUP o velero. Una de las actividades más populares en verano.</div>
-      </div>
-      <div class="vla-card">
-        <div class="vla-icon">⛷️</div>
-        <div class="vla-name">Cerro Bayo</div>
-        <div class="vla-desc">Centro de ski en invierno y trekking + telesilla en verano. Vistas panorámicas de los lagos y la cordillera a 1.500 msnm.</div>
-      </div>
-      <div class="vla-card">
-        <div class="vla-icon">🏞️</div>
-        <div class="vla-name">Ruta de los 7 Lagos</div>
-        <div class="vla-desc">112 km de paisaje único entre VLA y San Martín de los Andes atravesando siete lagos patagónicos. Imperdible en auto o bici.</div>
-      </div>
-      <div class="vla-card">
-        <div class="vla-icon">🥾</div>
-        <div class="vla-name">Trekking</div>
-        <div class="vla-desc">Senderos para todos los niveles: Cascada Inacayal, Belvedere, Río Bonito y la Huella Andina. Bosques de coihues y lengas.</div>
-      </div>
-      <div class="vla-card">
-        <div class="vla-icon">🐴</div>
-        <div class="vla-name">Cabalgatas</div>
-        <div class="vla-desc">Recorridos a caballo por senderos históricos hasta miradores naturales con vistas al lago y la montaña.</div>
-      </div>
-      <div class="vla-card">
-        <div class="vla-icon">🎣</div>
-        <div class="vla-name">Pesca con mosca</div>
-        <div class="vla-desc">El Río Correntoso, uno de los más cortos del mundo, es referente mundial de la pesca deportiva con mosca.</div>
-      </div>
-      <div class="vla-card">
-        <div class="vla-icon">🍽️</div>
-        <div class="vla-name">Gastronomía</div>
-        <div class="vla-desc">Trucha ahumada, cordero, quesos y chocolates artesanales. La Av. Arrayanes concentra los mejores restaurantes y tiendas.</div>
-      </div>
-      <div class="vla-card">
-        <div class="vla-icon">🚵</div>
-        <div class="vla-name">Mountain Bike</div>
-        <div class="vla-desc">Rutas de ripio y senderos de tierra hacia el Lago Espejo y Correntoso. Alquilás bici en el centro o en Puerto Manzano.</div>
-      </div>
-      <div class="vla-card">
-        <div class="vla-icon">🏖️</div>
-        <div class="vla-name">Playas y balnearios</div>
-        <div class="vla-desc">Lago Correntoso, Puerto Manzano y Bahía Mansa ofrecen playas de arena volcánica con aguas cristalinas ideales para el verano.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- CÓMO LLEGAR -->
-<div class="llegar-section">
-  <div class="llegar-inner">
-    <div class="llegar-titulo">¿Cómo llegar a Villa La Angostura?</div>
-    <div class="llegar-sub">Patagonia Argentina · Provincia de Neuquén</div>
-    <div class="llegar-grid">
-      <div class="llegar-card">
-        <div class="llegar-card-top"><div class="llegar-card-icon">✈️</div><div class="llegar-card-titulo">En avión + traslado</div></div>
-        <div class="llegar-card-desc">Volá al Aeropuerto de Bariloche (BRC), el más cercano a 80 km. Desde ahí hay minivans y buses directos a VLA. También podés volar a Chapelco (San Martín de los Andes) como alternativa.</div>
-      </div>
-      <div class="llegar-card">
-        <div class="llegar-card-top"><div class="llegar-card-icon">🚌</div><div class="llegar-card-titulo">En autobús</div></div>
-        <div class="llegar-card-desc">Empresas como Via Bariloche y Albus conectan VLA con Bariloche, San Martín de los Andes y Neuquén. Desde Buenos Aires podés llegar con trasbordo en Bariloche.</div>
-      </div>
-      <div class="llegar-card">
-        <div class="llegar-card-top"><div class="llegar-card-icon">🚗</div><div class="llegar-card-titulo">En auto</div></div>
-        <div class="llegar-card-desc">Desde Neuquén capital por Ruta 22 y luego Ruta 40. Desde Buenos Aires por Ruta Nacional 40 atravesando la Patagonia. El camino ofrece paisajes espectaculares.</div>
-      </div>
-      <div class="llegar-card">
-        <div class="llegar-card-top"><div class="llegar-card-icon">🚐</div><div class="llegar-card-titulo">Transfer privado</div></div>
-        <div class="llegar-card-desc">Desde el aeropuerto de Bariloche hay minivans y remises puerta a puerta. Cómodo, directo y sin esperas.</div>
-      </div>
-      <div class="llegar-card">
-        <div class="llegar-card-top"><div class="llegar-card-icon">🗺️</div><div class="llegar-card-titulo">Desde Chile</div></div>
-        <div class="llegar-card-desc">Cruzando por el paso Cardenal Samoré desde Osorno o Puerto Montt. Una ruta escénica entre bosques y volcanes que muchos turistas hacen como parte de su viaje.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Banner Angostura VIP -->
-  <a class="avip-banner" href="https://www.instagram.com/angosturavip" target="_blank">
-    <img src="data:image/png;base64,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" alt="Angostura VIP">
-    <div class="avip-info">
-      <div class="avip-name">Angostura VIP · Traslados Patagónicos</div>
-      <div class="avip-desc">Transfer puerta a puerta desde el aeropuerto de Bariloche · Minivans, combis y remises para grupos y familias · 5.0 ⭐ 147 opiniones en Google</div>
-      <div class="avip-badge">🎁 Descuento especial para huéspedes de Sombra Verde · Consultanos al reservar · 📞 0294 430-4014 · @angosturavip</div>
-    </div>
-    <div class="avip-cta">Ver más ↗</div>
-  </a>
-
-  </div>
-</div>
-
-<!-- FAQ -->
-<div class="faq-section">
-  <div class="faq-title">Preguntas frecuentes</div>
-  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cómo funciona el proceso de reserva? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner" style="padding:4px 0">
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#3d5a3e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">1</span><span>Elegís la cabaña y seleccionás las fechas</span></div>
-      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#3d5a3e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">2</span><span>Completás tus datos en el formulario</span></div>
-      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#3d5a3e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">3</span><span>Abonás el <strong>50% de seña</strong> por transferencia bancaria o Mercado Pago</span></div>
-      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#3d5a3e;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">4</span><span>Enviás el comprobante por WhatsApp al <strong>+54 9 2944 562177</strong></span></div>
-      <div style="display:flex;align-items:flex-start;gap:10px"><span style="background:#c4a35a;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px">✓</span><span>Confirmamos tu reserva en <strong>cuestión de minutos</strong></span></div>
-    </div>
-  </div></div></div>
-  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cuál es la política de cancelación? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">La seña es no reembolsable. Ante cualquier imprevisto, si avisás con anticipación podemos reprogramar las fechas. Escribinos por WhatsApp y lo resolvemos.</div></div></div>
-  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cuáles son los horarios de check-in y check-out? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Check-in desde las 14:00 hs. Check-out hasta las 10:00 hs. Si necesitás horarios especiales consultanos con anticipación — hacemos lo posible para acomodarnos.</div></div></div>
-  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Se admiten mascotas? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">En algunas cabañas sí. Consultanos antes de reservar indicando qué mascota traés y te confirmamos disponibilidad.</div></div></div>
-  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Hay mínimo de noches? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Depende la temporada. En temporada alta y fines de semana largo el mínimo es 3 noches. En temporada baja desde 2 noches. Consultanos para fechas específicas.</div></div></div>
-  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Qué formas de pago aceptan? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Aceptamos efectivo, transferencia bancaria, Mercado Pago y dólares billete. El saldo restante se abona al momento del check-in.</div></div></div>
-  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Qué incluye cada cabaña? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Todas las cabañas incluyen ropa de cama, toallas, cocina totalmente equipada, WiFi, Smart TV, calefacción, parrilla individual y estacionamiento propio. El complejo cuenta con parque amplio compartido.</div></div></div>
-  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Dónde están ubicadas las cabañas? <span class="faq-arrow">▾</span></div><div class="faq-a"><div class="faq-a-inner">Tenemos dos sectores. Sector A (Sombra 1, 2 y 3) en Michay 268 — a metros del centro, supermercados y restaurantes caminando. Sector B (Sombra 4, 5, 6 y 7) en Alumine 961, Barrio Norte — a 20 minutos caminando del centro, más tranquilo y con parque amplio.</div></div></div>
-</div>
-
-<!-- MODAL DETALLE CABAÑA -->
 <!-- MODAL DETALLE CABAÑA -->
 <div class="detail-overlay" id="detail-overlay" onclick="cerrarDetalleSiOverlay(event)">
   <div class="detail-modal" id="detail-modal">
@@ -1417,7 +1574,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         <div class="prog-line" id="pline-2"></div>
         <div class="prog-step">
           <div class="prog-circle" id="pc-3">3</div>
-          <div class="prog-label" id="pl-3">WhatsApp</div>
+          <div class="prog-label" id="pl-3">Tus datos</div>
         </div>
         <div class="prog-line" id="pline-3"></div>
         <div class="prog-step">
@@ -1462,7 +1619,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
               <div class="fg"><label>Nombre completo *</label><input type="text" id="f-nombre" placeholder="Juan Pérez"></div>
               <div class="fg"><label>WhatsApp *</label><input type="tel" id="f-tel" placeholder="+54 9 11 1234-5678"></div>
               <div class="fg full"><label>Email *</label><input type="email" id="f-email" placeholder="juan@email.com"></div>
-              <div class="fg full"><label>Cantidad de personas</label><input type="number" id="f-pers" min="1" max="8" placeholder="2"></div>
+              <div class="fg full"><label>Cantidad de personas</label><input type="number" id="f-pers" min="1" max="5" placeholder="2"></div>
               <div class="fg full"><label>Consultas o pedidos especiales</label><textarea id="f-consulta" placeholder="Opcional..."></textarea></div>
             </div>
             <button class="btn-conf" onclick="confirmar()">Ver datos de pago →</button>
@@ -1483,15 +1640,22 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           <div class="c-row sena-v"><span>Seña a transferir ahora</span><span id="conf-sena"></span></div>
         </div>
         <div class="cbu-box">
-          <div class="cbu-label">CVU</div>
-          <div class="cbu-val">0000003100064350971270</div>
-          <div class="cbu-alias">Alias: franyarcho</div>
-          <div class="cbu-alias" style="margin-top:3px">Titular: Francisco Yarcho</div>
+          <div class="cbu-label">CVU / Transferencia</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:2px;">
+            <div class="cbu-val" id="cbu-num">0000003100064350971270</div>
+            <button onclick="copiarCBU()" id="btn-cbu-copy" style="background:var(--moss);color:white;border:none;border-radius:8px;padding:6px 14px;font-size:.75rem;font-family:inherit;cursor:pointer;white-space:nowrap;transition:background .2s;" onmouseover="this.style.background='var(--forest)'" onmouseout="this.style.background='var(--moss)'">📋 Copiar CVU</button>
+          </div>
+          <div class="cbu-alias">Alias: <strong>franyarcho</strong></div>
+          <div class="cbu-alias" style="margin-top:2px">Titular: Francisco Yarcho</div>
         </div>
         <div class="conf-note">
-          Transferí la seña al CBU de arriba y enviá el comprobante por WhatsApp a Francisco al <strong>+54 9 2944 562177</strong>. Confirmamos tu reserva en cuestión de minutos. El saldo (<span id="conf-saldo"></span>) se abona al check-in.
+          Transferí la seña al CBU de arriba y enviá el comprobante por WhatsApp a Francisco al <strong>+54 9 2944 562177</strong>. Confirmamos tu reserva en cuestión de minutos. El saldo (<span class="conf-saldo-txt"></span>) se abona al check-in.
         </div>
         <button class="btn-wsp-final" onclick="enviarWsp()">💬 Ya transferí — enviar comprobante por WhatsApp</button>
+        <div style="margin-top:.7rem;text-align:center;font-size:.75rem;color:#888;line-height:1.6;">
+          ¿No funciona el botón? Escribí directamente a<br>
+          <a href="https://wa.me/5492944562177" target="_blank" style="color:var(--moss);font-weight:600;text-decoration:none;">+54 9 2944 562177</a>
+        </div>
       </div>
 
     </div>
@@ -1510,7 +1674,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         <div class="popup-paso"><div class="popup-paso-num">1</div><div class="popup-paso-txt"><strong>Elegí fechas</strong> y cantidad de huéspedes</div></div>
         <div class="popup-paso"><div class="popup-paso-num">2</div><div class="popup-paso-txt"><strong>Elegí tu cabaña</strong> — 7 opciones en dos sectores</div></div>
         <div class="popup-paso"><div class="popup-paso-num">3</div><div class="popup-paso-txt"><strong>Completá tus datos</strong> en menos de 1 minuto</div></div>
-        <div class="popup-paso"><div class="popup-paso-num">4</div><div class="popup-paso-txt"><strong>Enviá la seña</strong> del 50% y confirmamos en 2hs</div></div>
+        <div class="popup-paso"><div class="popup-paso-num">4</div><div class="popup-paso-txt"><strong>Enviá la seña</strong> del 50% y confirmamos en minutos</div></div>
         <div class="popup-paso"><div class="popup-paso-num">5</div><div class="popup-paso-txt">🌿 <strong>¡Disfrutá tu estadía</strong> en Patagonia!</div></div>
       </div>
       <div class="popup-vs">
@@ -1539,16 +1703,22 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
 
 <div class="toast" id="toast"></div>
 
-<button class="wa-float" onclick="window.open('https://wa.me/5492944562177?text=Hola!%20Quiero%20consultar%20disponibilidad.','_blank')">
-  <svg viewBox="0 0 24 24" width="22" height="22" fill="white" xmlns="http://www.w3.org/2000/svg">
-    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-  </svg>
-  <span class="wa-float-txt">¿Consultas? Escribinos</span>
-</button>
+<div style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:300;display:flex;flex-direction:column;align-items:center;gap:5px;">
+  <button class="wa-float" style="position:static;" onclick="window.open('https://wa.me/5492944562177?text=Hola!%20Quiero%20consultar%20disponibilidad.','_blank')">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="white" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    <span class="wa-float-txt">¿Consultas? Escribinos</span>
+  </button>
+  <span style="font-size:.7rem;color:#555;background:rgba(255,255,255,.92);padding:3px 10px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.12);white-space:nowrap;text-align:center;display:block;">+54 9 2944 562177</span>
+</div>
 
 <footer>
   <strong>Sombra Verde</strong> · Villa La Angostura, Neuquén<br>
-  <span style="margin-top:6px;display:block;">Reservas directas sin comisión · +54 9 2944 562177</span>
+  <span style="margin-top:6px;display:block;">Reservas directas sin comisión</span>
+  <span style="margin-top:4px;display:block;font-size:.88rem;">
+    📱 WhatsApp: <a href="https://wa.me/5492944562177" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:600;">+54 9 2944 562177</a>
+  </span>
   <a href="https://www.instagram.com/sombraverde.vla" target="_blank" style="display:inline-flex;align-items:center;gap:5px;color:var(--sage);text-decoration:none;font-size:.75rem;margin-top:8px;transition:color .2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='var(--sage)'">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
     @sombraverde.vla · 2.1K seguidores
@@ -1561,15 +1731,17 @@ const CABANAS_IDS = {
   's1':'Sombra 1','s2':'Sombra 2','s3':'Sombra 3','s4':'Sombra 4',
   's5':'Sombra 5','s6':'Sombra 6','s7':'Sombra 7'
 };
+// Capacidad máxima por cabaña (para validación de personas en modal)
+const CABANAS_IDS_CAP = {'s1':5,'s2':3,'s3':3,'s4':5,'s5':5,'s6':4,'s7':5};
 
 const CABANAS_DATA = {
-  's1':{ nombre:'Sombra 1', tipo:'Cabaña · Michay 268 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Michay+268,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'Todo en planta baja — 2 dormitorios: 1 matrimonial y 1 con camas separadas (una de ellas es diván, para el 5to huésped). A metros del centro, supermercados y restaurantes caminando.', amenities:['🏠 Todo planta baja','📍 Céntrica','🛏 2 dormitorios','🔥 Parrilla','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/oT9Ju7XPwheG5ZsDA', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'Todo planta baja'},{l:'Dormitorios',v:'1 matrimonial + 1 con camas separadas'},{l:'Baños',v:'1 baño completo'},{l:'Sector',v:'A · Céntrico'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/c62cfb12-9d48-458e-a8c5-2921f1288e67-YNqMzqeOZyS0WQXP_mgj96u','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-14-AGBbxLO01qt1Nq9W_dngutm','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-11-mePJ9OlB92foBWJ6_ckft9m','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-15-YNq2w9vz8Oie4Vyn_psg3mm','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-17-AE0r15L1yQi41QNK_uvodpl','https://res.cloudinary.com/dzld5gwmr/image/upload/9b7e4d9b-3250-4c59-afc5-2901e024608f-m6LbN8MX9MtGrKlk_hbb9fs','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-12-mnlJMZ106Zi7Ev9G_csesn5','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-9-YBgb2L3qokIQRqWL_n6h9qn','https://res.cloudinary.com/dzld5gwmr/image/upload/whatsapp-image-2025-07-23-at-10.03.47-1-m2WEXB0vwvioKMjr_a7bl5o','https://res.cloudinary.com/dzld5gwmr/image/upload/a-dOqDQMENGrUQMGw3_w8aemh'] },
-  's2':{ nombre:'Sombra 2', tipo:'Cabaña · Michay 268 · Hasta 3 pax', mapaEmbed:'https://maps.google.com/maps?q=Michay+268,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'Todo en planta baja — 1 dormitorio matrimonial y sommier en el living para el 3er huésped. A pasos del centro, supermercados, confiterías y el lago a pie.', amenities:['🏠 Todo planta baja','📍 Céntrica','🛏 1 dormitorio','🔥 Parrilla','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/oT9Ju7XPwheG5ZsDA', info:[{l:'Capacidad',v:'hasta 3 personas'},{l:'Distribución',v:'Todo planta baja'},{l:'Dormitorios',v:'1 matrimonial + sommier en living'},{l:'Baños',v:'1 baño completo'},{l:'Sector',v:'A · Céntrico'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/1-6-d95ZN585j5hV3vJ0_gn6h4e','https://res.cloudinary.com/dzld5gwmr/image/upload/a-YNqMzVVbMVt62KK0_yzhz5r','https://res.cloudinary.com/dzld5gwmr/image/upload/b-A0xvLgg9lrtB2Wlo_lxwxdz','https://res.cloudinary.com/dzld5gwmr/image/upload/3o7a9558-AoP4ayZG8ouW6x4g_bfmlcf','https://res.cloudinary.com/dzld5gwmr/image/upload/3-dJoPxrGwL1Sr6M3J_zr4ou9','https://res.cloudinary.com/dzld5gwmr/image/upload/3o7a9536-YyvDeQX76WIMbaKP_nf2jox','https://res.cloudinary.com/dzld5gwmr/image/upload/7-m5K8OxeQe3IWpRPW_vkywcp','https://res.cloudinary.com/dzld5gwmr/image/upload/d-mxB2y11bl1sKOJg8_vpzjle'] },
-  's3':{ nombre:'Sombra 3', tipo:'Cabaña · Michay 268 · Hasta 3 pax', mapaEmbed:'https://maps.google.com/maps?q=Michay+268,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas — PB: cocina, living, comedor y sillón cama. PA: dormitorio matrimonial y baño completo. Céntrica, tranquila y a metros de todo lo que necesitás.', amenities:['🏡 2 plantas','📍 Céntrica','🛏 1 dormitorio','🔥 Parrilla','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/oT9Ju7XPwheG5ZsDA', info:[{l:'Capacidad',v:'hasta 3 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial (PA) + sillón cama (PB)'},{l:'Baños',v:'1 baño completo (PA)'},{l:'Sector',v:'A · Céntrico'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/img_1893-AQEe6v7ybXuZB7B3_t7qyjt','https://res.cloudinary.com/dzld5gwmr/image/upload/b3be4030-48ec-4ba2-b70e-17c3e365cf30-A85M7jGON1s3zrRg_bxgotd','https://res.cloudinary.com/dzld5gwmr/image/upload/b3be4030-48ec-4ba2-b70e-17c3e365cf30-A85M7jGON1s3zrRg_c4qiud','https://res.cloudinary.com/dzld5gwmr/image/upload/974750a4-caa1-4466-a535-c20e1b3a0df0-AzGMa1P2DztJKqpp_tsqd19','https://res.cloudinary.com/dzld5gwmr/image/upload/img_1922-m5K8Ox04DZcR3NXd_juvpgb','https://res.cloudinary.com/dzld5gwmr/image/upload/img_1890-m5K8Ox04yeSEyK8D_vblkep','https://res.cloudinary.com/dzld5gwmr/image/upload/img_1907-YrD4OoV2OQF001rE_en60bl','https://res.cloudinary.com/dzld5gwmr/image/upload/img_1928-mv0PMyVe7xUBwzM5_gnikdw'] },
-  's4':{ nombre:'Sombra 4', tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas — PB: cocina, living y comedor. PA: dormitorio matrimonial, dormitorio con 3 camas separadas y baño completo. Parque amplio, tranquila y con todo el espacio que necesitás.', amenities:['🏡 2 plantas','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque amplio','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.google.com/?q=Aluminé+961,+Villa+La+Angostura', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial + 1 con 3 camas sep. (PA)'},{l:'Baños',v:'1 baño completo (PA)'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/16-mnl4Xl1qynFblejQ_hk683u','https://res.cloudinary.com/dzld5gwmr/image/upload/630c7eff-e2b3-4047-8a9a-a7abeafa5f22-AE073XLPrZCLQeBg_p2sxsf','https://res.cloudinary.com/dzld5gwmr/image/upload/90625f19-af4b-4a0f-b27b-2e7e34738232-m2WqO5V8aaCn2eRz_rf1hp6','https://res.cloudinary.com/dzld5gwmr/image/upload/1784012b-a510-4954-8b96-65da39baae13-YNqMzV6BW7h0RG2Z_ofcxpv','https://res.cloudinary.com/dzld5gwmr/image/upload/1-Yan0eBe11LiZkxzP_ceytkm','https://res.cloudinary.com/dzld5gwmr/image/upload/14-Awv80r081KhBkVRk_l3xgfa','https://res.cloudinary.com/dzld5gwmr/image/upload/9b-m2WqO4OqJVtMn1wW_dkmhcc','https://res.cloudinary.com/dzld5gwmr/image/upload/6a-m2WqO4OqxGtq9yM5_jbemof','https://res.cloudinary.com/dzld5gwmr/image/upload/11-AGBz0G0zzPH32Jby_i7ydgt'] },
-  's5':{ nombre:'Sombra 5', tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas — PB: cocina, living y comedor. PA: dormitorio matrimonial, dormitorio con 3 camas separadas y baño completo. Parque amplio y estacionamiento propio.', amenities:['🏡 2 plantas','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque amplio','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.google.com/?q=Aluminé+961,+Villa+La+Angostura', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial + 1 con 3 camas sep. (PA)'},{l:'Baños',v:'1 baño completo (PA)'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/l-Yle47MjQRDC6Wqq1_vschvm','https://res.cloudinary.com/dzld5gwmr/image/upload/j-YBgjDpVjxpCvkrlL_sathgj','https://res.cloudinary.com/dzld5gwmr/image/upload/c-YyvDeonDvaCw7VDJ_skvrwb','https://res.cloudinary.com/dzld5gwmr/image/upload/h-Awv80rZ93QT7XwB5_anx8vd','https://res.cloudinary.com/dzld5gwmr/image/upload/i-A0xvLNqjRPFjqZ84_a8gewl','https://res.cloudinary.com/dzld5gwmr/image/upload/1-mv0PMjeJprfaaz3W_jbyldm','https://res.cloudinary.com/dzld5gwmr/image/upload/5-AoP4ael4WnSEnjKd_sgdn93','https://res.cloudinary.com/dzld5gwmr/image/upload/d-AQEe6J1eE6Tgvl1z_w72fy1'] },
-  's6':{ nombre:'Sombra 6', tipo:'Cabaña · Aluminé 961 · Hasta 4 pax · 2 baños', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'La única del complejo con 2 baños. PB: living, cocina, comedor, dormitorio matrimonial y baño. PA: dormitorio con camas separadas y baño. Ideal para dos parejas o familia con privacidad total.', amenities:['🏡 2 plantas','🚿 2 baños','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque','📶 WiFi','🚗 Estacionamiento','📺 Smart TV'], mapa:'https://maps.google.com/?q=Aluminé+961,+Villa+La+Angostura', info:[{l:'Capacidad',v:'hasta 4 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial (PB) + 1 camas sep. (PA)'},{l:'Baños',v:'2 baños completos'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/a08e7e02-3461-4e58-966e-ed33d3d481b1-dJoPxoDQWMUrQKPw_ptuisb','https://res.cloudinary.com/dzld5gwmr/image/upload/3-Y4LPn48WOai4lM11_h70s8p','https://res.cloudinary.com/dzld5gwmr/image/upload/5-AE073pMQX2FgPrPr_ftvo9n','https://res.cloudinary.com/dzld5gwmr/image/upload/6-A1azVKQqenh1yLqM_nzuhom','https://res.cloudinary.com/dzld5gwmr/image/upload/2-AMqDjnxQzRFy3yqG_bkmafr','https://res.cloudinary.com/dzld5gwmr/image/upload/7-AzGMar8ggXUkEaWP_yyvnd9'] },
-  's7':{ nombre:'Sombra 7', tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas — PB: living, cocina, comedor, baño y dormitorio matrimonial. PA: dormitorio con camas separadas. Parque amplio y estacionamiento. Ideal para grupos y familias.', amenities:['🏡 2 plantas','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque amplio','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.google.com/?q=Aluminé+961,+Villa+La+Angostura', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial (PB) + 1 camas sep. (PA)'},{l:'Baños',v:'1 baño completo (PB)'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5172_q30o0k','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5203_oafj9l','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5176_maf9gr','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5180_y8srkk','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5214_v0oyw8'] }
+  's1':{ nombre:'Sombra 1', tipo:'Cabaña · Michay 268 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Michay+268,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'Todo en planta baja — 2 dormitorios: 1 matrimonial y 1 con camas separadas (una de ellas es diván, para el 5to huésped). A metros del centro, supermercados y restaurantes caminando.', amenities:['🏠 Todo planta baja','📍 Céntrica','🛏 2 dormitorios','🔥 Parrilla','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/5waEAutJ9CfH24Ja9', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'Todo planta baja'},{l:'Dormitorios',v:'1 matrimonial + 1 con camas separadas'},{l:'Baños',v:'1 baño completo'},{l:'Sector',v:'A · Céntrico'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/c62cfb12-9d48-458e-a8c5-2921f1288e67-YNqMzqeOZyS0WQXP_mgj96u','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-14-AGBbxLO01qt1Nq9W_dngutm','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-11-mePJ9OlB92foBWJ6_ckft9m','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-15-YNq2w9vz8Oie4Vyn_psg3mm','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-17-AE0r15L1yQi41QNK_uvodpl','https://res.cloudinary.com/dzld5gwmr/image/upload/9b7e4d9b-3250-4c59-afc5-2901e024608f-m6LbN8MX9MtGrKlk_hbb9fs','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-12-mnlJMZ106Zi7Ev9G_csesn5','https://res.cloudinary.com/dzld5gwmr/image/upload/fffffff-9-YBgb2L3qokIQRqWL_n6h9qn','https://res.cloudinary.com/dzld5gwmr/image/upload/whatsapp-image-2025-07-23-at-10.03.47-1-m2WEXB0vwvioKMjr_a7bl5o','https://res.cloudinary.com/dzld5gwmr/image/upload/a-dOqDQMENGrUQMGw3_w8aemh'] },
+  's2':{ nombre:'Sombra 2', tipo:'Cabaña · Michay 268 · Hasta 3 pax', mapaEmbed:'https://maps.google.com/maps?q=Michay+268,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'Todo en planta baja — 1 dormitorio matrimonial y sommier en el living para el 3er huésped. A pasos del centro, supermercados, confiterías y el lago a pie.', amenities:['🏠 Todo planta baja','📍 Céntrica','🛏 1 dormitorio','🔥 Parrilla','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/5waEAutJ9CfH24Ja9', info:[{l:'Capacidad',v:'hasta 3 personas'},{l:'Distribución',v:'Todo planta baja'},{l:'Dormitorios',v:'1 matrimonial + sommier en living'},{l:'Baños',v:'1 baño completo'},{l:'Sector',v:'A · Céntrico'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/1-6-d95ZN585j5hV3vJ0_gn6h4e','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4492_qxrzu1','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4480_blxjdj','https://res.cloudinary.com/dzld5gwmr/image/upload/3o7a9536-YyvDeQX76WIMbaKP_nf2jox','https://res.cloudinary.com/dzld5gwmr/image/upload/3-dJoPxrGwL1Sr6M3J_zr4ou9','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4479_hmh4fk','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4490_v9dmga','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4481_idh6nf'] },
+  's3':{ nombre:'Sombra 3', tipo:'Cabaña · Michay 268 · Hasta 3 pax', mapaEmbed:'https://maps.google.com/maps?q=Michay+268,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas — PB: cocina, living, comedor y sillón cama. PA: dormitorio matrimonial y baño completo. Céntrica, tranquila y a metros de todo lo que necesitás.', amenities:['🏡 2 plantas','📍 Céntrica','🛏 1 dormitorio','🔥 Parrilla','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/5waEAutJ9CfH24Ja9', info:[{l:'Capacidad',v:'hasta 3 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial (PA) + sillón cama (PB)'},{l:'Baños',v:'1 baño completo (PA)'},{l:'Sector',v:'A · Céntrico'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4444_nej9sv','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4473_mlqlyc','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4460_sxmeeh','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4461_qxq01r','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4462_molhhu','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4464_jp2zfd','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4468_davioz','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4475_owr5k9','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A4457_ctqbjz'] },
+  's4':{ nombre:'Sombra 4', tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas — PB: cocina, living y comedor. PA: dormitorio matrimonial, dormitorio con 3 camas separadas y baño completo. Parque amplio, tranquila y con todo el espacio que necesitás.', amenities:['🏡 2 plantas','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque amplio','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/21TMtnZsw2DeXh7g6', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial + 1 con 3 camas sep. (PA)'},{l:'Baños',v:'1 baño completo (PA)'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/16-mnl4Xl1qynFblejQ_hk683u','https://res.cloudinary.com/dzld5gwmr/image/upload/630c7eff-e2b3-4047-8a9a-a7abeafa5f22-AE073XLPrZCLQeBg_p2sxsf','https://res.cloudinary.com/dzld5gwmr/image/upload/90625f19-af4b-4a0f-b27b-2e7e34738232-m2WqO5V8aaCn2eRz_rf1hp6','https://res.cloudinary.com/dzld5gwmr/image/upload/1784012b-a510-4954-8b96-65da39baae13-YNqMzV6BW7h0RG2Z_ofcxpv','https://res.cloudinary.com/dzld5gwmr/image/upload/1-Yan0eBe11LiZkxzP_ceytkm','https://res.cloudinary.com/dzld5gwmr/image/upload/14-Awv80r081KhBkVRk_l3xgfa','https://res.cloudinary.com/dzld5gwmr/image/upload/9b-m2WqO4OqJVtMn1wW_dkmhcc','https://res.cloudinary.com/dzld5gwmr/image/upload/6a-m2WqO4OqxGtq9yM5_jbemof','https://res.cloudinary.com/dzld5gwmr/image/upload/11-AGBz0G0zzPH32Jby_i7ydgt'] },
+  's5':{ nombre:'Sombra 5', tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas — PB: cocina, living y comedor. PA: dormitorio matrimonial, dormitorio con 3 camas separadas y baño completo. Parque amplio y estacionamiento propio.', amenities:['🏡 2 plantas','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque amplio','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/21TMtnZsw2DeXh7g6', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial + 1 con 3 camas sep. (PA)'},{l:'Baños',v:'1 baño completo (PA)'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5163_lua9n8','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5238_j6shh6','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5243_n8lf96','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5268_pleypu','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5226_ou2tc5','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5230_oj3som','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5237_ersupb','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5151_qg3g3x','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5227_ahjlxb','https://res.cloudinary.com/dzld5gwmr/image/upload/5-AoP4ael4WnSEnjKd_sgdn93','https://res.cloudinary.com/dzld5gwmr/image/upload/1-mv0PMjeJprfaaz3W_jbyldm'] },
+  's6':{ nombre:'Sombra 6', tipo:'Cabaña · Aluminé 961 · Hasta 4 pax · 2 baños', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'La única del complejo con 2 baños. PB: living, cocina, comedor, dormitorio matrimonial y baño. PA: dormitorio con camas separadas y baño. Ideal para dos parejas o familia con privacidad total.', amenities:['🏡 2 plantas','🚿 2 baños','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque','📶 WiFi','🚗 Estacionamiento','📺 Smart TV'], mapa:'https://maps.app.goo.gl/21TMtnZsw2DeXh7g6', info:[{l:'Capacidad',v:'hasta 4 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial (PB) + 1 camas sep. (PA)'},{l:'Baños',v:'2 baños completos'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/a08e7e02-3461-4e58-966e-ed33d3d481b1-dJoPxoDQWMUrQKPw_ptuisb','https://res.cloudinary.com/dzld5gwmr/image/upload/3-Y4LPn48WOai4lM11_h70s8p','https://res.cloudinary.com/dzld5gwmr/image/upload/5-AE073pMQX2FgPrPr_ftvo9n','https://res.cloudinary.com/dzld5gwmr/image/upload/6-A1azVKQqenh1yLqM_nzuhom','https://res.cloudinary.com/dzld5gwmr/image/upload/2-AMqDjnxQzRFy3yqG_bkmafr','https://res.cloudinary.com/dzld5gwmr/image/upload/7-AzGMar8ggXUkEaWP_yyvnd9'] },
+  's7':{ nombre:'Sombra 7', tipo:'Cabaña · Aluminé 961 · Hasta 5 pax', mapaEmbed:'https://maps.google.com/maps?q=Alum%C3%ADn%C3%A9+961,+Villa+La+Angostura,+Neuqu%C3%A9n&output=embed&z=14', desc:'2 plantas — PB: living, cocina, comedor, baño y dormitorio matrimonial. PA: dormitorio con camas separadas. Parque amplio y estacionamiento. Ideal para grupos y familias.', amenities:['🏡 2 plantas','🛏 2 dormitorios','🔥 Parrilla','🌳 Parque amplio','📶 WiFi','🚗 Estacionamiento','📺 Smart TV','🧴 Ropa de cama','🍼 Cuna disponible'], mapa:'https://maps.app.goo.gl/21TMtnZsw2DeXh7g6', info:[{l:'Capacidad',v:'hasta 5 personas'},{l:'Distribución',v:'2 plantas'},{l:'Dormitorios',v:'1 matrimonial (PB) + 1 camas sep. (PA)'},{l:'Baños',v:'1 baño completo (PB)'},{l:'Sector',v:'B · Barrio Norte'},{l:'Check-in',v:'14:00 hs'},{l:'Check-out',v:'10:00 hs'}], imgs:['https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5172_q30o0k','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5203_oafj9l','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5176_maf9gr','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5180_y8srkk','https://res.cloudinary.com/dzld5gwmr/image/upload/DE1A5214_v0oyw8'] }
 };
 const MESES = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 const DIAS  = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
@@ -1601,11 +1773,13 @@ window.onReservasLoaded = function(data) {
 window.onTarifasLoaded = function(data) {
   tarifasDB = data;
   actualizarPrecios();
+  filtrar();
 };
 
 window.onCabanasLoaded = function(data) {
   cabanasDB = data;
   actualizarBadges();
+  actualizarPrecios();
   filtrar();
 };
 
@@ -1685,28 +1859,33 @@ function getPrecioNoche(cabNombre, fechaStr) {
 }
 
 function getPrecioPromedioMes(cabNombre) {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth() + 1;
-  const dias = new Date(year, month, 0).getDate();
+  // Usa los próximos 30 días para mostrar precio representativo
   let total = 0, count = 0;
-  for (let d = 1; d <= dias; d++) {
-    const iso = year + '-' + String(month).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+  const cur = new Date();
+  for (let i = 0; i < 30; i++) {
+    const iso = cur.toISOString().split('T')[0];
     const p = getPrecioNoche(cabNombre, iso);
     if (p) { total += p; count++; }
+    cur.setDate(cur.getDate() + 1);
   }
   return count ? Math.round(total / count) : null;
 }
 
 function actualizarPrecios() {
+  const pas = getPersonas();
   Object.keys(CABANAS_IDS).forEach(id => {
     const nombre = CABANAS_IDS[id];
-    const precio = getPrecioPromedioMes(nombre);
-    const el     = document.getElementById('pn-' + id);
-    if (!el) return;
-    if (precio) {
-      const original = Math.round(precio / 0.85);
-      el.innerHTML = '<span class="price-tachado">$' + original.toLocaleString('es-AR') + '</span>$' + precio.toLocaleString('es-AR') + '<span>/ noche</span>';
+    const pnBase = getPrecioPromedioMes(nombre);
+    const el = document.getElementById('pn-' + id);
+    if (!el || !pnBase) return;
+    const factor = pas ? getAjustePrecio(nombre, pas) : 1;
+    const precio = Math.round(pnBase * factor);
+    if (factor !== 1) {
+      // Mostrar precio ajustado por personas (sin tachado)
+      el.innerHTML = fmt(precio) + '<span>/ noche</span>';
+    } else {
+      const original = Math.round(pnBase / 0.85);
+      el.innerHTML = '<span class="price-tachado">$' + original.toLocaleString('es-AR') + '</span>' + fmt(precio) + '<span>/ noche</span>';
     }
   });
 }
@@ -1717,47 +1896,77 @@ function getPrecioCard(cabNombre, ci) {
 }
 
 function mostrarCombinaciones(pas, ci, co, noches) {
-  const mixBox = document.getElementById('mix-box');
+  const mixBox    = document.getElementById('mix-box');
+  const mixDesc   = document.getElementById('mix-box-desc');
   const mixCombos = document.getElementById('mix-combos');
-  // Solo mostrar si hay personas seleccionadas y superan cap máxima individual (5)
   if (!pas || pas <= 5) { mixBox.style.display = 'none'; return; }
 
-  const grupos = [
+  const caps    = { 'Sombra 1':5,'Sombra 2':3,'Sombra 3':3,'Sombra 4':5,'Sombra 5':5,'Sombra 6':4,'Sombra 7':5 };
+  const sectores= { 'Sombra 1':'A','Sombra 2':'A','Sombra 3':'A','Sombra 4':'B','Sombra 5':'B','Sombra 6':'B','Sombra 7':'B' };
+  const grupos  = [
     ['Sombra 1','Sombra 2','Sombra 3'],
     ['Sombra 4','Sombra 5','Sombra 6','Sombra 7']
   ];
-  const caps = { 'Sombra 1':5,'Sombra 2':3,'Sombra 3':3,'Sombra 4':5,'Sombra 5':5,'Sombra 6':4,'Sombra 7':5 };
-  const sectores = { 'Sombra 1':'A','Sombra 2':'A','Sombra 3':'A','Sombra 4':'B','Sombra 5':'B','Sombra 6':'B','Sombra 7':'B' };
+
+  function dispYTotal(nombres) {
+    for (const n of nombres) {
+      if (ci && co && !estaDisponible(n, ci, co)) return null;
+    }
+    const total = ci ? nombres.reduce((s, n) => s + (calcularTotalReal(n, ci, co, pas).total || 0), 0) : 0;
+    const capTotal = nombres.reduce((s, n) => s + caps[n], 0);
+    return { capTotal, total };
+  }
 
   let combos = [];
+
+  // ── Combos de 2 cabañas ──
   grupos.forEach(grupo => {
     for (let i = 0; i < grupo.length; i++) {
       for (let j = i+1; j < grupo.length; j++) {
-        const a = grupo[i], b = grupo[j];
-        const capTotal = caps[a] + caps[b];
-        if (capTotal < pas) continue;
-        const dispA = !ci || !co || estaDisponible(a, ci, co);
-        const dispB = !ci || !co || estaDisponible(b, ci, co);
-        if (!dispA || !dispB) continue;
-        const pA = ci ? calcularTotalReal(a, ci, co).total : 0;
-        const pB = ci ? calcularTotalReal(b, ci, co).total : 0;
-        const total = pA + pB;
-        combos.push({ a, b, capTotal, total, noches, sector: sectores[a] });
+        const nombres = [grupo[i], grupo[j]];
+        const res = dispYTotal(nombres);
+        if (!res || res.capTotal < pas) continue;
+        combos.push({ nombres, capTotal: res.capTotal, total: res.total, noches, sector: sectores[grupo[i]], tipo: 2 });
       }
     }
   });
 
+  // ── Combos de 3 cabañas (solo si pas > 10) ──
+  if (pas > 10) {
+    grupos.forEach(grupo => {
+      if (grupo.length < 3) return;
+      for (let i = 0; i < grupo.length; i++) {
+        for (let j = i+1; j < grupo.length; j++) {
+          for (let k = j+1; k < grupo.length; k++) {
+            const nombres = [grupo[i], grupo[j], grupo[k]];
+            const res = dispYTotal(nombres);
+            if (!res || res.capTotal < pas) continue;
+            combos.push({ nombres, capTotal: res.capTotal, total: res.total, noches, sector: sectores[grupo[i]], tipo: 3 });
+          }
+        }
+      }
+    });
+  }
+
   if (!combos.length) { mixBox.style.display = 'none'; return; }
 
-  combos.sort((x,y) => x.total - y.total);
+  combos.sort((x,y) => x.tipo - y.tipo || x.total - y.total);
+
+  const tiene3 = combos.some(c => c.tipo === 3);
+  mixDesc.textContent = tiene3
+    ? 'Para grupos grandes podés combinar 2 o 3 cabañas del mismo sector.'
+    : 'Podés combinar cabañas del mismo sector a precio especial.';
+
   mixCombos.innerHTML = combos.map(c => {
     const sena = Math.round(c.total * 0.5);
     const precioStr = c.total > 0 ? fmt(c.total) : 'Consultá precio';
     const senaStr   = c.total > 0 ? 'Seña 50%: ' + fmt(sena) : '';
-    const msg = encodeURIComponent(`Hola! Quiero consultar disponibilidad para ${c.a} + ${c.b} del ${ci||'?'} al ${co||'?'} para ${pas} personas.`);
+    const nombresStr = c.nombres.join(' + ');
+    const msg = encodeURIComponent(`Hola! Quiero consultar disponibilidad para ${nombresStr} del ${ci||'?'} al ${co||'?'} para ${pas} personas.`);
+    const etiqueta = c.tipo === 3 ? '<span style="font-size:.6rem;background:var(--accent);color:#fff;border-radius:8px;padding:2px 7px;margin-left:6px;vertical-align:middle;">3 cabañas</span>' : '';
     return `<div class="mix-combo">
       <div>
-        <div class="mix-combo-names">${c.a} + ${c.b}</div>
+        <div class="mix-combo-names">${nombresStr}${etiqueta}</div>
         <div class="mix-combo-cap">Sector ${c.sector} · hasta ${c.capTotal} personas · ${c.noches > 0 ? c.noches + ' noches' : ''}</div>
       </div>
       <div class="mix-combo-precio">
@@ -1769,23 +1978,34 @@ function mostrarCombinaciones(pas, ci, co, noches) {
   mixBox.style.display = 'block';
 }
 
-function onPersonasChange(sel) {
-  const numInput = document.getElementById('personas-num');
-  if (sel.value === 'mas') {
-    numInput.style.display = 'block';
-    numInput.focus();
-  } else {
-    numInput.style.display = 'none';
-    numInput.value = '';
-  }
+// ─── HUÉSPEDES PICKER ─────────────────────────────────────────
+let _adultos = 2, _menores = 0;
+
+// Actualizar display inicial
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('count-adultos').textContent = _adultos;
+  document.getElementById('count-menores').textContent = _menores;
+  actualizarHuespedDisplay();
+});
+
+function actualizarHuespedDisplay() {
+  const total = _adultos + _menores;
+  document.getElementById('personas-num').value = total || '';
 }
 
+function cambiarHuespedes(tipo, delta) {
+  if (tipo === 'adultos') { _adultos = Math.max(0, _adultos + delta); }
+  else { _menores = Math.max(0, _menores + delta); }
+  document.getElementById('count-adultos').textContent = _adultos;
+  document.getElementById('count-menores').textContent = _menores;
+  actualizarHuespedDisplay();
+  filtrar();
+}
+
+function onPersonasChange(sel) {} // legacy, no usado
+
 function getPersonas() {
-  const sel = document.getElementById('personas');
-  if (sel.value === 'mas') {
-    return parseInt(document.getElementById('personas-num').value) || 0;
-  }
-  return parseInt(sel.value) || 0;
+  return (_adultos + _menores) || 0;
 }
 
 function onCheckinChange() {
@@ -1826,8 +2046,9 @@ function filtrar() {
     const plEl   = document.getElementById('pl-' + id);
 
     if (calcEl && noches > 0) {
-      const { total, tienePrecios } = calcularTotalReal(cabNombre, ci, co);
-      const pn = getPrecioNoche(cabNombre, ci) || getPrecioPromedioMes(cabNombre);
+      const { total, tienePrecios, factor } = calcularTotalReal(cabNombre, ci, co, pas);
+      const pnBase = getPrecioNoche(cabNombre, ci) || getPrecioPromedioMes(cabNombre);
+      const pn = pnBase ? Math.round(pnBase * factor) : null;
       if (tienePrecios) {
         document.getElementById('calc-' + id + '-noches').textContent = noches + (noches === 1 ? ' noche' : ' noches');
         document.getElementById('calc-' + id + '-pn').textContent = pn ? (noches > 1 ? 'Variable/noche' : fmt(pn)) : '';
@@ -1842,7 +2063,19 @@ function filtrar() {
 
     if (!cumplePas) { ocultas.push(c); return; }
     const esOcupada = ci && co && !estaDisponible(cabNombre, ci, co);
-    if (esOcupada) ocupadas.push(c); else libres.push(c);
+    // Verificar estadía mínima por cabaña
+    const minNochesReq = ci ? getMinNoches(ci, cabNombre) : 1;
+    const noCumpleMin = ci && co && noches > 0 && noches < minNochesReq;
+    if (esOcupada || noCumpleMin) {
+      // Marcar badge según motivo
+      const badge = document.getElementById('badge-' + id);
+      if (badge && noCumpleMin && !esOcupada) {
+        badge.textContent = 'Mín. ' + minNochesReq + ' noches';
+        badge.className = 'badge-disp badge-ocupada';
+        c.classList.add('no-disponible');
+      }
+      ocupadas.push(c);
+    } else libres.push(c);
   });
 
   // Ordenar libres por precio (menor a mayor)
@@ -1856,6 +2089,9 @@ function filtrar() {
   const todos = [...libres, ...ocupadas, ...ocultas];
   todos.forEach(c => { c.classList.remove('hidden'); grid.appendChild(c); });
   ocultas.forEach(c => c.classList.add('hidden'));
+
+  // Actualizar precios "Desde" con factor de personas (cuando no hay fechas)
+  if (!noches) actualizarPrecios();
 
   if (ci && co && ocupadas.length > 0 && libres.length > 0) {
     const sep = document.createElement('div');
@@ -1968,6 +2204,12 @@ function abrirModal(nombre, id) {
   document.getElementById('step-conf').classList.remove('show');
   setProgreso(1);
   renderCal();
+  // Ajustar máximo de personas según capacidad de la cabaña
+  const capCab = CABANAS_IDS_CAP[id] || 5;
+  const persInput = document.getElementById('f-pers');
+  if (persInput) { persInput.max = capCab; persInput.placeholder = '1–' + capCab; }
+  const pasBuscador = getPersonas();
+  if (persInput && pasBuscador) persInput.value = Math.min(pasBuscador, capCab);
   // Si ya hay fechas pre-cargadas, mostrar resumen directo
   if (selStart && selEnd) mostrarResumen();
   document.getElementById('modal-overlay').classList.add('open');
@@ -2049,31 +2291,78 @@ function clickDia(ds, ocupadas) {
   if (!selEnd) document.getElementById('nights-box').classList.remove('show');
 }
 
-function calcularTotalReal(cabNombre, checkin, checkout) {
-  // Suma el precio real de cada noche entre checkin y checkout
+function getAjustePrecio(cabNombre, personas) {
+  if (!personas) return 1;
+  const CAP_DEFAULT = {'Sombra 1':5,'Sombra 2':3,'Sombra 3':3,'Sombra 4':5,'Sombra 5':5,'Sombra 6':4,'Sombra 7':5};
+  const id = CAB_ID_MAP[cabNombre];
+  const d = id && cabanasDB && cabanasDB[id] ? cabanasDB[id] : {};
+  const cap      = Number(d.capacidad) || CAP_DEFAULT[cabNombre] || 4;
+  const pctExtra = Number(d.pctExtra) >= 0 ? Number(d.pctExtra) : 0;
+  const pctMenos = Number(d.pctMenos) >= 0 ? Number(d.pctMenos) : 0;
+  const diff = personas - cap;
+  if (diff > 0 && pctExtra > 0) return 1 + (pctExtra / 100) * diff;
+  if (diff < 0 && pctMenos > 0) return Math.max(0.1, 1 + (pctMenos / 100) * diff);
+  return 1;
+}
+
+function calcularTotalReal(cabNombre, checkin, checkout, personas) {
+  // Suma el precio real de cada noche entre checkin y checkout, ajustado por personas
+  const factor = getAjustePrecio(cabNombre, personas);
   let total = 0, count = 0;
   const cur = new Date(checkin);
   const end = new Date(checkout);
   while (cur < end) {
     const iso = cur.toISOString().split('T')[0];
     const p = getPrecioNoche(cabNombre, iso) || getPrecioPromedioMes(cabNombre) || 0;
-    total += p;
+    total += p * factor;
     if (p) count++;
     cur.setDate(cur.getDate() + 1);
   }
-  return { total, tienePrecios: count > 0 };
+  return { total, tienePrecios: count > 0, factor };
 }
 
 function mostrarResumen() {
   if (!selStart || !selEnd) return;
   const noches = Math.round((new Date(selEnd) - new Date(selStart)) / 86400000);
-  const { total, tienePrecios } = calcularTotalReal(modalCab, selStart, selEnd);
+  const pas = getPersonas();
+  const { total, tienePrecios, factor } = calcularTotalReal(modalCab, selStart, selEnd, pas);
   const sena   = Math.round(total * 0.5);
   const fmtD   = s => { const [y,m,d] = s.split('-'); return d+'/'+m+'/'+y; };
   const fmt    = n => '$' + Math.round(n).toLocaleString('es-AR');
+  // Label de ajuste por personas
+  const id = CAB_ID_MAP[modalCab];
+  const d  = id && cabanasDB && cabanasDB[id] ? cabanasDB[id] : null;
+  const cap = d ? (Number(d.capacidad) || Number(d.cap) || 0) : 0;
+  let ajusteLabel = '';
+  if (pas && cap && factor !== 1) {
+    ajusteLabel = factor > 1 ? ' (+' + Math.round((factor-1)*100) + '% por ' + pas + ' pax)' : ' (-' + Math.round((1-factor)*100) + '% por ' + pas + ' pax)';
+  }
+  // Calcular si el precio es variable o fijo
+  const precios = [];
+  const cur2 = new Date(selStart);
+  const end2 = new Date(selEnd);
+  while (cur2 < end2) {
+    const iso2 = cur2.toISOString().split('T')[0];
+    const p2 = getPrecioNoche(modalCab, iso2) || getPrecioPromedioMes(modalCab) || 0;
+    precios.push({ fecha: iso2, precio: Math.round(p2 * factor) });
+    cur2.setDate(cur2.getDate() + 1);
+  }
+  const todosIguales = precios.every(p => p.precio === precios[0].precio);
+  const pnEl = document.getElementById('nb-pn');
+  if (!tienePrecios) {
+    pnEl.textContent = 'A confirmar';
+  } else if (todosIguales) {
+    pnEl.textContent = fmt(precios[0].precio);
+  } else {
+    // Desglose noche a noche
+    pnEl.innerHTML = precios.map(p => {
+      const [y,m,d] = p.fecha.split('-');
+      return '<span style="display:flex;justify-content:space-between;font-size:.75rem;color:#666;margin-top:2px"><span>' + d + '/' + m + '</span><span>' + fmt(p.precio) + '</span></span>';
+    }).join('');
+  }
+
   document.getElementById('nb-fechas').textContent = fmtD(selStart) + ' → ' + fmtD(selEnd);
-  document.getElementById('nb-noches').textContent = noches + (noches === 1 ? ' noche' : ' noches');
-  document.getElementById('nb-pn').textContent     = tienePrecios ? (noches > 1 ? 'Variable por noche' : fmt(total)) : 'A confirmar';
+  document.getElementById('nb-noches').textContent = noches + (noches === 1 ? ' noche' : ' noches') + ajusteLabel;
   document.getElementById('nb-total').textContent  = tienePrecios ? fmt(total) : 'A confirmar';
   document.getElementById('nb-sena').textContent   = tienePrecios ? fmt(sena) : 'A confirmar';
   document.getElementById('nights-box').classList.add('show');
@@ -2082,16 +2371,41 @@ function mostrarResumen() {
 }
 
 // ─── CONFIRMAR ─────────────────────────────────────────────────
+// Enforce personas max on input
+document.addEventListener('input', function(e) {
+  if (e.target.id === 'f-pers') {
+    const max = parseInt(e.target.max) || 5;
+    const val = parseInt(e.target.value) || 0;
+    if (val > max) e.target.value = max;
+    if (val < 1 && e.target.value !== '') e.target.value = 1;
+  }
+});
+
+function copiarCBU() {
+  navigator.clipboard.writeText('0000003100064350971270').then(() => {
+    const btn = document.getElementById('btn-cbu-copy');
+    const orig = btn.textContent;
+    btn.textContent = '✅ Copiado!';
+    btn.style.background = 'var(--forest)';
+    setTimeout(() => { btn.textContent = orig; btn.style.background = 'var(--moss)'; }, 2000);
+  });
+}
 function genId() { return Date.now().toString(36) + Math.random().toString(36).substr(2,5); }
 
 async function confirmar() {
   const nombre = document.getElementById('f-nombre').value.trim();
   const tel    = document.getElementById('f-tel').value.trim();
   const email  = document.getElementById('f-email').value.trim();
-  if (!nombre || !tel || !email) { alert('Completá nombre, WhatsApp y email.'); return; }
+  // Validar WhatsApp: solo números, +, espacios, guiones — mínimo 8 dígitos
+  const telLimpio = tel.replace(/[\s\-().]/g, '');
+  if (!tel || !/^[+]?[0-9]{8,15}$/.test(telLimpio)) { alert('Ingresá un número de WhatsApp válido (solo números, ej: +54 9 2944 123456).'); return; }
+  // Validar email
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Ingresá un email válido (ej: juan@gmail.com).'); return; }
+  if (!nombre) { alert('Completá tu nombre.'); return; }
   if (!selStart || !selEnd) { alert('Seleccioná fechas primero.'); return; }
   const noches = Math.round((new Date(selEnd) - new Date(selStart)) / 86400000);
-  const { total, tienePrecios } = calcularTotalReal(modalCab, selStart, selEnd);
+  const pas    = getPersonas();
+  const { total, tienePrecios } = calcularTotalReal(modalCab, selStart, selEnd, pas);
   const sena   = Math.round(total * 0.5);
   const pers   = document.getElementById('f-pers').value || '1';
   const mascotas = 'No';
@@ -2193,6 +2507,19 @@ window.addEventListener('load', function() {
     }, 800);
   }
 });
+
+function toggleVla() {
+  const wrap = document.getElementById('vla-grid-wrap');
+  const btn  = document.getElementById('vla-toggle-btn');
+  const open = wrap.style.maxHeight !== '0px' && wrap.style.maxHeight !== '';
+  if (open) {
+    wrap.style.maxHeight = '0px';
+    btn.textContent = 'Ver actividades ▾';
+  } else {
+    wrap.style.maxHeight = wrap.scrollHeight + 2000 + 'px';
+    btn.textContent = 'Ocultar ▴';
+  }
+}
 
 function toggleFaq(el) { el.closest('.faq-item').classList.toggle('open'); }
 
@@ -2363,7 +2690,7 @@ const LANGS = {
     confTitle: '¡Casi listo,', confSub: 'Transferí la seña para confirmar tu reserva',
     confCab: 'Cabaña', confFechas: 'Fechas', confPers: 'Personas',
     confTotal: 'Total estadía', confSena: 'Seña a transferir ahora',
-    confNote: 'Transferí la seña al CBU de arriba y enviá el comprobante por WhatsApp a Francisco al <strong>+54 9 2944 562177</strong>. Confirmamos tu reserva en cuestión de minutos. El saldo (<span id="conf-saldo"></span>) se abona al check-in.',
+    confNote: 'Transferí la seña al CBU de arriba y enviá el comprobante por WhatsApp a Francisco al <strong>+54 9 2944 562177</strong>. Confirmamos tu reserva en cuestión de minutos. El saldo (<span class="conf-saldo-txt"></span>) se abona al check-in.',
     btnWspFinal: '💬 Ya transferí — enviar comprobante por WhatsApp',
     footerLine1: '<strong>Sombra Verde</strong> · Villa La Angostura, Neuquén',
     footerLine2: 'Reservas directas sin comisión · +54 9 2944 562177',
@@ -2456,7 +2783,7 @@ const LANGS = {
     confTitle: 'Almost done,', confSub: 'Transfer the deposit to confirm your booking',
     confCab: 'Cabin', confFechas: 'Dates', confPers: 'Guests',
     confTotal: 'Total stay', confSena: 'Deposit to transfer now',
-    confNote: 'Transfer the deposit to the account above and send the receipt via WhatsApp to Francisco at <strong>+54 9 2944 562177</strong>. We\'ll confirm your booking within 2 hours. The balance (<span id="conf-saldo"></span>) is due at check-in.',
+    confNote: 'Transfer the deposit to the account above and send the receipt via WhatsApp to Francisco at <strong>+54 9 2944 562177</strong>. We\'ll confirm your booking within 2 hours. The balance (<span class="conf-saldo-txt"></span>) is due at check-in.',
     btnWspFinal: '💬 Transferred — send receipt via WhatsApp',
     footerLine1: '<strong>Sombra Verde</strong> · Villa La Angostura, Neuquén',
     footerLine2: 'Direct bookings, no fees · +54 9 2944 562177',
@@ -2724,6 +3051,245 @@ function setLang(lang) {
 (function() {
   const saved = localStorage.getItem('sv_lang');
   if (saved && saved !== 'es') setLang(saved);
+})();
+</script>
+
+<!-- RANGE PICKER OVERLAY -->
+<div id="range-picker-overlay" onclick="if(event.target===this) cerrarRangePicker()">
+  <div id="range-picker-box" onclick="event.stopPropagation()">
+    <div class="rp-header">
+      <div>
+        <div class="rp-title">Seleccioná tus fechas</div>
+        <div class="rp-hint" id="rp-hint">Hacé clic en el día de llegada</div>
+      </div>
+      <button class="rp-close" onclick="cerrarRangePicker()">✕</button>
+    </div>
+    <div class="rp-months" id="rp-months"></div>
+    <div class="rp-footer">
+      <div class="rp-selected-label" id="rp-selected-label"></div>
+      <div style="display:flex;gap:.6rem;">
+        <button class="rp-clear" onclick="limpiarRangePicker()">Limpiar</button>
+        <button class="rp-confirm" id="rp-confirm" onclick="confirmarRangePicker()" disabled>Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── ESTADÍA MÍNIMA (global) ───────────────────────────────────
+function getMinNoches(fechaISO, cabNombre) {
+  if (!window.eventosDB || !window.eventosDB.length) return 1;
+  for (const ev of window.eventosDB) {
+    if (!ev.minNoches) continue;
+    if (fechaISO >= ev.desde && fechaISO <= ev.hasta) {
+      const cab = ev.cabanas;
+      if (!cab || cab === 'todas' || (Array.isArray(cab) && (cab.includes(cabNombre) || cab.includes('todas')))) {
+        return ev.minNoches;
+      }
+    }
+  }
+  return 1;
+}
+
+(function(){
+  const overlay = document.getElementById('range-picker-overlay');
+  overlay.addEventListener('click', function(e){ if(e.target===overlay) cerrarRangePicker(); });
+
+  let rpStart = null, rpEnd = null, rpHover = null;
+  let rpViewYear, rpViewMonth; // mes mostrado (izq)
+
+  function toISO(d){ return d.toISOString().split('T')[0]; }
+  function parseISO(s){ const [y,m,d]=s.split('-'); return new Date(y,m-1,d); }
+  function fmtDisplay(s){
+    const d=parseISO(s);
+    return d.toLocaleDateString('es-AR',{day:'numeric',month:'short'});
+  }
+  const MESES=['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+  const DIAS=['Do','Lu','Ma','Mi','Ju','Vi','Sá'];
+
+  function getOccupied(){
+    // Recolectar todas las fechas ocupadas de todas las cabañas (union) — para el picker general
+    const set = new Set();
+    if(!window.reservasDB) return set;
+    window.reservasDB.forEach(r=>{
+      let d=new Date(r.checkin); const end=new Date(r.checkout);
+      while(d<end){ set.add(toISO(d)); d.setDate(d.getDate()+1); }
+    });
+    return set;
+  }
+
+  function renderMonths(){
+    const container=document.getElementById('rp-months');
+    container.innerHTML='';
+    const isMobile=window.innerWidth<=600;
+    const count=isMobile?1:2;
+    for(let m=0;m<count;m++){
+      const y=rpViewYear, mo=(rpViewMonth+m)%12;
+      const yr2=rpViewYear+Math.floor((rpViewMonth+m)/12);
+      container.appendChild(renderMonth(yr2, mo, m===0, m===count-1));
+    }
+  }
+
+  function renderMonth(year,month,showPrev,showNext){
+    const wrap=document.createElement('div');
+    wrap.className='rp-month';
+    // Header
+    const hdr=document.createElement('div');
+    hdr.className='rp-month-title';
+    const btnP=document.createElement('button');
+    btnP.className='rp-nav';
+    btnP.innerHTML='‹';
+    btnP.style.visibility=showPrev?'visible':'hidden';
+    btnP.onclick=()=>{ rpViewMonth--; if(rpViewMonth<0){rpViewMonth=11;rpViewYear--;} renderMonths(); };
+    const btnN=document.createElement('button');
+    btnN.className='rp-nav';
+    btnN.innerHTML='›';
+    btnN.style.visibility=showNext?'visible':'hidden';
+    btnN.onclick=()=>{ rpViewMonth++; if(rpViewMonth>11){rpViewMonth=0;rpViewYear++;} renderMonths(); };
+    const title=document.createElement('span');
+    title.textContent=MESES[month]+' '+year;
+    hdr.appendChild(btnP); hdr.appendChild(title); hdr.appendChild(btnN);
+    wrap.appendChild(hdr);
+    // Days of week
+    const grid=document.createElement('div');
+    grid.className='rp-grid';
+    DIAS.forEach(d=>{ const el=document.createElement('div'); el.className='rp-dow'; el.textContent=d; grid.appendChild(el); });
+    // Empty cells
+    const first=new Date(year,month,1).getDay();
+    for(let i=0;i<first;i++){ const el=document.createElement('button'); el.className='rp-day rp-empty'; el.disabled=true; grid.appendChild(el); }
+    // Days
+    const today=new Date(); today.setHours(0,0,0,0);
+    const daysInMonth=new Date(year,month+1,0).getDate();
+    for(let d=1;d<=daysInMonth;d++){
+      const date=new Date(year,month,d);
+      const iso=toISO(date);
+      const el=document.createElement('button');
+      el.className='rp-day';
+      el.textContent=d;
+      el.dataset.iso=iso;
+      if(date<today){ el.classList.add('rp-past'); el.disabled=true; }
+      else {
+        // Clases de selección
+        const inRange=rpStart&&rpEnd&&iso>rpStart&&iso<rpEnd;
+        const inHover=rpStart&&!rpEnd&&rpHover&&iso>rpStart&&iso<=rpHover;
+        if(iso===rpStart) el.classList.add('rp-sel-start');
+        if(iso===rpEnd) el.classList.add('rp-sel-end');
+        if(iso===rpStart&&iso===rpEnd) el.classList.add('rp-sel-end');
+        if(inRange||inHover) el.classList.add('rp-in-range');
+        el.addEventListener('mouseover',()=>{ if(rpStart&&!rpEnd&&rpHover!==iso){ rpHover=iso; renderMonths(); }});
+        el.addEventListener('click',()=>clickDayRP(iso));
+      }
+      grid.appendChild(el);
+    }
+    wrap.appendChild(grid);
+    return wrap;
+  }
+
+  // Obtener estadía mínima para una fecha y cabaña
+  // Mínimo global para una fecha (sin cabaña específica — para el picker general)
+  function getMinNochesGlobal(fechaISO) {
+    if (!window.eventosDB || !window.eventosDB.length) return 1;
+    let max = 1;
+    for (const ev of window.eventosDB) {
+      if (!ev.minNoches) continue;
+      if (fechaISO >= ev.desde && fechaISO <= ev.hasta) {
+        if (ev.minNoches > max) max = ev.minNoches;
+      }
+    }
+    return max;
+  }
+
+  function clickDayRP(iso){
+    if(!rpStart||rpEnd||(rpStart&&iso<rpStart)){
+      rpStart=iso; rpEnd=null; rpHover=null;
+      const min=getMinNochesGlobal(rpStart);
+      document.getElementById('rp-hint').textContent='Ahora elegí el día de salida' + (min>1 ? ' · Mínimo '+min+' noches' : '');
+    } else if(iso===rpStart){
+      rpStart=null; rpEnd=null;
+      document.getElementById('rp-hint').textContent='Hacé clic en el día de llegada';
+    } else {
+      const noches=Math.round((parseISO(iso)-parseISO(rpStart))/86400000);
+      const min=getMinNochesGlobal(rpStart);
+      if(noches<min){
+        document.getElementById('rp-hint').textContent='⚠️ Mínimo '+min+' noches para esta fecha. Elegí una salida posterior.';
+        rpEnd=null;
+        actualizarRPFooter();
+        renderMonths();
+        return;
+      }
+      rpEnd=iso;
+      document.getElementById('rp-hint').textContent='¡Listo! Confirmá las fechas';
+    }
+    actualizarRPFooter();
+    renderMonths();
+  }
+
+  function actualizarRPFooter(){
+    const lbl=document.getElementById('rp-selected-label');
+    const btn=document.getElementById('rp-confirm');
+    if(rpStart&&rpEnd){
+      const noches=Math.round((parseISO(rpEnd)-parseISO(rpStart))/86400000);
+      const min=getMinNochesGlobal(rpStart);
+      lbl.textContent=fmtDisplay(rpStart)+' → '+fmtDisplay(rpEnd)+' · '+noches+(noches===1?' noche':' noches');
+      lbl.style.color = noches < min ? '#c0392b' : '';
+      btn.disabled = noches < min;
+    } else if(rpStart){
+      const min=getMinNochesGlobal(rpStart);
+      lbl.textContent='Llegada: '+fmtDisplay(rpStart)+' — elegí la salida' + (min>1 ? ' (mín. '+min+' noches)' : '');
+      btn.disabled=true;
+    } else {
+      lbl.textContent='';
+      btn.disabled=true;
+    }
+  }
+
+  window.abrirRangePicker=function(){
+    const now=new Date();
+    // Si ya hay fechas, pre-cargar
+    const ci=document.getElementById('checkin').value;
+    const co=document.getElementById('checkout').value;
+    if(ci){ rpStart=ci; } else { rpStart=null; }
+    if(co){ rpEnd=co; } else { rpEnd=null; }
+    rpHover=null;
+    if(ci){ const d=parseISO(ci); rpViewYear=d.getFullYear(); rpViewMonth=d.getMonth(); }
+    else { rpViewYear=now.getFullYear(); rpViewMonth=now.getMonth(); }
+    renderMonths();
+    actualizarRPFooter();
+    document.getElementById('range-picker-overlay').classList.add('open');
+    document.body.style.overflow='hidden';
+  };
+
+  window.cerrarRangePicker=function(){
+    document.getElementById('range-picker-overlay').classList.remove('open');
+    document.body.style.overflow='';
+  };
+
+  window.limpiarRangePicker=function(){
+    rpStart=null; rpEnd=null; rpHover=null;
+    document.getElementById('checkin').value='';
+    document.getElementById('checkout').value='';
+    document.getElementById('date-range-label').textContent='Check-in → Check-out';
+    document.getElementById('date-range-label').style.color='#999';
+    document.getElementById('rp-hint').textContent='Hacé clic en el día de llegada';
+    actualizarRPFooter();
+    renderMonths();
+    filtrar();
+  };
+
+  window.confirmarRangePicker=function(){
+    if(!rpStart||!rpEnd) return;
+    document.getElementById('checkin').value=rpStart;
+    document.getElementById('checkout').value=rpEnd;
+    const noches=Math.round((parseISO(rpEnd)-parseISO(rpStart))/86400000);
+    const lbl=fmtDisplay(rpStart)+' → '+fmtDisplay(rpEnd)+' · '+noches+(noches===1?' noche':' noches');
+    document.getElementById('date-range-label').textContent=lbl;
+    document.getElementById('date-range-label').style.color='var(--dark)';
+    cerrarRangePicker();
+    filtrar();
+  };
+
+  // Soporte teclado Esc
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') cerrarRangePicker(); });
 })();
 </script>
 </body>
