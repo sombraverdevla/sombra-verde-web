@@ -127,6 +127,18 @@ onSnapshot(doc(db, 'sv', 'eventos'), (snap) => {
   }
 });
 
+// Escuchar config de precios por persona en tiempo real
+onSnapshot(doc(db, 'sv', 'config'), (snap) => {
+  if (snap.exists()) {
+    try {
+      window.configDB = JSON.parse(snap.data().data);
+      // Recalcular precios con nueva config
+      if (typeof actualizarPrecios === 'function') actualizarPrecios();
+      if (typeof filtrar === 'function') filtrar();
+    } catch(e) {}
+  }
+});
+
 // ─── GUARDAR RESERVA EN FIREBASE ──────────────────────────────
 window.guardarReservaFirebase = async function(nueva) {
   try {
@@ -479,9 +491,9 @@ header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:cen
 .puntaje-stars{font-size:.7rem;color:var(--accent);letter-spacing:-1px;}
 .puntaje-sep{width:1px;height:20px;background:rgba(255,255,255,.2);}
 .puntaje-logo{font-size:.8rem;}
-.reviews-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:1.5rem;}
-.review-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:1.1rem 1.2rem;}
-.review-top{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem;}
+.reviews-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+.review-card{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:1.1rem 1.2rem;display:flex;flex-direction:column;}
+.review-top{display:flex;align-items:flex-start;gap:.75rem;margin-bottom:.5rem;min-height:56px;}
 .reviewer-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);color:var(--dark);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600;flex-shrink:0;}
 .reviewer-info{flex:1;min-width:0;}
 .reviewer-name{font-size:.85rem;font-weight:500;color:var(--cream);}
@@ -531,10 +543,10 @@ header{background:var(--forest);padding:1.2rem 2rem;display:flex;align-items:cen
 /* MODAL DETALLE CABAÑA */
 .detail-overlay{position:fixed;inset:0;background:rgba(10,20,10,.7);z-index:700;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
 .detail-overlay.open{display:flex;}
-.detail-modal{background:white;border-radius:20px;width:100%;max-width:780px;max-height:92vh;overflow-y:auto;position:relative;}
+.detail-modal{background:white;border-radius:20px;width:100%;max-width:780px;max-height:92vh;overflow-y:auto;overflow-x:hidden;position:relative;}
 .detail-header{position:relative;}
-.detail-gallery-main{width:100%;height:420px;object-fit:cover;border-radius:20px 20px 0 0;}
-.detail-thumbs-row{display:flex;gap:6px;padding:.75rem 1rem .5rem;}
+.detail-gallery-main{width:100%;height:420px;object-fit:cover;border-radius:20px 20px 0 0;display:block;}
+.detail-thumbs-row{display:flex;gap:6px;padding:.75rem 1rem .5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .detail-thumb{width:70px;height:50px;border-radius:8px;object-fit:cover;cursor:pointer;border:2px solid transparent;opacity:.8;transition:all .2s;flex-shrink:0;}
 .detail-thumb:hover,.detail-thumb.active{opacity:1;border-color:var(--accent);}
 .detail-close{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.5);border:none;color:white;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
@@ -675,7 +687,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
   .counter-num{font-size:1.4rem;}
 
   /* Reseñas */
-  .reviews-grid{grid-template-columns:repeat(5,80vw);overflow-x:auto;padding-bottom:.5rem;}
+  .reviews-grid{grid-template-columns:repeat(4,85vw);overflow-x:auto;padding-bottom:.5rem;}
 
   /* Proceso — ocultar flechas en mobile muy chico */
   @media(max-width:400px){
@@ -787,18 +799,24 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
       <button class="lang-btn" id="lang-en" onclick="setLang('en')" title="English">
         <svg width="24" height="16" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
           <rect width="60" height="40" fill="#012169"/>
-          <!-- Diagonales blancas -->
           <line x1="0" y1="0" x2="60" y2="40" stroke="#fff" stroke-width="8"/>
           <line x1="60" y1="0" x2="0" y2="40" stroke="#fff" stroke-width="8"/>
-          <!-- Diagonales rojas -->
           <line x1="0" y1="0" x2="60" y2="40" stroke="#C8102E" stroke-width="4"/>
           <line x1="60" y1="0" x2="0" y2="40" stroke="#C8102E" stroke-width="4"/>
-          <!-- Cruz blanca -->
           <rect x="24" y="0" width="12" height="40" fill="#fff"/>
           <rect x="0" y="14" width="60" height="12" fill="#fff"/>
-          <!-- Cruz roja -->
           <rect x="26" y="0" width="8" height="40" fill="#C8102E"/>
           <rect x="0" y="16" width="60" height="8" fill="#C8102E"/>
+        </svg>
+      </button>
+      <button class="lang-btn" id="lang-pt" onclick="setLang('pt')" title="Português">
+        <svg width="24" height="16" viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg">
+          <rect width="60" height="40" fill="#009C3B"/>
+          <polygon points="30,2 58,20 30,38 2,20" fill="#FEDF00"/>
+          <circle cx="30" cy="20" r="11" fill="#002776"/>
+          <path d="M19.5,16.5 a11,11 0 0,1 21,0" fill="none" stroke="white" stroke-width="2"/>
+          <rect x="19" y="18" width="22" height="4" fill="#002776"/>
+          <text x="30" y="23" text-anchor="middle" font-size="4.5" fill="white" font-family="sans-serif" font-weight="bold" letter-spacing="0.5">BRASIL</text>
         </svg>
       </button>
     </div>
@@ -823,7 +841,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
     <em style="font-size:clamp(1.9rem,5vw,3.2rem);letter-spacing:-.02em;">en Villa La Angostura</em>
   </h1>
   <p class="hero-sub">7 cabañas · Dos sectores céntricos · Atención personalizada · Abierto todo el año</p>
-  <p class="hero-sub" style="margin-top:.4rem;color:var(--accent);font-weight:500;">★★★★★ 4.8 · 224 reseñas en Google</p>
+  <p class="hero-sub" style="margin-top:.4rem;"><a href="https://maps.app.goo.gl/M17LHwKJcSRuQHsi8" target="_blank" rel="noopener" style="color:var(--accent);font-weight:500;text-decoration:none;">★★★★★ 4.8 · 224 reseñas en Google ↗</a></p>
 </div>
 
 <div class="search-wrap">
@@ -841,13 +859,13 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
       </div>
       <!-- Huéspedes inline -->
       <div class="field">
-        <label>Huéspedes</label>
+        <label id="lbl-huespedes">Huéspedes</label>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;">
           <!-- Adultos -->
           <div style="background:var(--cream);border:1.5px solid var(--warm);border-radius:10px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:.5rem;">
             <div>
-              <div style="font-size:.8rem;font-weight:500;color:var(--dark);">Adultos</div>
-              <div style="font-size:.65rem;color:#bbb;">13 años o más</div>
+              <div id="lbl-adultos" style="font-size:.8rem;font-weight:500;color:var(--dark);">Adultos</div>
+              <div id="sub-adultos" style="font-size:.65rem;color:#bbb;">13 años o más</div>
             </div>
             <div style="display:flex;align-items:center;gap:.5rem;flex-shrink:0;">
               <button onclick="cambiarHuespedes('adultos',-1)" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #ddd;background:#fff;font-size:1rem;cursor:pointer;color:#666;display:flex;align-items:center;justify-content:center;">−</button>
@@ -858,8 +876,8 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           <!-- Menores -->
           <div style="background:var(--cream);border:1.5px solid var(--warm);border-radius:10px;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;gap:.5rem;">
             <div>
-              <div style="font-size:.8rem;font-weight:500;color:var(--dark);">Menores</div>
-              <div style="font-size:.65rem;color:#bbb;">Hasta 12 años</div>
+              <div id="lbl-menores" style="font-size:.8rem;font-weight:500;color:var(--dark);">Menores</div>
+              <div id="sub-menores" style="font-size:.65rem;color:#bbb;">Hasta 12 años</div>
             </div>
             <div style="display:flex;align-items:center;gap:.5rem;flex-shrink:0;">
               <button onclick="cambiarHuespedes('menores',-1)" style="width:28px;height:28px;border-radius:50%;border:1.5px solid #ddd;background:#fff;font-size:1rem;cursor:pointer;color:#666;display:flex;align-items:center;justify-content:center;">−</button>
@@ -874,7 +892,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
       <!-- Buscar -->
       <button class="btn-search" style="width:100%;" onclick="window._filtrarConScroll=true;filtrar()">Buscar</button>
     </div>
-    <p style="font-size:.72rem;color:#999;margin-top:.7rem;text-align:center;">Elegí fechas de llegada y salida, sumá adultos y menores, y buscá tu cabaña ideal.</p>
+    <p id="search-hint-txt" style="font-size:.72rem;color:#999;margin-top:.7rem;text-align:center;">Elegí fechas de llegada y salida, sumá adultos y menores, y buscá tu cabaña ideal.</p>
   </div>
 </div>
 
@@ -992,7 +1010,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         </div>
         <p class="cabana-desc">Todo en planta baja — 2 dormitorios: 1 matrimonial y 1 con camas separadas (una de ellas es diván, para el 5to huésped). A metros del centro, supermercados y restaurantes caminando.</p>
         <div class="amenities">
-          <span class="amenity">🏠 Todo planta baja</span><span class="amenity">📍 Céntrica</span><span class="amenity">🔥 Parrilla</span><span class="amenity">📶 WiFi</span><span class="amenity">🚗 Estacionamiento</span><span class="amenity">📺 Smart TV</span><span class="amenity">🍼 Cuna</span>
+          <span class="amenity" data-original="🏠 Todo planta baja">🏠 Todo planta baja</span><span class="amenity" data-original="📍 Céntrica">📍 Céntrica</span><span class="amenity" data-original="🔥 Parrilla">🔥 Parrilla</span><span class="amenity" data-original="📶 WiFi">📶 WiFi</span><span class="amenity" data-original="🚗 Estacionamiento">🚗 Estacionamiento</span><span class="amenity" data-original="📺 Smart TV">📺 Smart TV</span><span class="amenity" data-original="🍼 Cuna">🍼 Cuna</span>
         </div>
         <div class="card-footer">
           <div class="price-block" id="price-s1">
@@ -1032,7 +1050,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         </div>
         <p class="cabana-desc">Todo en planta baja, cómoda y luminosa. 1 dormitorio matrimonial + sommier en living para el 3ro. A pasos del centro — supermercados, confiterías y el lago a pie.</p>
         <div class="amenities">
-          <span class="amenity">🏠 Todo planta baja</span><span class="amenity">📍 Céntrica</span><span class="amenity">🔥 Parrilla</span><span class="amenity">📶 WiFi</span><span class="amenity">🚗 Estacionamiento</span><span class="amenity">📺 Smart TV</span><span class="amenity">🍼 Cuna</span>
+          <span class="amenity" data-original="🏠 Todo planta baja">🏠 Todo planta baja</span><span class="amenity" data-original="📍 Céntrica">📍 Céntrica</span><span class="amenity" data-original="🔥 Parrilla">🔥 Parrilla</span><span class="amenity" data-original="📶 WiFi">📶 WiFi</span><span class="amenity" data-original="🚗 Estacionamiento">🚗 Estacionamiento</span><span class="amenity" data-original="📺 Smart TV">📺 Smart TV</span><span class="amenity" data-original="🍼 Cuna">🍼 Cuna</span>
         </div>
         <div class="card-footer">
           <div class="price-block" id="price-s2">
@@ -1069,7 +1087,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         </div>
         <p class="cabana-desc">2 plantas con living/cocina en PB y dormitorio/baño en PA. 1 dormitorio matrimonial + sillón cama en living. Céntrica, tranquila y a metros de todo lo que necesitás.</p>
         <div class="amenities">
-          <span class="amenity">🏡 2 plantas</span><span class="amenity">📍 Céntrica</span><span class="amenity">🔥 Parrilla</span><span class="amenity">📶 WiFi</span><span class="amenity">🚗 Estacionamiento</span><span class="amenity">📺 Smart TV</span><span class="amenity">🍼 Cuna</span>
+          <span class="amenity" data-original="🏡 2 plantas">🏡 2 plantas</span><span class="amenity" data-original="📍 Céntrica">📍 Céntrica</span><span class="amenity" data-original="🔥 Parrilla">🔥 Parrilla</span><span class="amenity" data-original="📶 WiFi">📶 WiFi</span><span class="amenity" data-original="🚗 Estacionamiento">🚗 Estacionamiento</span><span class="amenity" data-original="📺 Smart TV">📺 Smart TV</span><span class="amenity" data-original="🍼 Cuna">🍼 Cuna</span>
         </div>
         <div class="card-footer">
           <div class="price-block" id="price-s3">
@@ -1106,7 +1124,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         </div>
         <p class="cabana-desc">2 plantas — PB: cocina, living y comedor. PA: dormitorio matrimonial, dormitorio con 3 camas separadas y baño completo. Parque amplio, tranquila y con todo el espacio que necesitás.</p>
         <div class="amenities">
-          <span class="amenity">🏡 2 plantas</span><span class="amenity">🛏 2 dormitorios</span><span class="amenity">🔥 Parrilla</span><span class="amenity">🌳 Parque amplio</span><span class="amenity">📶 WiFi</span><span class="amenity">🚗 Estacionamiento</span><span class="amenity">🍼 Cuna</span>
+          <span class="amenity" data-original="🏡 2 plantas">🏡 2 plantas</span><span class="amenity" data-original="🛏 2 dormitorios">🛏 2 dormitorios</span><span class="amenity" data-original="🔥 Parrilla">🔥 Parrilla</span><span class="amenity" data-original="🌳 Parque amplio">🌳 Parque amplio</span><span class="amenity" data-original="📶 WiFi">📶 WiFi</span><span class="amenity" data-original="🚗 Estacionamiento">🚗 Estacionamiento</span><span class="amenity" data-original="🍼 Cuna">🍼 Cuna</span>
         </div>
         <div class="card-footer">
           <div class="price-block" id="price-s4">
@@ -1143,7 +1161,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         </div>
         <p class="cabana-desc">2 plantas — PB: cocina, living y comedor. PA: dormitorio matrimonial, dormitorio con 3 camas separadas y baño completo. Parque amplio y estacionamiento propio.</p>
         <div class="amenities">
-          <span class="amenity">🏡 2 plantas</span><span class="amenity">🛏 2 dormitorios</span><span class="amenity">🔥 Parrilla</span><span class="amenity">🌳 Parque amplio</span><span class="amenity">📶 WiFi</span><span class="amenity">🚗 Estacionamiento</span><span class="amenity">🍼 Cuna</span>
+          <span class="amenity" data-original="🏡 2 plantas">🏡 2 plantas</span><span class="amenity" data-original="🛏 2 dormitorios">🛏 2 dormitorios</span><span class="amenity" data-original="🔥 Parrilla">🔥 Parrilla</span><span class="amenity" data-original="🌳 Parque amplio">🌳 Parque amplio</span><span class="amenity" data-original="📶 WiFi">📶 WiFi</span><span class="amenity" data-original="🚗 Estacionamiento">🚗 Estacionamiento</span><span class="amenity" data-original="🍼 Cuna">🍼 Cuna</span>
         </div>
         <div class="card-footer">
           <div class="price-block" id="price-s5">
@@ -1180,7 +1198,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         </div>
         <p class="cabana-desc">La única del complejo con 2 baños. PB: living, cocina, comedor, dormitorio matrimonial y baño. PA: dormitorio con camas separadas y baño. Ideal para dos parejas o familia con privacidad total.</p>
         <div class="amenities">
-          <span class="amenity">🏡 2 plantas</span><span class="amenity">🚿 2 baños</span><span class="amenity">🛏 2 dormitorios</span><span class="amenity">🔥 Parrilla</span><span class="amenity">🌳 Parque</span><span class="amenity">📶 WiFi</span>
+          <span class="amenity" data-original="🏡 2 plantas">🏡 2 plantas</span><span class="amenity" data-original="🚿 2 baños">🚿 2 baños</span><span class="amenity" data-original="🛏 2 dormitorios">🛏 2 dormitorios</span><span class="amenity" data-original="🔥 Parrilla">🔥 Parrilla</span><span class="amenity" data-original="🌳 Parque">🌳 Parque</span><span class="amenity" data-original="📶 WiFi">📶 WiFi</span>
         </div>
         <div class="card-footer">
           <div class="price-block" id="price-s6">
@@ -1217,7 +1235,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         </div>
         <p class="cabana-desc">2 plantas — PB: living, cocina, comedor, baño y dormitorio matrimonial. PA: dormitorio con camas separadas. Parque amplio y estacionamiento. Ideal para grupos y familias.</p>
         <div class="amenities">
-          <span class="amenity">🏡 2 plantas</span><span class="amenity">🛏 2 dormitorios</span><span class="amenity">🔥 Parrilla</span><span class="amenity">🌳 Parque amplio</span><span class="amenity">📶 WiFi</span><span class="amenity">🚗 Estacionamiento</span><span class="amenity">🍼 Cuna</span>
+          <span class="amenity" data-original="🏡 2 plantas">🏡 2 plantas</span><span class="amenity" data-original="🛏 2 dormitorios">🛏 2 dormitorios</span><span class="amenity" data-original="🔥 Parrilla">🔥 Parrilla</span><span class="amenity" data-original="🌳 Parque amplio">🌳 Parque amplio</span><span class="amenity" data-original="📶 WiFi">📶 WiFi</span><span class="amenity" data-original="🚗 Estacionamiento">🚗 Estacionamiento</span><span class="amenity" data-original="🍼 Cuna">🍼 Cuna</span>
         </div>
         <div class="card-footer">
           <div class="price-block" id="price-s7">
@@ -1258,10 +1276,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         </div>
         <a class="map-label-link" href="https://maps.app.goo.gl/5waEAutJ9CfH24Ja9" target="_blank">Ver en Maps ↗</a>
       </div>
-      <a href="https://maps.app.goo.gl/5waEAutJ9CfH24Ja9" target="_blank" style="display:flex;height:180px;align-items:center;justify-content:center;background:#e8ede8;border-radius:0 0 12px 12px;text-decoration:none;gap:8px;color:var(--moss);font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;border-top:1px solid var(--warm);">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-        Michay 268 · Ver en Google Maps
-      </a>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2963.1!2d-71.6441!3d-40.7609!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9610bb1234567890%3A0xabcdef!2sMichay+268%2C+Villa+La+Angostura!5e0!3m2!1ses!2sar!4v1" width="100%" height="220" style="border:none;display:block;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
     <div class="map-card">
       <div class="map-label">
@@ -1271,10 +1286,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         </div>
         <a class="map-label-link" href="https://maps.app.goo.gl/21TMtnZsw2DeXh7g6" target="_blank">Ver en Maps ↗</a>
       </div>
-      <a href="https://maps.app.goo.gl/21TMtnZsw2DeXh7g6" target="_blank" style="display:flex;height:180px;align-items:center;justify-content:center;background:#e8ede8;border-radius:0 0 12px 12px;text-decoration:none;gap:8px;color:var(--moss);font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:500;border-top:1px solid var(--warm);">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
-        Aluminé 961 · Ver en Google Maps
-      </a>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d741.2!2d-71.6352!3d-40.7589!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9610b9c1234abcd%3A0x5678!2sAlum%C3%ADn%C3%A9+961%2C+Villa+La+Angostura%2C+Neuqu%C3%A9n!5e0!3m2!1ses!2sar!4v1" width="100%" height="220" style="border:none;display:block;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
   </div>
 </div>
@@ -1353,19 +1365,6 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         </div>
         <div class="review-stars">★★★★★</div>
         <div class="review-text">"Nos alojamos unos días y la experiencia fue excelente. El lugar es muy cómodo, muy bien equipado, tranquilo y con una ubicación ideal, cerca del centro. Perfecto para descansar. Sin duda volveríamos."</div>
-      </div>
-
-      <div class="review-card">
-        <div class="review-top">
-          <div class="reviewer-avatar">AG</div>
-          <div class="reviewer-info">
-            <div class="reviewer-name">Alejandro Gallardo</div>
-            <div class="reviewer-meta">Hace 3 meses · Local Guide · Google</div>
-          </div>
-          <span class="review-platform google-badge">Google</span>
-        </div>
-        <div class="review-stars">★★★★★</div>
-        <div class="review-text">"Hermosa cabaña. Muy buena calidad de instalaciones y contacto frecuente con su anfitrión por cualquier duda o consulta. Cerca del centro y de negocios para abastecerse. Muy recomendable. Volveríamos."</div>
       </div>
 
       <div class="review-card">
@@ -1579,12 +1578,12 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         <div class="prog-line" id="pline-3"></div>
         <div class="prog-step">
           <div class="prog-circle" id="pc-4">4</div>
-          <div class="prog-label" id="pl-4">Seña</div>
+          <div class="prog-label" id="pl-4">WhatsApp</div>
         </div>
         <div class="prog-line" id="pline-4"></div>
         <div class="prog-step">
           <div class="prog-circle" id="pc-5">🏡</div>
-          <div class="prog-label" id="pl-5">¡A disfrutar!</div>
+          <div class="prog-label" id="pl-5">Seña y a disfrutar</div>
         </div>
       </div>
 
@@ -1607,12 +1606,13 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
         <!-- PASO 2: TARIFAS (resumen) -->
         <div class="nights-box" id="nights-box">
           <div class="n-row"><span id="nb-fechas"></span><span id="nb-noches"></span></div>
-          <div class="n-row"><span>Precio por noche</span><span id="nb-pn"></span></div>
+          <div id="nb-pn-wrap" style="font-size:.75rem;color:#666;margin-bottom:2px;"></div>
           <div class="n-row total"><span>Total estadía</span><span id="nb-total"></span></div>
           <div class="n-row sena"><span>Seña (50%)</span><span id="nb-sena"></span></div>
         </div>
 
         <!-- PASO 3: DATOS (sin mascotas) -->
+        <p data-beta-disclaimer style="font-size:.68rem;color:#aaa;text-align:center;margin:.4rem 0 .6rem;line-height:1.5;">⚙️ Sitio en versión beta — los precios y fechas mostrados son orientativos. La confirmación final siempre es por WhatsApp.</p>
         <div id="form-huésped" style="display:none">
           <div class="form-sec"><h4>Tus datos</h4>
             <div class="form-grid-2">
@@ -1622,36 +1622,27 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
               <div class="fg full"><label>Cantidad de personas</label><input type="number" id="f-pers" min="1" max="5" placeholder="2"></div>
               <div class="fg full"><label>Consultas o pedidos especiales</label><textarea id="f-consulta" placeholder="Opcional..."></textarea></div>
             </div>
-            <button class="btn-conf" onclick="confirmar()">Ver datos de pago →</button>
+            <button class="btn-conf" onclick="confirmar()">💬 Enviar reserva por WhatsApp →</button>
           </div>
         </div>
       </div>
 
       <!-- PASO 4-5: CONFIRMACIÓN -->
       <div class="conf-wrap" id="step-conf">
-        <div class="conf-icon">✅</div>
-        <div class="conf-title">¡Casi listo, <span id="conf-nombre"></span>!</div>
-        <div class="conf-sub">Transferí la seña para confirmar tu reserva</div>
+        <div class="conf-icon">💬</div>
+        <div class="conf-title">¡Listo, <span id="conf-nombre"></span>!</div>
+        <div class="conf-sub">Tu reserva fue registrada. Enviala por WhatsApp — te confirmamos y te pasamos los datos para la seña.</div><div data-sena-warning style="background:#fff3cd;border:1.5px solid #f0c040;border-radius:10px;padding:.65rem .9rem;margin:.6rem 0;font-size:.78rem;color:#7a5c00;line-height:1.5;">⚠️ <strong>Sin la seña del 50% el lugar no queda garantizado.</strong> Te la pedimos una vez que confirmemos disponibilidad por WhatsApp.</div>
         <div class="conf-detail">
           <div class="c-row"><span>Cabaña</span><span id="conf-cab"></span></div>
           <div class="c-row"><span>Fechas</span><span id="conf-fechas"></span></div>
           <div class="c-row"><span>Personas</span><span id="conf-pers"></span></div>
           <div class="c-row total"><span>Total estadía</span><span id="conf-total"></span></div>
-          <div class="c-row sena-v"><span>Seña a transferir ahora</span><span id="conf-sena"></span></div>
-        </div>
-        <div class="cbu-box">
-          <div class="cbu-label">CVU / Transferencia</div>
-          <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:2px;">
-            <div class="cbu-val" id="cbu-num">0000003100064350971270</div>
-            <button onclick="copiarCBU()" id="btn-cbu-copy" style="background:var(--moss);color:white;border:none;border-radius:8px;padding:6px 14px;font-size:.75rem;font-family:inherit;cursor:pointer;white-space:nowrap;transition:background .2s;" onmouseover="this.style.background='var(--forest)'" onmouseout="this.style.background='var(--moss)'">📋 Copiar CVU</button>
-          </div>
-          <div class="cbu-alias">Alias: <strong>franyarcho</strong></div>
-          <div class="cbu-alias" style="margin-top:2px">Titular: Francisco Yarcho</div>
+          <div class="c-row sena-v"><span>Seña estimada (50%)</span><span id="conf-sena"></span></div>
         </div>
         <div class="conf-note">
-          Transferí la seña al CBU de arriba y enviá el comprobante por WhatsApp a Francisco al <strong>+54 9 2944 562177</strong>. Confirmamos tu reserva en cuestión de minutos. El saldo (<span class="conf-saldo-txt"></span>) se abona al check-in.
+          Hacé clic en el botón para abrir WhatsApp con tu consulta pre-armada. Te enviamos los datos de transferencia una vez que confirmemos disponibilidad y precio.
         </div>
-        <button class="btn-wsp-final" onclick="enviarWsp()">💬 Ya transferí — enviar comprobante por WhatsApp</button>
+        <button class="btn-wsp-final" onclick="enviarWsp()">💬 Enviar reserva por WhatsApp</button>
         <div style="margin-top:.7rem;text-align:center;font-size:.75rem;color:#888;line-height:1.6;">
           ¿No funciona el botón? Escribí directamente a<br>
           <a href="https://wa.me/5492944562177" target="_blank" style="color:var(--moss);font-weight:600;text-decoration:none;">+54 9 2944 562177</a>
@@ -1708,7 +1699,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
     <svg viewBox="0 0 24 24" width="22" height="22" fill="white" xmlns="http://www.w3.org/2000/svg">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
     </svg>
-    <span class="wa-float-txt">¿Consultas? Escribinos</span>
+    <span class="wa-float-txt" id="wa-float-txt">¿Consultas? Escribinos</span>
   </button>
   <span style="font-size:.7rem;color:#555;background:rgba(255,255,255,.92);padding:3px 10px;border-radius:20px;box-shadow:0 2px 8px rgba(0,0,0,.12);white-space:nowrap;text-align:center;display:block;">+54 9 2944 562177</span>
 </div>
@@ -1871,22 +1862,58 @@ function getPrecioPromedioMes(cabNombre) {
   return count ? Math.round(total / count) : null;
 }
 
+function getTarifasTabla(cabNombre, fechaBase) {
+  // Retorna array de { pax, precio, base } para mostrar en la card
+  // fechaBase opcional: si se pasa usa el precio de esa noche en vez del promedio
+  const CAP_DEFAULT = {'Sombra 1':5,'Sombra 2':3,'Sombra 3':3,'Sombra 4':5,'Sombra 5':5,'Sombra 6':4,'Sombra 7':5};
+  const id = CAB_ID_MAP[cabNombre];
+  const cfg = (window.configDB && id && window.configDB[id]) ? window.configDB[id] : {};
+  const cap      = Number(cfg.capacidad) || CAP_DEFAULT[cabNombre] || 4;
+  const pctExtra = Number(cfg.pctExtra)  || 0;
+  const pctMenos = Number(cfg.pctMenos)  || 0;
+  const pnBase   = (fechaBase ? getPrecioNoche(cabNombre, fechaBase) : null) || getPrecioPromedioMes(cabNombre);
+  if (!pnBase) return null;
+
+  // Precio base (capacidad estándar)
+  const rows = [];
+  // Si hay descuento por menos personas, mostrar cap-1 (mínimo 1)
+  const paxMenos = cap - 1;
+  if (pctMenos > 0 && paxMenos >= 1) {
+    const factor = Math.max(0.1, 1 + (pctMenos / 100) * -1); // diff siempre -1
+    rows.push({ label: paxMenos + ' pax o menos', precio: Math.round(pnBase * factor), color: '#2980b9' });
+  }
+  // Precio base
+  rows.push({ label: cap + ' pax (base)', precio: Math.round(pnBase), color: '#333', base: true });
+  // Si hay recargo por más personas, mostrar cap+1 (si no supera capacidad máxima)
+  const paxExtra = cap + 1;
+  const capMax = CAP_DEFAULT[cabNombre]; // capacidad real máxima
+  if (pctExtra > 0 && paxExtra <= capMax) {
+    const diff = paxExtra - cap; // +1
+    const factor = 1 + (pctExtra / 100) * diff;
+    rows.push({ label: paxExtra + ' pax', precio: Math.round(pnBase * factor), color: '#c0392b' });
+  }
+  return { rows, cap, capMax };
+}
+
 function actualizarPrecios() {
   const pas = getPersonas();
+  const T = (typeof LANGS !== 'undefined' && typeof currentLang !== 'undefined') ? LANGS[currentLang] : null;
   Object.keys(CABANAS_IDS).forEach(id => {
     const nombre = CABANAS_IDS[id];
-    const pnBase = getPrecioPromedioMes(nombre);
     const el = document.getElementById('pn-' + id);
-    if (!el || !pnBase) return;
-    const factor = pas ? getAjustePrecio(nombre, pas) : 1;
-    const precio = Math.round(pnBase * factor);
-    if (factor !== 1) {
-      // Mostrar precio ajustado por personas (sin tachado)
-      el.innerHTML = fmt(precio) + '<span>/ noche</span>';
-    } else {
-      const original = Math.round(pnBase / 0.85);
-      el.innerHTML = '<span class="price-tachado">$' + original.toLocaleString('es-AR') + '</span>' + fmt(precio) + '<span>/ noche</span>';
-    }
+    const plEl = document.getElementById('pl-' + id);
+    if (!el) return;
+
+    // Si hay fechas → filtrar() lo maneja
+    const ci = document.getElementById('checkin').value;
+    const co = document.getElementById('checkout').value;
+    if (ci && co) return;
+
+    // Sin fechas → mostrar mensaje "Elegí fechas"
+    const msg = T ? T.tarifaFecha : 'Elegí fechas para ver tarifas';
+    el.innerHTML = '<span style="font-size:.72rem;color:#aaa;font-style:italic;line-height:1.4;">' + msg + '</span>';
+    if (plEl) plEl.style.display = 'none';
+
   });
 }
 
@@ -2047,18 +2074,32 @@ function filtrar() {
 
     if (calcEl && noches > 0) {
       const { total, tienePrecios, factor } = calcularTotalReal(cabNombre, ci, co, pas);
-      const pnBase = getPrecioNoche(cabNombre, ci) || getPrecioPromedioMes(cabNombre);
-      const pn = pnBase ? Math.round(pnBase * factor) : null;
       if (tienePrecios) {
         document.getElementById('calc-' + id + '-noches').textContent = noches + (noches === 1 ? ' noche' : ' noches');
-        document.getElementById('calc-' + id + '-pn').textContent = pn ? (noches > 1 ? 'Variable/noche' : fmt(pn)) : '';
+        document.getElementById('calc-' + id + '-pn').textContent = '';
         document.getElementById('calc-' + id + '-total').textContent = fmt(total);
         calcEl.classList.add('show');
-        if (plEl) plEl.textContent = noches + (noches === 1 ? ' noche · total:' : ' noches · total:');
+        if (plEl) plEl.style.display = 'none';
+      }
+      // Actualizar tabla por pax en pn-
+      const pnEl2 = document.getElementById('pn-' + id);
+      if (pnEl2) {
+        const tabla2 = getTarifasTabla(cabNombre, ci);
+        if (tabla2) {
+          const { rows: rows2, cap: cap2, capMax: capMax2 } = tabla2;
+          let html2 = '';
+          rows2.forEach(function(r) {
+            const paxNum = parseInt(r.label);
+            const isActive = pas > 0 && (r.base ? pas === cap2 : (paxNum < cap2 ? pas <= paxNum : pas >= paxNum));
+            const bold = isActive ? 'font-weight:700;' : 'font-weight:400;';
+            html2 += '<div style="display:flex;justify-content:space-between;gap:6px;font-size:.72rem;' + bold + 'color:' + r.color + ';line-height:1.5"><span>' + r.label + '</span><span>' + fmt(r.precio) + '<span style="font-size:.62rem;color:#aaa">/noche</span></span></div>';
+          });
+          pnEl2.innerHTML = html2;
+        }
       }
     } else if (calcEl) {
       calcEl.classList.remove('show');
-      if (plEl) plEl.textContent = 'Desde';
+      if (plEl) { plEl.style.display = ''; plEl.textContent = 'Desde'; }
     }
 
     if (!cumplePas) { ocultas.push(c); return; }
@@ -2133,7 +2174,8 @@ function abrirDetalle(id) {
   document.getElementById('detail-type').textContent = d.tipo;
   document.getElementById('detail-desc').textContent = d.desc;
   document.getElementById('detail-mapa').href = d.mapa;
-  document.getElementById('detail-amenities').innerHTML = d.amenities.map(a => `<span class="detail-amenity">${a}</span>`).join('');
+  const _amap = (typeof LANGS !== 'undefined' && typeof currentLang !== 'undefined' && LANGS[currentLang] && LANGS[currentLang].amenityMap) ? LANGS[currentLang].amenityMap : {};
+  document.getElementById('detail-amenities').innerHTML = d.amenities.map(a => `<span class="detail-amenity">${_amap[a] || a}</span>`).join('');
   const INFO_ICONS = {'Capacidad':'👥','Distribución':'🏠','Dormitorios':'🛏','Baños':'🚿','Sector':'📍','Check-in':'🕑','Check-out':'🕙'};
   document.getElementById('detail-info').innerHTML = d.info.map(i => `<div class="detail-info-item"><div class="detail-info-label">${INFO_ICONS[i.l] ? INFO_ICONS[i.l] + ' ' : ''}${i.l}</div><div class="detail-info-val">${i.v}</div></div>`).join('');
   // Mapa embed
@@ -2251,13 +2293,7 @@ function renderCal() {
 
     // Precio (solo días libres y no pasados)
     if (!isPast && !isOcup) {
-      const pn = getPrecioNoche(modalCab, ds);
-      if (pn) {
-        const pSpan = document.createElement('span');
-        pSpan.className = 'cal-day-precio';
-        pSpan.textContent = '$' + (pn >= 1000 ? Math.round(pn/1000) + 'k' : pn);
-        el.appendChild(pSpan);
-      }
+
     }
 
     if (isPast)      el.className = 'cal-day past';
@@ -2295,13 +2331,14 @@ function getAjustePrecio(cabNombre, personas) {
   if (!personas) return 1;
   const CAP_DEFAULT = {'Sombra 1':5,'Sombra 2':3,'Sombra 3':3,'Sombra 4':5,'Sombra 5':5,'Sombra 6':4,'Sombra 7':5};
   const id = CAB_ID_MAP[cabNombre];
-  const d = id && cabanasDB && cabanasDB[id] ? cabanasDB[id] : {};
-  const cap      = Number(d.capacidad) || CAP_DEFAULT[cabNombre] || 4;
-  const pctExtra = Number(d.pctExtra) >= 0 ? Number(d.pctExtra) : 0;
-  const pctMenos = Number(d.pctMenos) >= 0 ? Number(d.pctMenos) : 0;
+  // Leer de configDB (colección separada, sin race conditions)
+  const cfg = (window.configDB && id && window.configDB[id]) ? window.configDB[id] : {};
+  const cap      = Number(cfg.capacidad) || CAP_DEFAULT[cabNombre] || 4;
+  const pctExtra = Number(cfg.pctExtra)  || 0;
+  const pctMenos = Number(cfg.pctMenos)  || 0;
   const diff = personas - cap;
   if (diff > 0 && pctExtra > 0) return 1 + (pctExtra / 100) * diff;
-  if (diff < 0 && pctMenos > 0) return Math.max(0.1, 1 + (pctMenos / 100) * diff);
+  if (diff < 0 && pctMenos > 0) return Math.max(0.1, 1 + (pctMenos / 100) * Math.max(diff, -1));
   return 1;
 }
 
@@ -2324,7 +2361,8 @@ function calcularTotalReal(cabNombre, checkin, checkout, personas) {
 function mostrarResumen() {
   if (!selStart || !selEnd) return;
   const noches = Math.round((new Date(selEnd) - new Date(selStart)) / 86400000);
-  const pas = getPersonas();
+  const fPers = document.getElementById('f-pers');
+  const pas = (fPers && fPers.value) ? (parseInt(fPers.value) || getPersonas()) : getPersonas();
   const { total, tienePrecios, factor } = calcularTotalReal(modalCab, selStart, selEnd, pas);
   const sena   = Math.round(total * 0.5);
   const fmtD   = s => { const [y,m,d] = s.split('-'); return d+'/'+m+'/'+y; };
@@ -2348,16 +2386,16 @@ function mostrarResumen() {
     cur2.setDate(cur2.getDate() + 1);
   }
   const todosIguales = precios.every(p => p.precio === precios[0].precio);
-  const pnEl = document.getElementById('nb-pn');
+  const pnWrap = document.getElementById('nb-pn-wrap');
   if (!tienePrecios) {
-    pnEl.textContent = 'A confirmar';
-  } else if (todosIguales) {
-    pnEl.textContent = fmt(precios[0].precio);
+    pnWrap.innerHTML = '';
+  } else if (todosIguales && noches > 0) {
+    const _nbPn = (typeof LANGS!=='undefined'&&typeof currentLang!=='undefined'&&LANGS[currentLang])?LANGS[currentLang].nbPn||'Precio por noche':'Precio por noche';
+    pnWrap.innerHTML = '<span style="display:flex;justify-content:space-between"><span>'+_nbPn+'</span><span>' + fmt(precios[0].precio) + '</span></span>';
   } else {
-    // Desglose noche a noche
-    pnEl.innerHTML = precios.map(p => {
+    pnWrap.innerHTML = precios.map(p => {
       const [y,m,d] = p.fecha.split('-');
-      return '<span style="display:flex;justify-content:space-between;font-size:.75rem;color:#666;margin-top:2px"><span>' + d + '/' + m + '</span><span>' + fmt(p.precio) + '</span></span>';
+      return '<span style="display:flex;justify-content:space-between;margin-top:2px"><span>' + d + '/' + m + '</span><span>' + fmt(p.precio) + '</span></span>';
     }).join('');
   }
 
@@ -2378,6 +2416,8 @@ document.addEventListener('input', function(e) {
     const val = parseInt(e.target.value) || 0;
     if (val > max) e.target.value = max;
     if (val < 1 && e.target.value !== '') e.target.value = 1;
+    // Recalcular tarifas al cambiar personas
+    if (selStart && selEnd) mostrarResumen();
   }
 });
 
@@ -2396,43 +2436,38 @@ async function confirmar() {
   const nombre = document.getElementById('f-nombre').value.trim();
   const tel    = document.getElementById('f-tel').value.trim();
   const email  = document.getElementById('f-email').value.trim();
-  // Validar WhatsApp: solo números, +, espacios, guiones — mínimo 8 dígitos
   const telLimpio = tel.replace(/[\s\-().]/g, '');
   if (!tel || !/^[+]?[0-9]{8,15}$/.test(telLimpio)) { alert('Ingresá un número de WhatsApp válido (solo números, ej: +54 9 2944 123456).'); return; }
-  // Validar email
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { alert('Ingresá un email válido (ej: juan@gmail.com).'); return; }
   if (!nombre) { alert('Completá tu nombre.'); return; }
   if (!selStart || !selEnd) { alert('Seleccioná fechas primero.'); return; }
   const noches = Math.round((new Date(selEnd) - new Date(selStart)) / 86400000);
-  const pas    = getPersonas();
+  const fPers  = document.getElementById('f-pers');
+  const pas    = (fPers && fPers.value) ? (parseInt(fPers.value) || getPersonas()) : getPersonas();
   const { total, tienePrecios } = calcularTotalReal(modalCab, selStart, selEnd, pas);
   const sena   = Math.round(total * 0.5);
-  const pers   = document.getElementById('f-pers').value || '1';
-  const mascotas = 'No';
+  const pers   = fPers ? (fPers.value || String(pas)) : String(pas);
   const obs    = document.getElementById('f-consulta') ? document.getElementById('f-consulta').value.trim() : '';
   const fmtD   = s => { const [y,m,d] = s.split('-'); return d+'/'+m+'/'+y; };
   const fmt    = n => '$' + Math.round(n).toLocaleString('es-AR');
 
-  // Mostrar pantalla confirmación
+  // Mostrar pantalla de confirmación / WhatsApp
   document.getElementById('conf-nombre').textContent = nombre.split(' ')[0];
   document.getElementById('conf-cab').textContent    = modalCab;
   document.getElementById('conf-fechas').textContent = fmtD(selStart) + ' → ' + fmtD(selEnd);
   document.getElementById('conf-pers').textContent   = pers + ' persona' + (pers !== '1' ? 's' : '');
   document.getElementById('conf-total').textContent  = tienePrecios ? fmt(total) : 'A confirmar';
   document.getElementById('conf-sena').textContent   = tienePrecios ? fmt(sena) : 'A confirmar';
-  document.getElementById('conf-saldo').textContent  = tienePrecios ? fmt(total - sena) : '';
   document.getElementById('step-form').style.display = 'none';
   document.getElementById('step-conf').classList.add('show');
-  document.getElementById('modal-sub').textContent = 'Confirmá tu reserva';
+  document.getElementById('modal-sub').textContent = 'Enviá tu consulta';
   setProgreso(4);
-  window._confData = { nombre, tel, sena, total, noches };
+  window._confData = { nombre, tel, email, sena, total, noches, pers, obs };
 
-  // Separar nombre y apellido
-  const partes   = nombre.trim().split(' ');
+  // Guardar en Firebase
+  const partes = nombre.trim().split(' ');
   const apellido = partes.length > 1 ? partes.slice(1).join(' ') : '';
   const primerNombre = partes[0];
-
-  // Escribir en Firebase
   const tarifaPN = tienePrecios && noches > 0 ? Math.round(total / noches) : 0;
   const nuevaReserva = {
     id:         genId(),
@@ -2451,37 +2486,37 @@ async function confirmar() {
     sena1:      0, sena1fecha: '',
     sena2:      0, sena2fecha: '',
     sena3:      0, sena3fecha: '',
-    obs:        `Email: ${email}${mascotas !== 'No' ? ' · Mascotas: ' + mascotas : ''}${obs ? ' · ' + obs : ''} · Reserva web ${new Date().toLocaleDateString('es-AR')}`
+    obs:        'Email: ' + email + (obs ? ' · ' + obs : '') + ' · Consulta web ' + new Date().toLocaleDateString('es-AR')
   };
-
   if (typeof window.guardarReservaFirebase === 'function') {
-    const ok = await window.guardarReservaFirebase(nuevaReserva);
-    if (!ok) console.warn('No se pudo guardar en Firebase — el huésped deberá confirmar por WhatsApp');
+    window.guardarReservaFirebase(nuevaReserva).catch(e => console.warn('Firebase error:', e));
   }
+
+  // Notificación por email al equipo
+  emailjs.send('service_0dwfzv2', 'template_yna33f4', {
+    cabaña:   modalCab,
+    checkin:  fmtD(selStart),
+    checkout: fmtD(selEnd),
+    noches:   noches,
+    personas: pers,
+    nombre:   nombre,
+    telefono: tel,
+    email:    email,
+    total:    tienePrecios ? fmt(total) : 'A confirmar',
+    sena:     tienePrecios ? fmt(sena)  : 'A confirmar',
+    obs:      obs || '—'
+  }).catch(e => console.warn('EmailJS error:', e));
 }
 
 function enviarWsp() {
   const d = window._confData || {};
   const fmtD = s => { if (!s) return ''; const [y,m,d2] = s.split('-'); return d2+'/'+m+'/'+y; };
   const fmt  = n => '$' + Math.round(n).toLocaleString('es-AR');
-  const msg  = `Hola! Soy ${d.nombre}. Quiero reservar ${modalCab} del ${fmtD(selStart)} al ${fmtD(selEnd)} (${d.noches} noches). Realicé la transferencia de la seña de ${fmt(d.sena)}. Te mando el comprobante.`;
+  const totalStr = d.total ? ' · Total estimado: ' + fmt(d.total) : '';
+  const obsStr = d.obs ? ' · ' + d.obs : '';
+  const msg = 'Hola! Soy ' + d.nombre + '. Quiero hacer una reserva en ' + modalCab + ' del ' + fmtD(selStart) + ' al ' + fmtD(selEnd) + ' (' + d.noches + ' noches · ' + d.pers + ' personas)' + totalStr + obsStr + '. Quedo a la espera de confirmación. Entiendo que sin la seña del 50% el lugar no queda garantizado.';
   window.open('https://wa.me/5492944562177?text=' + encodeURIComponent(msg), '_blank');
   setProgreso(5);
-
-  // Notificación por email
-  emailjs.send('service_0dwfzv2', 'template_yna33f4', {
-    cabaña:   modalCab,
-    checkin:  fmtD(selStart),
-    checkout: fmtD(selEnd),
-    noches:   d.noches,
-    personas: document.getElementById('f-pers') ? document.getElementById('f-pers').value : '—',
-    nombre:   d.nombre,
-    telefono: d.tel || '—',
-    email:    document.getElementById('f-email') ? document.getElementById('f-email').value : '—',
-    total:    d.total ? fmt(d.total) : 'A confirmar',
-    sena:     d.sena  ? fmt(d.sena)  : 'A confirmar',
-    obs:      document.getElementById('f-consulta') ? document.getElementById('f-consulta').value || '—' : '—'
-  }).catch(e => console.warn('EmailJS error:', e));
 }
 
 // ─── HELPERS ───────────────────────────────────────────────────
@@ -2577,6 +2612,12 @@ function enviarConsulta() {
       otono:    '🍂 <strong>Low season:</strong> special prices April–June · Fewer tourists, more Patagonia · <strong>Check availability</strong>',
       invierno: '❄️ <strong>Winter in Patagonia:</strong> snow, mountains and a cozy cabin · <strong>Book for July and August</strong>',
       primavera:'🌸 <strong>Spring in VLA:</strong> nature in bloom, ideal weather · Affordable prices · <strong>Check availability</strong>'
+    },
+    pt: {
+      verano:   '☀️ <strong>Alta temporada:</strong> dezembro a março · Reserve com antecedência · <strong>Poucas datas disponíveis</strong>',
+      otono:    '🍂 <strong>Baixa temporada:</strong> preços especiais abril–junho · Menos turistas, mais Patagônia · <strong>Verificar disponibilidade</strong>',
+      invierno: '❄️ <strong>Inverno na Patagônia:</strong> neve, montanhas e uma cabana quentinha · <strong>Reserve para julho e agosto</strong>',
+      primavera:'🌸 <strong>Primavera em VLA:</strong> natureza florida, clima ideal · Preços acessíveis · <strong>Verificar disponibilidade</strong>'
     }
   };
   let estacion;
@@ -2638,9 +2679,19 @@ const LANGS = {
   es: {
     headerSub: 'Villa La Angostura · Neuquén',
     promoBanner: '🍂 <strong>Temporada baja:</strong> precios especiales abril–junio · Menos turistas, más Patagonia · <strong>Consultá disponibilidad</strong>',
-    heroTag: 'Patagonia Argentina',
-    heroTitle: 'Tu refugio en<br><em>Villa La Angostura</em>',
-    heroSub: '7 cabañas · Dos sectores céntricos · Dueños presentes · Abierto todo el año',
+    heroTag: 'Patagonia Argentina · Villa La Angostura',
+    heroTitle: 'Alquiler de cabañas<br><em style="font-size:clamp(1.9rem,5vw,3.2rem);letter-spacing:-.02em;">en Villa La Angostura</em>',
+    heroSub: '7 cabañas · Dos sectores céntricos · Atención personalizada · Abierto todo el año',
+    heroStars: '★★★★★ 4.8 · 224 reseñas en Google ↗',
+    betaDisclaimer: '⚙️ Sitio en versión beta — los precios y fechas mostrados son orientativos. La confirmación final siempre es por WhatsApp.',
+    senaWarning: '⚠️ <strong>Sin la seña del 50% el lugar no queda garantizado.</strong> Te la pedimos una vez que confirmemos disponibilidad por WhatsApp.',
+    consultaTitle: '¿Tenés alguna consulta?',
+    consultaSub: 'Completá el formulario y te respondemos por WhatsApp en minutos',
+    cqNombrePH: 'Tu nombre *',
+    cqCabanaOpt: '¿Qué cabaña te interesa?',
+    cqPersonasOpt: '¿Cuántas personas?',
+    btnConsulta: 'Consultar por WhatsApp',
+    vlaToggleShow: 'Ver actividades ▾',
     labelCheckin: 'Check-in',
     labelCheckout: 'Check-out',
     labelPersonas: 'Personas',
@@ -2653,7 +2704,7 @@ const LANGS = {
     loadingText: 'Conectando con disponibilidad en tiempo real...',
     badgeLibre: 'Disponible', badgeOcup: 'Ocupada',
     btnVerMas: '🔍 Ver más', btnReservar: 'Reservar',
-    desde: 'Desde', consulta: 'Consultá',
+    desde: 'Desde', consulta: 'Consultá', tarifaFecha: 'Elegí fechas para ver tarifas',
     totalEstadia: 'Total estadía',
     noResults: '<h3>Sin disponibilidad para esas fechas</h3><p>Probá con otras fechas o menos personas.<br>También podés consultarnos directamente.</p>',
     mapTitle: 'Nuestras ubicaciones',
@@ -2686,15 +2737,21 @@ const LANGS = {
     fPers: 'Cantidad de personas',
     fMasc: '¿Traés mascotas?', fMascNo: 'No', fMascSi: 'Sí',
     fConsulta: 'Consultas o pedidos especiales', fConsultaPH: 'Opcional...',
-    btnConf: 'Ver datos de pago →',
-    confTitle: '¡Casi listo,', confSub: 'Transferí la seña para confirmar tu reserva',
+    btnConf: '💬 Enviar reserva por WhatsApp →',
+    confTitle: '¡Listo,', confSub: 'Tu reserva fue registrada. Te confirmamos por WhatsApp y te pasamos los datos de pago.',
     confCab: 'Cabaña', confFechas: 'Fechas', confPers: 'Personas',
-    confTotal: 'Total estadía', confSena: 'Seña a transferir ahora',
-    confNote: 'Transferí la seña al CBU de arriba y enviá el comprobante por WhatsApp a Francisco al <strong>+54 9 2944 562177</strong>. Confirmamos tu reserva en cuestión de minutos. El saldo (<span class="conf-saldo-txt"></span>) se abona al check-in.',
-    btnWspFinal: '💬 Ya transferí — enviar comprobante por WhatsApp',
+    confTotal: 'Total estadía', confSena: 'Seña estimada (50%)',
+    confNote: 'Hacé clic en el botón para abrir WhatsApp con tu consulta pre-armada. Te enviamos los datos de transferencia una vez que confirmemos disponibilidad y precio.',
+    btnWspFinal: '💬 Enviar reserva por WhatsApp',
     footerLine1: '<strong>Sombra Verde</strong> · Villa La Angostura, Neuquén',
     footerLine2: 'Reservas directas sin comisión · +54 9 2944 562177',
     igFollowers: '@sombraverde.vla · 2.1K seguidores',
+    procesoTitle: '¿Cómo reservar?',
+    procesoPasos: ['Elegí fechas y huéspedes','Elegí tu cabaña','Completá tus datos','Enviá la seña 50%','Confirmá por WhatsApp','¡Disfrutá Sombra Verde!'],
+    searchHint: 'Elegí fechas de llegada y salida, sumá adultos y menores, y buscá tu cabaña ideal.',
+    adultos: 'Adultos', adultosSub: '13 años o más', menores: 'Menores', menoresSub: 'Hasta 12 años',
+    popupPasos: ['Elegí fechas y cantidad de huéspedes','Elegí tu cabaña — 7 opciones en dos sectores','Completá tus datos en menos de 1 minuto','Enviá la seña del 50% y confirmamos en minutos','¡Disfrutá tu estadía en Patagonia!'],
+    amenityMap: {'🏠 Todo planta baja':'🏠 Todo planta baja','🏡 2 plantas':'🏡 2 plantas','📍 Céntrica':'📍 Céntrica','🛏 1 dormitorio':'🛏 1 dormitorio','🛏 2 dormitorios':'🛏 2 dormitorios','🔥 Parrilla':'🔥 Parrilla','📶 WiFi':'📶 WiFi','🚗 Estacionamiento':'🚗 Estacionamiento','📺 Smart TV':'📺 Smart TV','🧴 Ropa de cama':'🧴 Ropa de cama','🍼 Cuna disponible':'🍼 Cuna disponible','🍼 Cuna':'🍼 Cuna','🌳 Parque amplio':'🌳 Parque amplio','🌳 Parque':'🌳 Parque','🚿 2 baños':'🚿 2 baños'},
     vlaTitulo: '¿Qué hacer en Villa La Angostura?',
     vlaSub: 'Naturaleza, aventura y gastronomía todo el año en la Patagonia',
     vlaActividades: [
@@ -2731,8 +2788,8 @@ const LANGS = {
   en: {
     headerSub: 'Villa La Angostura · Neuquén',
     promoBanner: '🍂 <strong>Low season:</strong> special prices April–June · Fewer tourists, more Patagonia · <strong>Check availability</strong>',
-    heroTag: 'Argentine Patagonia',
-    heroTitle: 'Your retreat in<br><em>Villa La Angostura</em>',
+    heroTag: 'Argentine Patagonia · Villa La Angostura',
+    heroTitle: 'Cabin rentals in<br><em>Villa La Angostura</em>',
     heroSub: '7 cabins · Two central locations · Owners on-site · Open year-round',
     labelCheckin: 'Check-in',
     labelCheckout: 'Check-out',
@@ -2746,7 +2803,7 @@ const LANGS = {
     loadingText: 'Connecting to real-time availability...',
     badgeLibre: 'Available', badgeOcup: 'Occupied',
     btnVerMas: '🔍 View more', btnReservar: 'Book',
-    desde: 'From', consulta: 'Inquire',
+    desde: 'From', consulta: 'Inquire', tarifaFecha: 'Select dates to see rates',
     totalEstadia: 'Total stay',
     noResults: '<h3>No availability for those dates</h3><p>Try different dates or fewer guests.<br>You can also contact us directly.</p>',
     mapTitle: 'Our locations',
@@ -2758,7 +2815,7 @@ const LANGS = {
     faqs: [
       ['How does the booking process work?', 'Choose your cabin, select dates and fill in your details. Pay a 30% deposit via bank transfer, cash or Mercado Pago and send the receipt via WhatsApp to Francisco (+54 9 2944 562177). We confirm your booking within 2 hours.'],
       ['What is the cancellation policy?', 'The deposit is non-refundable. If anything comes up, let us know in advance and we can reschedule your dates. Just message us on WhatsApp.'],
-      ['What are the check-in and check-out times?', 'Check-in from 2:00 PM. Check-out by 10:00 AM. If you need special hours, let us know in advance — we\'ll do our best to accommodate you.'],
+      ['What are the check-in and check-out times?', 'Check-in from 2:00 PM. Check-out by 10:00 AM. If you need special hours, let us know in advance — we will do our best to accommodate you.'],
       ['Are pets allowed?', 'In some cabins, yes. Contact us before booking letting us know what pet you\'re bringing and we\'ll confirm availability.'],
       ['Is there a minimum stay?', 'It depends on the season. During high season and long weekends the minimum is 3 nights. In low season, from 2 nights. Contact us for specific dates.'],
       ['What payment methods do you accept?', 'We accept cash, bank transfer, Mercado Pago and US dollars. The remaining balance is paid at check-in.'],
@@ -2779,15 +2836,21 @@ const LANGS = {
     fPers: 'Number of guests',
     fMasc: 'Are you bringing pets?', fMascNo: 'No', fMascSi: 'Yes',
     fConsulta: 'Special requests or questions', fConsultaPH: 'Optional...',
-    btnConf: 'View payment details →',
-    confTitle: 'Almost done,', confSub: 'Transfer the deposit to confirm your booking',
+    btnConf: '💬 Send reservation via WhatsApp →',
+    confTitle: 'Almost ready,', confSub: 'Your booking was registered. We will confirm via WhatsApp and send payment details.',
     confCab: 'Cabin', confFechas: 'Dates', confPers: 'Guests',
-    confTotal: 'Total stay', confSena: 'Deposit to transfer now',
-    confNote: 'Transfer the deposit to the account above and send the receipt via WhatsApp to Francisco at <strong>+54 9 2944 562177</strong>. We\'ll confirm your booking within 2 hours. The balance (<span class="conf-saldo-txt"></span>) is due at check-in.',
-    btnWspFinal: '💬 Transferred — send receipt via WhatsApp',
+    confTotal: 'Total stay', confSena: 'Estimated deposit (50%)',
+    confNote: 'Tap the button to open WhatsApp with your pre-filled inquiry. We will send you transfer details once we confirm availability and price.',
+    btnWspFinal: '💬 Send reservation via WhatsApp',
     footerLine1: '<strong>Sombra Verde</strong> · Villa La Angostura, Neuquén',
     footerLine2: 'Direct bookings, no fees · +54 9 2944 562177',
     igFollowers: '@sombraverde.vla · 2.1K followers',
+    procesoTitle: 'How to book?',
+    procesoPasos: ['Choose dates & guests','Choose your cabin','Fill in your details','Pay 50% deposit','Confirm via WhatsApp','Enjoy Sombra Verde!'],
+    searchHint: 'Choose check-in and check-out dates, add adults and children, and find your ideal cabin.',
+    adultos: 'Adults', adultosSub: '13 years or older', menores: 'Children', menoresSub: 'Up to 12 years',
+    popupPasos: ['Choose dates and number of guests','Choose your cabin — 7 options in two areas','Fill in your details in under 1 minute','Pay 50% deposit and we confirm in minutes','Enjoy your stay in Patagonia!'],
+    amenityMap: {'🏠 Todo planta baja':'🏠 Ground floor','🏡 2 plantas':'🏡 2 floors','📍 Céntrica':'📍 Central','🛏 1 dormitorio':'🛏 1 bedroom','🛏 2 dormitorios':'🛏 2 bedrooms','🔥 Parrilla':'🔥 BBQ grill','📶 WiFi':'📶 WiFi','🚗 Estacionamiento':'🚗 Parking','📺 Smart TV':'📺 Smart TV','🧴 Ropa de cama':'🧴 Bed linen','🍼 Cuna disponible':'🍼 Crib available','🍼 Cuna':'🍼 Crib','🌳 Parque amplio':'🌳 Large garden','🌳 Parque':'🌳 Garden','🚿 2 baños':'🚿 2 bathrooms'},
     vlaTitulo: 'What to do in Villa La Angostura?',
     vlaSub: 'Nature, adventure and gastronomy year-round in Patagonia',
     vlaActividades: [
@@ -2819,6 +2882,129 @@ const LANGS = {
       s5: { tipo:'Cabin · Aluminé 961 · Up to 5 guests', desc:'Same layout as Sombra 4 — 2 stories, living/kitchen/bathroom on ground floor and 2 bedrooms upstairs (1 double + 1 with 3 single beds). Spacious garden and private parking.' },
       s6: { tipo:'Cabin · Aluminé 961 · Up to 4 guests · 2 bathrooms', desc:'The only cabin in the complex with 2 full bathrooms. Ground floor: living/kitchen/double bedroom/bathroom. Upper floor: bedroom with 2 single beds/bathroom. Perfect for two couples or families wanting total privacy.' },
       s7: { tipo:'Cabin · Aluminé 961 · Up to 5 guests', desc:'2-story cabin with great layout. Ground floor: living/kitchen/dining/bathroom/double bedroom. Upper floor: bedroom with 3 single beds. Spacious garden and parking. Ideal for groups and families.' }
+    },
+    consultaTitle: 'Any questions?',
+    consultaSub: 'Fill out the form and we will reply on WhatsApp in minutes',
+    cqNombrePH: 'Your name *', cqTelPH: 'WhatsApp *', cqMsgPH: 'Any question or comment? (optional)',
+    cqCabanaOpt: 'Which cabin interests you?', cqCabanaNoSe: 'Not sure yet',
+    cqPersonasOpt: 'How many guests?', cqPersonasMas: '6 or more',
+    btnConsulta: 'Contact us on WhatsApp',
+    vlaToggleShow: 'See activities ▾', vlaToggleHide: 'Hide ▴',
+    mapTitle: 'Our locations',
+    mapALabel: 'Sector A · Sombra 1, 2 & 3', mapASub: 'Michay 268 · Steps from downtown',
+    mapBLabel: 'Sector B · Sombra 4, 5, 6 & 7', mapBSub: 'Aluminé 961 · Barrio Norte',
+    verMaps: 'View on Maps ↗',
+    heroStars: '★★★★★ 4.8 · 224 Google reviews ↗',
+    betaDisclaimer: '⚙️ Beta site — prices and dates shown are estimates. Final confirmation is always via WhatsApp.',
+    senaWarning: '⚠️ Without the 50% deposit the booking is not guaranteed. We will send payment details once we confirm via WhatsApp.'
+  },
+  pt: {
+    headerSub: 'Villa La Angostura · Neuquén',
+    promoBanner: '🍂 <strong>Baixa temporada:</strong> preços especiais abril–junho · Menos turistas, mais Patagônia · <strong>Verificar disponibilidade</strong>',
+    heroTag: 'Patagônia Argentina · Villa La Angostura',
+    heroTitle: 'Aluguel de cabanas<br><em style="font-size:clamp(1.9rem,5vw,3.2rem);letter-spacing:-.02em;">em Villa La Angostura</em>',
+    heroSub: '7 cabanas · Dois setores centrais · Atendimento personalizado · Aberto o ano todo',
+    heroStars: '★★★★★ 4.8 · 224 avaliações no Google ↗',
+    labelCheckin: 'Check-in',
+    labelCheckout: 'Check-out',
+    labelPersonas: 'Hóspedes',
+    optTodas: 'Todos',
+    opt2: '2 hóspedes', opt3: '3 hóspedes', opt4: '4 hóspedes', opt5: '5 ou mais',
+    btnBuscar: 'Buscar',
+    counterLabel: 'avaliações verificadas',
+    counterSeg: 'seguidores',
+    resultsTitle: 'Nossas cabanas',
+    loadingText: 'Conectando à disponibilidade em tempo real...',
+    badgeLibre: 'Disponível', badgeOcup: 'Ocupada',
+    btnVerMas: '🔍 Ver mais', btnReservar: 'Reservar',
+    desde: 'A partir de', consulta: 'Consulte', tarifaFecha: 'Selecione datas para ver tarifas',
+    totalEstadia: 'Total da estadia',
+    noResults: '<h3>Sem disponibilidade para essas datas</h3><p>Tente outras datas ou menos hóspedes.<br>Você também pode nos contatar diretamente.</p>',
+    mapTitle: 'Nossas localizações',
+    mapALabel: 'Setor A · Sombra 1, 2 e 3', mapASub: 'Michay 268 · A metros do centro',
+    mapBLabel: 'Setor B · Sombra 4, 5, 6 e 7', mapBSub: 'Aluminé 961 · Bairro Norte',
+    verMaps: 'Ver no Maps ↗',
+    reviewsTitle: 'O que nossos hóspedes dizem',
+    faqTitle: 'Perguntas frequentes',
+    faqs: [
+      ['Como funciona o processo de reserva?', 'Escolha a cabana, selecione as datas e preencha seus dados. Pague 50% de sinal por transferência bancária ou Mercado Pago e envie o comprovante pelo WhatsApp para Francisco (+54 9 2944 562177). Confirmamos sua reserva em minutos.'],
+      ['Qual é a política de cancelamento?', 'O sinal não é reembolsável. Em caso de imprevisto, se avisar com antecedência, podemos remarcar as datas. Escreva-nos pelo WhatsApp.'],
+      ['Quais são os horários de check-in e check-out?', 'Check-in a partir das 14h. Check-out até as 10h. Se precisar de horários especiais, consulte-nos com antecedência — faremos o possível para acomodá-lo.'],
+      ['São permitidos animais de estimação?', 'Em algumas cabanas sim. Consulte-nos antes de reservar informando qual animal você trará e confirmaremos a disponibilidade.'],
+      ['Há mínimo de noites?', 'Depende da temporada. Na alta temporada e feriados prolongados o mínimo é 3 noites. Na baixa temporada, a partir de 2 noites. Consulte-nos para datas específicas.'],
+      ['Quais formas de pagamento aceitam?', 'Aceitamos dinheiro, transferência bancária, Mercado Pago e dólares em espécie. O saldo restante é pago no check-in.'],
+      ['O que está incluído em cada cabana?', 'Todas as cabanas incluem roupa de cama, toalhas, cozinha totalmente equipada, WiFi, Smart TV, aquecimento, churrasqueira individual e estacionamento próprio. O complexo tem jardim amplo compartilhado.'],
+      ['Onde ficam as cabanas?', 'Temos dois setores. Setor A (Sombra 1, 2 e 3) na Michay 268 — a metros do centro, supermercados e restaurantes a pé. Setor B (Sombra 4, 5, 6 e 7) na Aluminé 961, Bairro Norte — a 20 minutos a pé do centro, mais tranquilo e com jardim amplo.']
+    ],
+    detInfoLabels: { Capacidad:'Capacidade', Distribución:'Distribuição', Baños:'Banheiros', Sector:'Setor', 'Check-in':'Check-in', 'Check-out':'Check-out', Ubicación:'Localização', 'Precio desde':'Preço a partir de' },
+    detBtnWsp: '💬 Consultar', detBtnRes: 'Reservar',
+    detPrecioLabel: 'Preço por noite', detDesde: 'A partir de',
+    detMapLink: '📍 Ver localização no Google Maps ↗',
+    modalSub: 'Selecione suas datas',
+    calLegLibre: 'Livre', calLegOcup: 'Ocupado', calLegSel: 'Sua seleção',
+    nbPn: 'Preço por noite', nbTotal: 'Total da estadia', nbSena: 'Sinal (50%)',
+    formTitle: 'Seus dados',
+    fNombre: 'Nome completo *', fNombrePH: 'João Silva',
+    fTel: 'WhatsApp *', fTelPH: '+55 11 91234-5678',
+    fEmail: 'Email *', fEmailPH: 'joao@email.com',
+    fPers: 'Número de hóspedes',
+    fMasc: 'Você traz animais de estimação?', fMascNo: 'Não', fMascSi: 'Sim',
+    fConsulta: 'Pedidos especiais ou perguntas', fConsultaPH: 'Opcional...',
+    btnConf: '💬 Enviar reserva pelo WhatsApp →',
+    confTitle: 'Pronto,', confSub: 'Sua reserva foi registrada. Confirmaremos pelo WhatsApp e enviaremos os dados de pagamento.',
+    confCab: 'Cabana', confFechas: 'Datas', confPers: 'Hóspedes',
+    confTotal: 'Total da estadia', confSena: 'Sinal estimado (50%)',
+    confNote: 'Clique no botão para abrir o WhatsApp com sua reserva pré-preenchida. Enviaremos os dados de transferência após confirmar disponibilidade e preço.',
+    btnWspFinal: '💬 Enviar reserva pelo WhatsApp',
+    footerLine1: '<strong>Sombra Verde</strong> · Villa La Angostura, Neuquén',
+    footerLine2: 'Reservas diretas sem comissão · +54 9 2944 562177',
+    igFollowers: '@sombraverde.vla · 2.1K seguidores',
+    procesoTitle: 'Como reservar?',
+    procesoPasos: ['Escolha datas e hóspedes','Escolha sua cabana','Preencha seus dados','Pague sinal 50%','Confirme pelo WhatsApp','Aproveite a Sombra Verde!'],
+    searchHint: 'Escolha as datas de entrada e saída, adicione adultos e crianças, e encontre sua cabana ideal.',
+    adultos: 'Adultos', adultosSub: '13 anos ou mais', menores: 'Crianças', menoresSub: 'Até 12 anos',
+    popupPasos: ['Escolha datas e número de hóspedes','Escolha sua cabana — 7 opções em dois setores','Preencha seus dados em menos de 1 minuto','Pague o sinal de 50% e confirmamos em minutos','Aproveite sua estadia na Patagônia!'],
+    amenityMap: {'🏠 Todo planta baja':'🏠 Térrea','🏡 2 plantas':'🏡 2 andares','📍 Céntrica':'📍 Central','🛏 1 dormitorio':'🛏 1 quarto','🛏 2 dormitorios':'🛏 2 quartos','🔥 Parrilla':'🔥 Churrasqueira','📶 WiFi':'📶 WiFi','🚗 Estacionamiento':'🚗 Estacionamento','📺 Smart TV':'📺 Smart TV','🧴 Ropa de cama':'🧴 Roupa de cama','🍼 Cuna disponible':'🍼 Berço disponível','🍼 Cuna':'🍼 Berço','🌳 Parque amplio':'🌳 Jardim amplo','🌳 Parque':'🌳 Jardim','🚿 2 baños':'🚿 2 banheiros'},
+    vlaTitulo: 'O que fazer em Villa La Angostura?',
+    vlaSub: 'Natureza, aventura e gastronomia o ano todo na Patagônia',
+    vlaToggleShow: 'Ver atividades ▾', vlaToggleHide: 'Ocultar ▴',
+    vlaActividades: [
+      { name: 'Floresta de Arrayanes', desc: 'Trilha de 12 km pela Península de Quetrihué com arrayanes centenários de até 600 anos. Pode ser feita a pé, de bicicleta ou em excursão lacustre.' },
+      { name: 'Caiaque e navegação', desc: 'Explore o Lago Nahuel Huapi e suas baías de caiaque, SUP ou veleiro. Uma das atividades mais populares no verão.' },
+      { name: 'Cerro Bayo', desc: 'Estação de esqui no inverno e trekking + teleférico no verão. Vistas panorâmicas dos lagos e da cordilheira a 1.500 m.' },
+      { name: 'Rota dos 7 Lagos', desc: '112 km de paisagem única entre VLA e San Martín de los Andes cruzando sete lagos patagônicos. Imperdível de carro ou bicicleta.' },
+      { name: 'Trekking', desc: 'Trilhas para todos os níveis: Cascata Inacayal, Belvedere, Río Bonito e a Huella Andina. Florestas de coihues e lengas.' },
+      { name: 'Cavalgadas', desc: 'Passeios a cavalo por trilhas históricas até mirantes naturais com vistas ao lago e à montanha.' },
+      { name: 'Pesca com mosca', desc: 'O Rio Correntoso, um dos mais curtos do mundo, é referência mundial da pesca esportiva com mosca.' },
+      { name: 'Gastronomia', desc: 'Truta defumada, cordeiro, queijos e chocolates artesanais. A Av. Arrayanes concentra os melhores restaurantes e lojas.' },
+      { name: 'Mountain Bike', desc: 'Estradas de cascalho e trilhas de terra até o Lago Espejo e Correntoso. Alugue bicicleta no centro ou em Puerto Manzano.' },
+      { name: 'Praias e balneários', desc: 'Lago Correntoso, Puerto Manzano e Bahía Mansa oferecem praias de areia vulcânica com águas cristalinas ideais para o verão.' }
+    ],
+    llegarTitulo: 'Como chegar a Villa La Angostura?',
+    llegarSub: 'Patagônia Argentina · Província de Neuquén',
+    llegarCards: [
+      { titulo: 'De avião + traslado', desc: 'Voe para o Aeroporto de Bariloche (BRC), o mais próximo a 80 km. De lá há minivans e ônibus diretos para VLA. Chapelco (San Martín de los Andes) é uma alternativa.' },
+      { titulo: 'De ônibus', desc: 'Empresas como Via Bariloche e Albus conectam VLA com Bariloche, San Martín de los Andes e Neuquén. De Buenos Aires você pode chegar com baldeação em Bariloche.' },
+      { titulo: 'De carro', desc: 'De Neuquén capital pela Ruta 22 e depois Ruta 40. De Buenos Aires pela Ruta Nacional 40 atravessando a Patagônia. O caminho oferece paisagens espetaculares.' },
+      { titulo: 'Transfer privado', desc: 'Do aeroporto de Bariloche há minivans e remises porta a porta. Cômodo, direto e sem esperas.' },
+      { titulo: 'Desde o Chile', desc: 'Cruzando pelo passo Cardenal Samoré desde Osorno ou Puerto Montt. Uma rota cênica entre florestas e vulcões que muitos turistas fazem como parte de sua viagem.' }
+    ],
+    consultaTitle: 'Tem alguma dúvida?',
+    consultaSub: 'Preencha o formulário e respondemos pelo WhatsApp em minutos',
+    cqNombrePH: 'Seu nome *', cqTelPH: 'WhatsApp *', cqMsgPH: 'Alguma pergunta ou comentário? (opcional)',
+    cqCabanaOpt: 'Qual cabana te interessa?', cqCabanaNoSe: 'Ainda não sei',
+    cqPersonasOpt: 'Quantas pessoas?', cqPersonasMas: '6 ou mais',
+    btnConsulta: 'Consultar pelo WhatsApp',
+    betaDisclaimer: '⚙️ Site em versão beta — preços e datas mostrados são estimativos. A confirmação final é sempre pelo WhatsApp.',
+    senaWarning: '⚠️ Sem o sinal de 50% o lugar não fica garantido. Enviaremos os dados de pagamento após confirmar disponibilidade pelo WhatsApp.',
+    cabanas: {
+      s1: { tipo:'Cabana · Michay 268 · Até 5 hóspedes', desc:'Toda no térreo — 2 quartos: 1 casal e 1 com camas separadas (uma delas é divã, para o 5º hóspede). A metros do centro, supermercados e restaurantes a pé.' },
+      s2: { tipo:'Cabana · Michay 268 · Até 3 hóspedes', desc:'Toda no térreo, aconchegante e luminosa. 1 quarto casal + sommier na sala para o 3º hóspede. A passos do centro — supermercados, cafeterias e o lago a pé.' },
+      s3: { tipo:'Cabana · Michay 268 · Até 3 hóspedes', desc:'2 andares com sala/cozinha no térreo e quarto/banheiro no superior. 1 quarto casal + sofá-cama na sala. Central, tranquila e perto de tudo.' },
+      s4: { tipo:'Cabana · Aluminé 961 · Até 5 hóspedes', desc:'2 andares — térreo: cozinha, sala e copa. Superior: quarto casal, quarto com 3 camas separadas e banheiro. Jardim amplo, tranquila e com todo o espaço necessário.' },
+      s5: { tipo:'Cabana · Aluminé 961 · Até 5 hóspedes', desc:'2 andares — térreo: cozinha, sala e copa. Superior: quarto casal, quarto com 3 camas separadas e banheiro. Jardim amplo e estacionamento próprio.' },
+      s6: { tipo:'Cabana · Aluminé 961 · Até 4 hóspedes · 2 banheiros', desc:'A única do complexo com 2 banheiros. Térreo: sala, cozinha, copa, quarto casal e banheiro. Superior: quarto com camas separadas e banheiro. Ideal para dois casais ou família com total privacidade.' },
+      s7: { tipo:'Cabana · Aluminé 961 · Até 5 hóspedes', desc:'2 andares — térreo: sala, cozinha, copa, banheiro e quarto casal. Superior: quarto com camas separadas. Jardim amplo e estacionamento. Ideal para grupos e famílias.' }
     }
   }
 };
@@ -2832,6 +3018,7 @@ function setLang(lang) {
   // Botones activos
   document.getElementById('lang-es').classList.toggle('active', lang === 'es');
   document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+  const ptBtn = document.getElementById('lang-pt'); if (ptBtn) ptBtn.classList.toggle('active', lang === 'pt');
 
   // Header
   document.querySelector('.header-sub').textContent = T.headerSub;
@@ -2839,13 +3026,16 @@ function setLang(lang) {
   // Banner promo
   const banner = document.querySelector('.promo-banner-text');
   if (banner && window._bannerEstacion && window._bannerTextos) {
-    banner.innerHTML = window._bannerTextos[lang][window._bannerEstacion];
+    const bannerTexto = window._bannerTextos[lang] || window._bannerTextos['es'];
+    banner.innerHTML = bannerTexto[window._bannerEstacion];
   }
 
   // Hero
   document.querySelector('.hero-tag').textContent = T.heroTag;
   document.querySelector('.hero h1').innerHTML = T.heroTitle;
-  document.querySelector('.hero-sub').textContent = T.heroSub;
+  const heroSubs = document.querySelectorAll('.hero-sub');
+  if (heroSubs[0]) heroSubs[0].textContent = T.heroSub;
+  if (heroSubs[1] && T.heroStars) heroSubs[1].innerHTML = '<a href="https://maps.app.goo.gl/M17LHwKJcSRuQHsi8" target="_blank" rel="noopener" style="color:var(--accent);font-weight:500;text-decoration:none;">' + T.heroStars + '</a>';
 
   // Search
   document.querySelector('label[for="checkin"], .field label:nth-child(1)');
@@ -2894,10 +3084,12 @@ function setLang(lang) {
     if (descEl) descEl.textContent = cab.desc;
     if (badgeEl) badgeEl.textContent = badgeEl.classList.contains('badge-ocupada') ? T.badgeOcup : T.badgeLibre;
     if (plEl && plEl.textContent.trim() !== '') plEl.textContent = T.desde;
-    if (pnEl && pnEl.textContent.includes('Consultá') || pnEl && pnEl.textContent.includes('Inquire')) {
+    if (pnEl && (pnEl.textContent.includes('Consultá') || pnEl.textContent.includes('Inquire'))) {
       const span = pnEl.querySelector('span');
       pnEl.textContent = T.consulta;
       if (span) pnEl.appendChild(span);
+    } else if (pnEl && (pnEl.textContent.includes('fechas') || pnEl.textContent.includes('dates') || pnEl.textContent.includes('rates'))) {
+      pnEl.innerHTML = '<span style="font-size:.72rem;color:#aaa;font-style:italic;line-height:1.4;">' + T.tarifaFecha + '</span>';
     }
     if (verEl) verEl.textContent = T.btnVerMas;
     if (resEl) resEl.textContent = T.btnReservar;
@@ -2967,9 +3159,9 @@ function setLang(lang) {
   if (calLeg[1]) calLeg[1].lastChild.textContent = T.calLegOcup;
   if (calLeg[2]) calLeg[2].lastChild.textContent = T.calLegSel;
   const nbRows = document.querySelectorAll('.nights-box .n-row');
-  if (nbRows[1]) nbRows[1].firstChild.textContent = T.nbPn;
-  if (nbRows[2]) nbRows[2].firstChild.textContent = T.nbTotal;
-  if (nbRows[3]) nbRows[3].firstChild.textContent = T.nbSena;
+  // nbRows[0]=fechas/noches, nbRows[1]=total, nbRows[2]=sena (nb-pn-wrap no es n-row)
+  if (nbRows[1]) nbRows[1].firstChild.textContent = T.nbTotal;
+  if (nbRows[2]) nbRows[2].firstChild.textContent = T.nbSena;
 
   // Formulario
   const formSec = document.querySelector('.form-sec h4');
@@ -3008,14 +3200,45 @@ function setLang(lang) {
     if (igLink) igLink.lastChild.textContent = ' ' + T.igFollowers;
   }
 
-  // WA float
-  const waFloat = document.querySelector('.wa-float');
-  if (waFloat) {
-    const msg = lang === 'en' ? 'Hello! I would like to check availability.' : 'Hola! Quiero consultar disponibilidad.';
-    waFloat.onclick = () => window.open(`https://wa.me/5492944562177?text=${encodeURIComponent(msg)}`, '_blank');
+  // Guardar preferencia
+  // Proceso ¿Cómo reservar?
+  const procesoTitle = document.querySelector('.proceso-title');
+  if (procesoTitle && T.procesoTitle) procesoTitle.textContent = T.procesoTitle;
+  if (T.procesoPasos) {
+    document.querySelectorAll('.proceso-label').forEach((el, i) => {
+      if (T.procesoPasos[i]) el.textContent = T.procesoPasos[i];
+    });
   }
 
-  // Guardar preferencia
+  // Buscador — hint y labels huéspedes
+  const searchHintEl = document.getElementById('search-hint-txt');
+  if (searchHintEl && T.searchHint) searchHintEl.textContent = T.searchHint;
+  const lblHuespedes = document.getElementById('lbl-huespedes');
+  if (lblHuespedes && T.labelPersonas) lblHuespedes.textContent = T.labelPersonas;
+  const lblAdultos = document.getElementById('lbl-adultos');
+  const subAdultos = document.getElementById('sub-adultos');
+  const lblMenores = document.getElementById('lbl-menores');
+  const subMenores = document.getElementById('sub-menores');
+  if (lblAdultos) lblAdultos.textContent = T.adultos || 'Adultos';
+  if (subAdultos) subAdultos.textContent = T.adultosSub || '13 años o más';
+  if (lblMenores) lblMenores.textContent = T.menores || 'Menores';
+  if (subMenores) subMenores.textContent = T.menoresSub || 'Hasta 12 años';
+
+  // Amenities de las cards — usar data-original para siempre partir del ES
+  if (T.amenityMap) {
+    document.querySelectorAll('.cabana-card .amenity[data-original]').forEach(el => {
+      const orig = el.dataset.original;
+      el.textContent = T.amenityMap[orig] || orig;
+    });
+  }
+
+  // Popup pasos
+  if (T.popupPasos) {
+    document.querySelectorAll('.popup-paso-txt').forEach((el, i) => {
+      if (T.popupPasos[i]) el.textContent = T.popupPasos[i];
+    });
+  }
+
   // Qué hacer en VLA
   const vlaTitulo = document.querySelector('.vla-titulo');
   const vlaSub = document.querySelector('.vla-sub');
@@ -3043,6 +3266,62 @@ function setLang(lang) {
     if (tituloEl) tituloEl.textContent = card.titulo;
     if (descEl) descEl.textContent = card.desc;
   });
+
+  // Sección consulta rápida
+  const consultaTitle = document.querySelector('.consulta-title');
+  const consultaSub   = document.querySelector('.consulta-sub');
+  const btnConsulta   = document.querySelector('.btn-consulta');
+  if (consultaTitle && T.consultaTitle) consultaTitle.textContent = T.consultaTitle;
+  if (consultaSub   && T.consultaSub)   consultaSub.textContent   = T.consultaSub;
+  if (btnConsulta   && T.btnConsulta) {
+    const svg = btnConsulta.querySelector('svg');
+    btnConsulta.textContent = T.btnConsulta;
+    if (svg) btnConsulta.prepend(svg);
+  }
+  const cqNombre = document.getElementById('cq-nombre');
+  const cqTel    = document.getElementById('cq-tel');
+  const cqMsg    = document.getElementById('cq-msg');
+  if (cqNombre && T.cqNombrePH) cqNombre.placeholder = T.cqNombrePH;
+  if (cqTel    && T.cqTelPH)    cqTel.placeholder    = T.cqTelPH;
+  if (cqMsg    && T.cqMsgPH)    cqMsg.placeholder     = T.cqMsgPH;
+  const cqCabana = document.getElementById('cq-cabana');
+  if (cqCabana && T.cqCabanaOpt) {
+    cqCabana.options[0].text = T.cqCabanaOpt;
+    cqCabana.options[8].text = T.cqCabanaNoSe;
+  }
+  const cqPersonas = document.getElementById('cq-personas');
+  if (cqPersonas && T.cqPersonasOpt) {
+    cqPersonas.options[0].text = T.cqPersonasOpt;
+    cqPersonas.options[6].text = T.cqPersonasMas;
+  }
+
+  // VLA toggle button
+  const vlaToggleBtn = document.getElementById('vla-toggle-btn');
+  if (vlaToggleBtn && T.vlaToggleShow) {
+    const isOpen = document.getElementById('vla-grid-wrap') && document.getElementById('vla-grid-wrap').style.maxHeight !== '0px' && document.getElementById('vla-grid-wrap').style.maxHeight !== '';
+    vlaToggleBtn.textContent = isOpen ? T.vlaToggleHide : T.vlaToggleShow;
+  }
+
+  // Disclaimer beta
+  document.querySelectorAll('[data-beta-disclaimer]').forEach(el => {
+    if (T.betaDisclaimer) el.textContent = T.betaDisclaimer;
+  });
+
+  // Aviso seña en pantalla confirmación
+  const senaWarnEl = document.querySelector('[data-sena-warning]');
+  if (senaWarnEl && T.senaWarning) senaWarnEl.innerHTML = T.senaWarning;
+
+  // WA float msg + texto
+  const waFloat = document.querySelector('.wa-float');
+  if (waFloat) {
+    const msgs = { es: 'Hola! Quiero consultar disponibilidad.', en: 'Hello! I would like to check availability.', pt: 'Olá! Gostaria de verificar disponibilidade.' };
+    waFloat.onclick = () => window.open('https://wa.me/5492944562177?text=' + encodeURIComponent(msgs[lang] || msgs.es), '_blank');
+  }
+  const waFloatTxt = document.getElementById('wa-float-txt');
+  if (waFloatTxt) {
+    const waTxts = { es: '¿Consultas? Escribinos', en: 'Questions? Chat with us', pt: 'Dúvidas? Fale conosco' };
+    waFloatTxt.textContent = waTxts[lang] || waTxts.es;
+  }
 
   localStorage.setItem('sv_lang', lang);
 }
