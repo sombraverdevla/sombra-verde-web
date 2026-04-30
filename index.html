@@ -611,8 +611,8 @@ header{background:#0e2a42;padding:1.2rem 2rem;display:flex;align-items:center;ju
 .btn-consulta{width:100%;background:#25D366;color:white;border:none;border-radius:11px;padding:12px;font-size:.9rem;font-weight:600;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s;}
 .btn-consulta:hover{background:#1da851;}
 /* ── Botón compartir ── */
-.btn-compartir{background:none;border:1.5px solid var(--warm);color:#777;padding:7px 11px;border-radius:10px;font-family:inherit;font-size:.75rem;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;margin-right:4px;}
-.btn-compartir:hover{border-color:var(--sage);color:var(--forest);}
+.btn-compartir{background:none;border:1.5px solid #25D366;color:#25D366;padding:7px 11px;border-radius:10px;font-family:inherit;font-size:.75rem;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:5px;margin-right:4px;font-weight:500;}
+.btn-compartir:hover{background:#25D366;color:#fff;border-color:#25D366;}
 /* ── Toast ── */
 .toast{position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(20px);background:#0e2a42;color:white;padding:10px 20px;border-radius:20px;font-size:.8rem;opacity:0;transition:all .3s;z-index:9999;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -1061,7 +1061,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           </div>
           <div>
             
-            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s1','Sombra 1')">🔗 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s1')">🔍 Ver más</button>
+            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s1','Sombra 1')">📲 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s1')">🔍 Ver más</button>
             <button class="btn-reservar" id="btn-s1" onclick="event.stopPropagation();abrirModal('Sombra 1','s1')">Reservar</button>
           </div>
         </div>
@@ -1098,7 +1098,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           </div>
           <div>
             
-            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s2','Sombra 2')">🔗 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s2')">🔍 Ver más</button>
+            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s2','Sombra 2')">📲 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s2')">🔍 Ver más</button>
             <button class="btn-reservar" id="btn-s2" onclick="event.stopPropagation();abrirModal('Sombra 2','s2')">Reservar</button>
           </div>
         </div>
@@ -1135,7 +1135,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           </div>
           <div>
             
-            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s3','Sombra 3')">🔗 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s3')">🔍 Ver más</button>
+            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s3','Sombra 3')">📲 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s3')">🔍 Ver más</button>
             <button class="btn-reservar" id="btn-s3" onclick="event.stopPropagation();abrirModal('Sombra 3','s3')">Reservar</button>
           </div>
         </div>
@@ -1172,7 +1172,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           </div>
           <div>
             
-            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s4','Sombra 4')">🔗 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s4')">🔍 Ver más</button>
+            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s4','Sombra 4')">📲 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s4')">🔍 Ver más</button>
             <button class="btn-reservar" id="btn-s4" onclick="event.stopPropagation();abrirModal('Sombra 4','s4')">Reservar</button>
           </div>
         </div>
@@ -1209,7 +1209,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           </div>
           <div>
             
-            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s5','Sombra 5')">🔗 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s5')">🔍 Ver más</button>
+            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s5','Sombra 5')">📲 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s5')">🔍 Ver más</button>
             <button class="btn-reservar" id="btn-s5" onclick="event.stopPropagation();abrirModal('Sombra 5','s5')">Reservar</button>
           </div>
         </div>
@@ -1246,7 +1246,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           </div>
           <div>
             
-            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s6','Sombra 6')">🔗 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s6')">🔍 Ver más</button>
+            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s6','Sombra 6')">📲 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s6')">🔍 Ver más</button>
             <button class="btn-reservar" id="btn-s6" onclick="event.stopPropagation();abrirModal('Sombra 6','s6')">Reservar</button>
           </div>
         </div>
@@ -1283,7 +1283,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
           </div>
           <div>
             
-            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s7','Sombra 7')">🔗 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s7')">🔍 Ver más</button>
+            <button class="btn-compartir" onclick="event.stopPropagation();compartirCabana('s7','Sombra 7')">📲 Compartir</button><button class="btn-cal" onclick="abrirDetalle('s7')">🔍 Ver más</button>
             <button class="btn-reservar" id="btn-s7" onclick="event.stopPropagation();abrirModal('Sombra 7','s7')">Reservar</button>
           </div>
         </div>
@@ -1485,7 +1485,7 @@ footer strong{color:var(--accent);font-family:'Playfair Display',serif;}
   </div>
 
   <!-- Banner Angostura VIP -->
-  <a class="avip-banner" href="https://www.instagram.com/angosturavip" target="_blank">
+  <a class="avip-banner" href="https://wa.me/5492944562177?text=Hola!%20Quiero%20consultar%20traslados.%20Los%20encontr%C3%A9%20a%20trav%C3%A9s%20del%20sitio%20web%20de%20Sombra%20Verde%20VLA." target="_blank">
     <img src="data:image/png;base64,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" alt="Angostura VIP">
     <div class="avip-info">
       <div class="avip-name">Angostura VIP · Traslados Patagónicos</div>
@@ -2602,23 +2602,108 @@ function toggleVla() {
 function toggleFaq(el) { el.closest('.faq-item').classList.toggle('open'); }
 
 // ─── TOAST ─────────────────────────────────────────────────────
-function showToast(msg) {
+function showToast(msg, duracion) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
+  setTimeout(() => t.classList.remove('show'), duracion || 2500);
 }
 
-// ─── COMPARTIR CABAÑA ──────────────────────────────────────────
+// ─── COMPARTIR CABAÑA POR WHATSAPP ────────────────────────────
 function compartirCabana(id, nombre) {
-  const url = window.location.href.split('?')[0] + '?cab=' + id;
-  if (navigator.share) {
-    navigator.share({ title: nombre + ' · Sombra Verde VLA', text: 'Mirá esta cabaña en Villa La Angostura 🌿', url });
-  } else if (navigator.clipboard) {
-    navigator.clipboard.writeText(url).then(() => showToast('🔗 Link copiado al portapapeles'));
-  } else {
-    showToast('🔗 ' + url);
+  const d = CABANAS_DATA[id];
+  if (!d) return;
+
+  // Capacidad máxima
+  const cap = CABANAS_IDS_CAP[id] || '?';
+
+  // Sector y ubicación
+  const sectorMap = { s1:'A', s2:'A', s3:'A', s4:'B', s5:'B', s6:'B', s7:'B' };
+  const sector = sectorMap[id] || '?';
+  const direccion = (id === 's1' || id === 's2' || id === 's3') ? 'Michay 268 · A metros del centro' : 'Aluminé 961 · Barrio Norte';
+  const mapsUrl = (id === 's1' || id === 's2' || id === 's3')
+    ? 'https://maps.app.goo.gl/5waEAutJ9CfH24Ja9'
+    : 'https://maps.app.goo.gl/21TMtnZsw2DeXh7g6';
+
+  // Servicios/amenities — lista vertical
+  const amenitiesList = d.amenities ? d.amenities.map(a => '  ' + a).join('\n') : '';
+
+  // Fechas y tarifa de la búsqueda actual
+  const ci  = document.getElementById('checkin').value;
+  const co  = document.getElementById('checkout').value;
+  const fmtD = s => { if (!s) return null; const [y,m,dd] = s.split('-'); return dd+'/'+m+'/'+y; };
+  const fmt  = n => '$' + Math.round(n).toLocaleString('es-AR');
+
+  let tarifaLinea = '';
+  if (ci && co && co > ci) {
+    const personas = getPersonas() || 2;
+    const noches = Math.round((new Date(co) - new Date(ci)) / 86400000);
+    const { total, tienePrecios } = calcularTotalReal(nombre, ci, co, personas);
+    const sena = Math.round(total * 0.5);
+    if (tienePrecios && total > 0) {
+      const pn = Math.round(total / noches);
+      tarifaLinea =
+        '\n\n💰 *Tarifa para tu búsqueda*' +
+        '\n📅 Fechas: ' + fmtD(ci) + ' → ' + fmtD(co) +
+        '\n🌙 Noches: ' + noches +
+        '\n👥 Personas: ' + personas +
+        '\n💵 Precio por noche: ' + fmt(pn) +
+        '\n💵 Total estadía: *' + fmt(total) + '*' +
+        '\n💳 Seña (50%): ' + fmt(sena);
+    } else if (ci && co) {
+      tarifaLinea =
+        '\n\n📅 Fechas consultadas: ' + fmtD(ci) + ' → ' + fmtD(co) +
+        '\n🌙 Noches: ' + noches +
+        '\n👥 Personas: ' + personas +
+        '\n💰 Precio: a confirmar por WhatsApp';
+    }
   }
+
+  const msg =
+    '🌿 *' + nombre + ' — Sombra Verde VLA*' +
+    '\n' + d.tipo +
+    '\n\n📍 *Ubicación*' +
+    '\nSector ' + sector + ' · ' + direccion +
+    '\n' + mapsUrl +
+    '\n\n👥 *Capacidad:* hasta ' + cap + ' personas' +
+    '\n\n🛎️ *Servicios incluidos*' +
+    '\n' + amenitiesList +
+    tarifaLinea +
+    '\n\n──────────────────────' +
+    '\n📲 *Reservas directas — sin comisión*' +
+    '\n🌐 www.sombraverde.com.ar' +
+    '\n💬 WhatsApp: +54 9 2944 562177' +
+    '\n📸 @sombraverde.vla' +
+    '\n⭐ 4.8 · 224 reseñas en Google';
+
+  // Copiar al portapapeles y mostrar toast
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(msg).then(() => {
+      showToast('✅ Texto copiado — pegalo en WhatsApp', 3500);
+    }).catch(() => {
+      _compartirFallback(msg);
+    });
+  } else {
+    _compartirFallback(msg);
+  }
+}
+
+function _compartirFallback(msg) {
+  // Fallback para navegadores sin clipboard API
+  const ta = document.createElement('textarea');
+  ta.value = msg;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.focus();
+  ta.select();
+  try {
+    document.execCommand('copy');
+    showToast('✅ Texto copiado — pegalo en WhatsApp', 3500);
+  } catch(e) {
+    showToast('⚠️ No se pudo copiar automáticamente');
+  }
+  document.body.removeChild(ta);
 }
 
 // ─── CONSULTA RÁPIDA ───────────────────────────────────────────
